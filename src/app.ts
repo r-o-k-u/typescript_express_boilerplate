@@ -7,7 +7,7 @@ const app = express();
 
 import router from "./api/routes/index";
 
-import prefix from "../config/index";
+import config from "../config/index";
 
 app.use(helmet());
 app.use(cookieParser());
@@ -34,7 +34,8 @@ app.disable("etag");
 
 app.set("views", path.join(__dirname, "../src/views"));
 
-app.use((req: Request, res: Response, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -47,15 +48,12 @@ app.use((req: Request, res: Response, next) => {
   next();
 });
 
-app.use((_req, _res, next) => {
-  const error: any = new Error("Endpoint could not be found!");
+app.use(router);
+
+app.use((_req: Request, _res: Response, next: NextFunction) => {
+  const error: any = new Error("Endpoint not found!");
   error.status = 404;
   next(error);
 });
-
-/**
- * Routes
- */
-app.use(router);
 
 export default app;
