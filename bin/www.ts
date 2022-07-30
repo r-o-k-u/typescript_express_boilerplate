@@ -4,8 +4,7 @@
  */
 import http from "http";
 import app from "../src/app";
-import port from "../config/index";
-
+const port = process.env.port;
 /**
  * Run the Database pool
  */
