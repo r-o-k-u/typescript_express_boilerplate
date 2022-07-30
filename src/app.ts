@@ -1,59 +1,51 @@
-import express, { Request, Response, NextFunction } from "express";
-import helmet from "helmet";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import path from "path";
-const app = express();
-
-import router from "./api/routes/index";
-
-import config from "../config/index";
-
-app.use(helmet());
-app.use(cookieParser());
-
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-    optionsSuccessStatus: 200,
-  })
-);
-
 /**
- * Get NODE_ENV from environment and store in Express.
+ * Primary file for your Clustered API Server
+ *
  */
-app.set("env", process.env.NODE_ENV);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "../public")));
+import * as path from "path";
+import * as dotenv from "dotenv";
+import express from "express";
 
-app.disable("x-powered-by");
-app.disable("etag");
+import Express from "./providers/Express";
 
-app.set("views", path.join(__dirname, "../src/views"));
+import Log from "./utils/Log";
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Content-Security-Policy-Report-Only", "default-src: https:");
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT POST PATCH DELETE GET");
-    return res.status(200).json({});
+class App {
+  /**
+   * Create the express object
+   */
+  public express: express.Application;
+
+  /**
+   * Initializes the express server
+   */
+  constructor() {
+    this.express = Express.express;
+    Express.init();
   }
-  next();
-});
+  // Clear the console
+  public clearConsole(): void {
+    process.stdout.write("\x1B[2J\x1B[0f");
+  }
+  // Loads your dotenv file
+  public loadConfiguration(): void {
+    Log.info("Configuration :: Booting @ Master...");
 
-app.use(router);
+    dotenv.config({ path: path.join(__dirname, "../../.env") });
+  }
 
-app.use((_req: Request, _res: Response, next: NextFunction) => {
-  const error: any = new Error("Endpoint not found!");
-  error.status = 404;
-  next(error);
-});
+  // Loads your Server
+  /* public loadServer(): void {
+    Log.info("Server :: Booting @ Master...");
 
-export default app;
+    Express.init();
+  } */
+
+  // Loads the Database Pool
+  public loadDatabase(): void {
+    Log.info("Database :: Booting @ Master...");
+  }
+}
+
+export default new App();

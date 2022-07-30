@@ -1,10 +1,19 @@
+/**
+ * Bootstrap your App
+ *
+ */
 import http from "http";
 import app from "../src/app";
 import port from "../config/index";
+
+/**
+ * Run the Database pool
+ */
+app.loadDatabase();
 /**
  * Create HTTP server.
  */
-const server = http.createServer(app);
+const server = http.createServer(app.express);
 
 /**
  * Event listener for HTTP server "error" event.
@@ -40,7 +49,7 @@ function onError(error: any) {
 function onListening() {
   const addr: any = server.address();
   const bind = typeof addr === "string" ? `pipe ${addr}` : `pipe ${addr.port}`;
-  console.log(`Listening on ${bind} in ${app.get("env")} environment`);
+  console.log(`Listening on ${bind} in ${app.express.get("env")} environment`);
   console.log(`Server ready at http://localhost:${addr.port}`);
   console.log(`Subscriptions ready at ws://localhost:${addr.port}`);
 }
