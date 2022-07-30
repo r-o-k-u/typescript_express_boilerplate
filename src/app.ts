@@ -10,6 +10,7 @@ import express from "express";
 import Express from "./providers/Express";
 
 import Log from "./utils/Log";
+import Database from "./db/index";
 
 class App {
   /**
@@ -45,6 +46,7 @@ class App {
   // Loads the Database Pool
   public loadDatabase(): void {
     Log.info("Database :: Booting @ Master...");
+    Database.init();
   }
 }
 
