@@ -1,24 +1,16 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-import Database from "../../db/index";
-const sequelize = Database.sequelize;
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number | undefined;
 
-// this configures the `userId` attribute.
+  @Column("varchar", { length: 200 })
+  firstName: string | undefined;
 
-class User extends Model {
-  declare id: number;
+  @Column("varchar", { length: 200 })
+  lastName: string | undefined;
+
+  @Column("varchar", { length: 200 })
+  age: number | undefined;
 }
-//User.belongsTo(User);
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-  },
-  {
-    tableName: "users",
-    sequelize, // passing the `sequelize` instance is required
-  }
-);
