@@ -3,6 +3,7 @@
  *
  */
 import http from "http";
+import "reflect-metadata";
 import app from "../src/app";
 const port = process.env.port;
 /**

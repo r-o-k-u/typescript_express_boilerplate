@@ -13,7 +13,7 @@ class Locals {
    * throughout the app's runtime
    */
   public static config(): any {
-    dotenv.config({ path: path.join(__dirname, "../../.env") });
+    dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
     const {
       COMPANY_NAME,
       PORT,

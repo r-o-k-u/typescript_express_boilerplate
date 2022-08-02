@@ -34,7 +34,7 @@ class Database {
           Log.info("Database :: connected...");
         })
         .catch((err: Error) => {
-          Log.info(`Database error:: ${err.message}`);
+          Log.error(`Database error:: ${err.message}`);
           process.exit(1);
         });
     } catch (error) {
