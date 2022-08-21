@@ -87,6 +87,11 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 \_For more examples, please refer to the [Documentation](https://qwerty.co.ke)
 
+- run migrations
+  - npm run typeorm migration:run
+- create a migration
+  - npm run typeorm migration:generate -- -n migrationNameHere
+
 <!-- ROADMAP -->
 
 ## Roadmap

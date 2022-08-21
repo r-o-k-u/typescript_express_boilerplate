@@ -7,7 +7,6 @@ const dbUser = Locals.config().dbUser as string;
 const dbHost = Locals.config().dbHost;
 const dbDriver = Locals.config().dbDriver;
 const dbPassword = Locals.config().dbPassword;
-import path from "path";
 
 import Log from "../utils/Log";
 console.log(__dirname, "..");
@@ -41,7 +40,9 @@ class Database {
     try {
       await this.database
         .initialize()
+
         .then(async () => {
+          this.database.synchronize();
           Log.info("Database :: connected...");
         })
         .catch((error: Error) => {
