@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --config nodemon.json bin/www.ts",
-    "start": "ts-node bin/www.ts",
+    "start": "nodemon --config nodemon.json bin/www.ts",
     "typeorm": "typeorm-ts-node-commonjs",
     "generate-doc": "npx typedoc"
   },
