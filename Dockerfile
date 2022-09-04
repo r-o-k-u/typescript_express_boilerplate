@@ -12,6 +12,7 @@ COPY ["package.json", "./"]
 
 # Install dependencies and clear npm cache
 RUN npm install && npm cache clean --force 
+RUN npm install nodemon
 
 COPY . .
 
