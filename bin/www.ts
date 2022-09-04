@@ -17,6 +17,8 @@ const server = http.createServer(app.express);
 
 /**
  * Event listener for HTTP server "error" event.
+ *
+ * @returns ERROR
  */
 function onError(error: any) {
   if (error.syscall !== "listen") {

@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/r-o-k-u/typescript_express_boilerplate">
-    <img src="https://admin.qwerty.co.ke/uploads/settings/1/e64bc61e5dcf35aba8cf12cc791d7ffa.png" alt="Logo" width="80" height="80">
+    <img src="https://res.cloudinary.com/dihzljuvb/image/upload/v1662269776/qwerty/qwerty_hlfpqr.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Typescript Express API Boilerplate  </h3>
@@ -27,6 +27,8 @@
 
 - [About the Project](#about-the-project)
   - [Built With](#built-with)
+  - [Architecture](#architecture)
+  - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -39,15 +41,38 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://qwerty.co.ke)
-
-**Boilerplate code for express api in typescript**
-
 ### Built With
 
 - [`typescript`]()
 - [`express`]()
 - [`node js`]()
+
+## Architecture
+
+[![Clean Architecture Screen Shot][clean-architecture-screenshot]](https://qwerty.co.ke)
+
+- **Entities**
+- **Use cases**
+- **Controllers / gateways**
+- **DB**
+
+## Features
+
+- [ ] **Local Authentication** using Email and Password or Phone and password
+- [ ] **2 step verification** using OTP on mail or phone
+- [ ] **single sign on**
+- [ ] **Account Management**
+  - [ ] Profile Details
+  - [ ] Change Password
+  - [ ] Forgot Password
+  - [ ] Reset Password
+  - [ ] Link multiple OAuth strategies to one account
+  - [ ] Delete Account
+- [ ] **CSRF protection**
+- [ ] **SMS queue service**
+- [ ] **Node.js clusters support**
+- [ ] **Email queue service**
+- [x] **API Documentation** Swagger.
 
 <!-- GETTING STARTED -->
 
@@ -57,13 +82,12 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+<!-- This is an example of how to list things you need to use the software and how to install them. -->
 
-- npm
+- [Node.js 14.0+](http://nodejs.org)
+- [Docker ](https://docs.docker.com/get-docker/)
 
-```sh
-npm install npm@latest -g
-```
+**Note:**
 
 ### Installation
 
@@ -83,7 +107,7 @@ npm install
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+<!-- Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources. -->
 
 \_For more examples, please refer to the [Documentation](https://qwerty.co.ke)
 
@@ -128,4 +152,4 @@ Project Link: [https://github.com/r-o-k-u/typescript_express_boilerplate](https:
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [issues-url]: https://github.com/r-o-k-u/typescript_express_boilerplate/issues
-[product-screenshot]: https://admin.qwerty.co.ke/uploads/settings/1/e64bc61e5dcf35aba8cf12cc791d7ffa.png
+[clean-architecture-screenshot]: https://res.cloudinary.com/dihzljuvb/image/upload/v1662269845/qwerty/CleanArchitecture_xey0q6.jpg

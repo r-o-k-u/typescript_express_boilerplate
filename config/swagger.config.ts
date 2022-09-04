@@ -6,7 +6,7 @@ export default {
       title: "Typescript Boilerplate Api",
       version: "1.0.0",
       description:
-        "The API documentation of a boilerplate/starter project for quickly building RESTful APIs using Node.js, Express, and Mongoose.",
+        "The API documentation of a boilerplate/starter project for quickly building RESTful APIs using Node.js, Express, and postgress.",
       license: {
         name: "MIT",
         url: "https://choosealicense.com/licenses/mit/",
@@ -33,7 +33,7 @@ export default {
     ],
   },
   apis: [
-    path.join(__dirname, "..", `src`, `routes`, `*.ts`),
+    path.join(__dirname, "..", `src`, `api`, `routes`, `*.ts`),
     path.join(__dirname, "..", `src`, `db`, `models`, `*.ts`),
   ],
 };

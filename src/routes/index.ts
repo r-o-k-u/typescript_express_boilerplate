@@ -11,6 +11,14 @@ import apiRouter from "./api";
 import webRouter from "./web";
 import docsRouter from "./docs";
 
+/**
+ * DThis class instantiates all the routes.
+ *
+ * @param
+ * @returns
+ *
+ * @internal
+ */
 class Routes {
   public mountDocs(_express: Application): Application {
     Log.info("Routes :: Mounting doc Routes...");

@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  typescript_api:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: typescript_api
+    # volumes allow sharing of data in run-time between host and container
+    volumes:
+      # don't overwrite this folder in container with the local one
+      - /app/node_modules
+      # map current local directory to the /app inside the container
+      #This is a must for development in order to update our container whenever a change to the source code is made. Without this, you would have to rebuild the image each time you make a change to source code.
+      - .:/app
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+    networks:
+      - typescript_api
+
+networks:
+  typescript_api:
+    driver: bridge

@@ -10,6 +10,15 @@ const dbPassword = Locals.config().dbPassword;
 
 import Log from "../utils/Log";
 console.log(__dirname, "..");
+
+/**
+ * This class instantiates all database.
+ *
+ * @param
+ * @returns
+ *
+ * @internal
+ */
 class Database {
   /**
    * Create the express object
