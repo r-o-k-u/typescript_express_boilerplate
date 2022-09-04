@@ -38,7 +38,9 @@ class Database {
       database: dbName,
       synchronize: true,
       logging: false,
-      entities: [`${__dirname}/models/*.ts`],
+      entities: [
+        /* `${__dirname}/models/*.ts` */
+      ],
       migrations: [`${__dirname}/migrations/*.ts`],
       subscribers: [],
     });
