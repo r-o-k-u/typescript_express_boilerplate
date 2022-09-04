@@ -107,6 +107,6 @@
       "src/routes/index.ts",
       "src/db/index.ts"
     ],
-    "out": "docs"
+    "out": "public/docs"
   }
 }

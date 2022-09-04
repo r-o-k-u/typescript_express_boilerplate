@@ -70,10 +70,10 @@ class Express {
      * Get NODE_ENV from environment and store in Express.
      */
     this.express.set("env", process.env.NODE_ENV);
-
+    console.log("__dirname", __dirname);
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: false }));
-    this.express.use(express.static(path.join(__dirname, "../public")));
+    this.express.use(express.static(path.join(__dirname, "../../public")));
     this.express.set("views", path.join(__dirname, "../views"));
     this.express.set("view engine", "ejs");
 
