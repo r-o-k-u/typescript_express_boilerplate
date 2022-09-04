@@ -9,7 +9,7 @@ const port = process.env.port;
 /**
  * Run the Database pool
  */
-app.loadDatabase();
+//app.loadDatabase();
 /**
  * Create HTTP server.
  */
