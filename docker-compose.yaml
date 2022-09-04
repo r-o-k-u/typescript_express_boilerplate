@@ -19,6 +19,8 @@ services:
       PORT: ${PORT}
     networks:
       - typescript_api
+    expose:
+      - 3333
 
 networks:
   typescript_api:
