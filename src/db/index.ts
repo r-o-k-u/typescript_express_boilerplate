@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "./models/User";
 import Locals from "../providers/Locals";
 const dbName = Locals.config().dbName as string;
 const dbUser = Locals.config().dbUser as string;
@@ -38,9 +37,7 @@ class Database {
       database: dbName,
       synchronize: true,
       logging: false,
-      entities: [
-        /* `${__dirname}/models/*.ts` */
-      ],
+      entities: [`${__dirname}/models/*.ts`],
       migrations: [`${__dirname}/migrations/*.ts`],
       subscribers: [],
     });
