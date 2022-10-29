@@ -1,5 +1,5 @@
 import { Router } from "express";
-import userController from "../controllers/users/user.controller";
+import userController from "../controllers/user/user.controller";
 const router = Router();
 
 /**
@@ -25,7 +25,7 @@ const router = Router();
  *      5XX':
  *        description: server error.
  */
-router.post("/create", userController.createUser);
+router.post("/create", userController.create);
 /**
  * @openapi
  * /api/User:
@@ -49,7 +49,7 @@ router.post("/create", userController.createUser);
  *      5XX':
  *        description: server error.
  */
-router.get("/", userController.findUser);
+router.get("/", userController.find);
 /**
  * @openapi
  * /api/users/update:
@@ -73,7 +73,7 @@ router.get("/", userController.findUser);
  *      5XX':
  *        description: server error.
  */
-router.patch("/update", userController.updateUser);
+router.patch("/update", userController.update);
 /**
  * @openapi
  * /api/user/delete:
@@ -95,7 +95,7 @@ router.patch("/update", userController.updateUser);
  *      5XX':
  *        description: server error.
  */
-router.patch("/delete", userController.deleteUser);
+router.patch("/delete", userController.delete);
 
 /**
  * @openapi
@@ -120,7 +120,7 @@ router.patch("/delete", userController.deleteUser);
  *      5XX':
  *        description: server error.
  */
-router.post("/create/details", userController.createUser);
+router.post("/create/details", userController.createDetails);
 /**
  * @openapi
  * /api/User/details:
@@ -144,7 +144,7 @@ router.post("/create/details", userController.createUser);
  *      5XX':
  *        description: server error.
  */
-router.get("/details/", userController.findUser);
+router.get("/details/", userController.findDetails);
 /**
  * @openapi
  * /api/users/details/update:
@@ -168,7 +168,7 @@ router.get("/details/", userController.findUser);
  *      5XX':
  *        description: server error.
  */
-router.patch("/details/update", userController.updateUser);
+router.patch("/details/update", userController.updateDetails);
 /**
  * @openapi
  * /api/user/details/delete:
@@ -190,5 +190,5 @@ router.patch("/details/update", userController.updateUser);
  *      5XX':
  *        description: server error.
  */
-router.patch("/details/delete", userController.deleteUser);
+router.patch("/details/delete", userController.deleteDetails);
 export default router;

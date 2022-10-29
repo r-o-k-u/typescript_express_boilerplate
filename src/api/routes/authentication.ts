@@ -76,17 +76,17 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 /**
  * @openapi
- * /api/auth/verify-email:
+ * /api/auth/verify-account:
  *  post:
  *     tags:
  *     - Authentication
- *     description: verify email
- *     summary: Verify email
+ *     description: verify account
+ *     summary: Verify account
  *     requestBody:
  *      required: false
  *     responses:
  *      '200':
- *        description: email verification  successful
+ *        description: account verification  successful
  *      400:
  *        description: Bad request
  *      401':
@@ -98,7 +98,7 @@ router.post("/logout", authController.logout);
  *      5XX':
  *        description: server error.
  */
-router.post("/verify-email", authController.verifyEmail);
+router.post("/verify-account", authController.verifyAccount);
 /**
  * @openapi
  * /api/auth/refresh-token:
@@ -123,7 +123,7 @@ router.post("/verify-email", authController.verifyEmail);
  *      5XX':
  *        description: server error.
  */
-router.post("/refresh-token", authController.refreshToken);
+//router.post("/refresh-token", authController.refreshToken);
 /**
  * @openapi
  * /api/auth/auth/forgot-password:
@@ -149,30 +149,5 @@ router.post("/refresh-token", authController.refreshToken);
  *        description: server error.
  */
 router.post("/forgot-password", authController.forgotPassword);
-/**
- * @openapi
- * /api/auth/send-verification-code:
- *  post:
- *     tags:
- *     - Authentication
- *     description: send verification code
- *     summary: Send verification code
- *     requestBody:
- *      required: false
- *     responses:
- *      '200':
- *        description: verification code sent  successfully
- *      400:
- *        description: Bad request
- *      401':
- *        description: Authorization information is missing or invalid.
- *      404':
- *        description: Not found.
- *      409:
- *        description: Conflict
- *      5XX':
- *        description: server error.
- */
-router.post("/send-verification-code", authController.sendVerificationCode);
 
 export default router;

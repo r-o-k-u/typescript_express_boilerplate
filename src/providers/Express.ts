@@ -27,11 +27,27 @@ class Express {
     this.express = express();
 
     this.mountDotEnv();
+    this.mountPrerequisites();
     this.mountRoutes();
   }
 
   private mountDotEnv(): void {
     this.express = Locals.init(this.express);
+  }
+
+  /**
+   * Mounts all the defined routes
+   */
+  private mountPrerequisites(): void {
+    /**
+     * Get NODE_ENV from environment and store in Express.
+     */
+    this.express.set("env", process.env.NODE_ENV);
+    this.express.use(express.json());
+    this.express.use(express.urlencoded({ extended: false }));
+    this.express.use(express.static(path.join(__dirname, "../../public")));
+    this.express.set("views", path.join(__dirname, "../views"));
+    this.express.set("view engine", "ejs");
   }
 
   /**
@@ -66,16 +82,6 @@ class Express {
     // Disable the x-powered-by header in response
     this.express.disable("x-powered-by");
     this.express.disable("etag");
-    /**
-     * Get NODE_ENV from environment and store in Express.
-     */
-    this.express.set("env", process.env.NODE_ENV);
-    console.log("__dirname", __dirname);
-    this.express.use(express.json());
-    this.express.use(express.urlencoded({ extended: false }));
-    this.express.use(express.static(path.join(__dirname, "../../public")));
-    this.express.set("views", path.join(__dirname, "../views"));
-    this.express.set("view engine", "ejs");
 
     // Registering Exception / Error Handlers
     this.express.use(ExceptionHandler.logErrors);

@@ -10,7 +10,7 @@ import express from "express";
 import Express from "./providers/Express";
 
 import Log from "./utils/Log";
-import Database from "./db/index";
+import Database from "./database/index";
 
 /**
  * This is the main class.

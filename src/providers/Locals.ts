@@ -32,6 +32,7 @@ class Locals {
       SMTP_USERNAME,
       SMTP_PASSWORD,
       EMAIL_FROM,
+      JWT_SECRET_KEY,
       JWT_EXPIRES_IN,
       JWT_REFRESH_EXPIRATION_DAYS,
       JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
@@ -94,6 +95,8 @@ class Locals {
       sms_client_id: SMS_CLIENT_ID,
       sms_sender_id: SMS_SENDER_ID,
       sms_access_key: SMS_ACCESS_KEY,
+      refreshTokenSecretKey: REFRESH_TOKEN_SECRET_KEY,
+      jwtSecretKey:JWT_SECRET_KEY,
     };
   }
 
