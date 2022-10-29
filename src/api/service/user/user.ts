@@ -3,6 +3,10 @@ import { User } from "../../../database/entity/User";
 import { UserDetails } from "../../../database/entity/UserDetails";
 import db from "../../../database/index";
 import bcrypt from "bcrypt";
+import Jwt from "../../../utils/Jwt";
+import { addMinutes } from "date-fns";
+import Locals from "../../../providers/Locals";
+import TokenService from "../../service/auth/Token";
 export interface IUser {
   user: number;
   first_name: string;
@@ -28,8 +32,38 @@ class UserService implements IUserRepository {
   async get(): Promise<User[] | Error | null> {
     // Get users from database
     try {
-      return null;
+      const userData = await db.database.manager.find(UserDetails);
+      return userData;
     } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  /**
+   * Get all users
+   * @returns
+   */
+  async find(
+    email?: String,
+    phone?: String
+  ): Promise<User[] | Error | null | any> {
+    // Get users from database
+    try {
+      const userData = await db.database.manager
+        .getRepository(UserDetails)
+        .createQueryBuilder("UserDetails")
+        .leftJoinAndSelect("UserDetails.user", "user")
+        //.innerJoinAndSelect("User")
+        .where(
+          "UserDetails.email = :email OR UserDetails.phone_number = :phone_number",
+          {
+            email: email,
+            phone_number: phone,
+          }
+        )
+        .getOne();
+      return userData;
+    } catch (error: any) {
+      console.log("err", error);
       throw new Error(error.message);
     }
   }
@@ -74,7 +108,7 @@ class UserService implements IUserRepository {
       const rawData = await db.database.manager.transaction(
         async (transactionalEntityManager: any) => {
           const userInfo = await transactionalEntityManager.save(user);
-          userDetails.user = user.id;
+          userDetails.user = user.id?.toString();
           userDetails.first_name = first_name;
           userDetails.middle_name = middle_name;
           userDetails.last_name = last_name;
@@ -90,6 +124,20 @@ class UserService implements IUserRepository {
           userDetails.id_pic_back = id_pic_back;
           userDetails.passport_pic = passport_pic;
           const userData = await transactionalEntityManager.save(userDetails);
+          let otp = Math.floor(Math.random() * 10000).toString();
+          let otp_hash = Jwt.signConfirmCodeToken(user.id, otp);
+          const expiry = addMinutes(
+            new Date(),
+            parseInt(Locals.config().jwt_verify_email_expiration_minutes)
+          );
+          const new_token = await TokenService.saveToken(
+            otp_hash,
+            expiry,
+            user.id,
+            "OTP"
+          );
+          userData.otp = otp;
+          userData.otp_hash = otp_hash;
           return userData;
         }
       );
@@ -102,9 +150,12 @@ class UserService implements IUserRepository {
    * Update a user
    * @returns
    */
-  async update(model: any): Promise<User | Error | null> {
+  async update(id: any, data: any): Promise<User | Error | null> {
     try {
-      return null;
+      console.log("id", id, data);
+
+      const userData = await db.database.manager.update(User, id, data);
+      return userData;
     } catch (error: any) {
       throw new Error(error.message);
     }

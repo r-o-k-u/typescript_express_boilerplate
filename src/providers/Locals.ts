@@ -44,6 +44,7 @@ class Locals {
       CORS_ENABLED,
       API_PREFIX,
       LOG_DAYS,
+      JWT_EXPIRATION,
     } = process.env;
     const url = APP_URL || `http://localhost:${process.env.PORT}`;
     const port = PORT || 4040;
@@ -88,6 +89,7 @@ class Locals {
       smtp_password: SMTP_PASSWORD,
       email_from: EMAIL_FROM,
       jwt_refresh_expiration_days: JWT_REFRESH_EXPIRATION_DAYS,
+      jwt_expiration: JWT_EXPIRATION,
       jwt_reset_password_expiration_minutes:
         JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
       jwt_verify_email_expiration_minutes: JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
@@ -96,7 +98,7 @@ class Locals {
       sms_sender_id: SMS_SENDER_ID,
       sms_access_key: SMS_ACCESS_KEY,
       refreshTokenSecretKey: REFRESH_TOKEN_SECRET_KEY,
-      jwtSecretKey:JWT_SECRET_KEY,
+      jwtSecretKey: JWT_SECRET_KEY,
     };
   }
 

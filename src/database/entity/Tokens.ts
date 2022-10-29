@@ -9,6 +9,8 @@ import {
 @Entity()
 export class Token {
   @PrimaryGeneratedColumn()
+  id: number | undefined;
+
   @Column("varchar", {
     length: 200,
     nullable: false,
@@ -26,24 +28,24 @@ export class Token {
   @Column("varchar", {
     length: 200,
     nullable: false,
-    comment: "refresh , reset , verification",
+    comment: "refresh , reset , verification , otp",
   })
   type: string | undefined;
 
-  @Column("boolean", { nullable: false, comment: "" })
+  @Column("boolean", { nullable: true, comment: "" })
   revoked: string | undefined;
 
-  @Column("varchar", { length: 200, nullable: false, comment: "" })
+  @Column("varchar", { length: 200, nullable: true, comment: "" })
   revoked_by_ip: string | undefined;
 
-  @Column("varchar", { length: 200, nullable: false, comment: "" })
+  @Column("varchar", { length: 200, nullable: true, comment: "" })
   replaced_by_token: string | undefined;
 
   @Column("boolean", { nullable: false, comment: "" })
-  is_expired: string | undefined;
+  is_expired: boolean | undefined;
 
   @Column("boolean", { nullable: false, comment: "" })
-  is_active: string | undefined;
+  is_active: boolean | undefined;
 
   @Column()
   @CreateDateColumn({ name: "created_at" })

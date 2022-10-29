@@ -2,7 +2,7 @@ import { User } from "../../../database/entity/User";
 import { UserDetails } from "../../../database/entity/UserDetails";
 
 export interface IUserRepository {
-  get(): Promise<User[] | Error | null>;
+  get(email: String, password: String): Promise<User[] | Error | null>;
   getById(id: number): Promise<User | Error | null>;
   add(user: UserDetails): Promise<User | Error | null>;
   delete(id: number): Promise<User | Error | null>;

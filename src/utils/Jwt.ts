@@ -18,7 +18,10 @@ class Jwt {
     );
     return refreshToken;
   }
-  public static signConfirmCodeToken(userId: number, confirmCode: String) {
+  public static signConfirmCodeToken(
+    userId: Number | String | undefined,
+    confirmCode: String
+  ) {
     const confirmCodeToken = sign(
       { id: userId, code: confirmCode },
       Locals.config().jwtSecretKey || "cscscscscdgefhboiveivnme0v9envev",

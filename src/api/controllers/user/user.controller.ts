@@ -50,7 +50,8 @@ class UserController {
         .then((data: any) => {
           if (data) {
             res.status(200).json({
-              message: "got to find user ",
+              message: "Got users ",
+              data: data,
             });
           } else {
             res.status(200).json({
@@ -100,8 +101,9 @@ class UserController {
    */
   public static update = (req: Request, res: Response, next: NextFunction) => {
     const updated_details = {};
+    const id = req.body.user_id;
     userService
-      .update(updated_details)
+      .update(id, updated_details)
       .then((data: any) => {
         if (data) {
           res.status(200).json({

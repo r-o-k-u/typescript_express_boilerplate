@@ -4,7 +4,10 @@ import {
   Column,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToMany,
 } from "typeorm";
+
+import { UserDetails } from "./UserDetails";
 
 @Entity()
 export class User {
@@ -33,4 +36,7 @@ export class User {
   @Column()
   @UpdateDateColumn({ name: "updated_at" })
   public updatedAt!: Date;
+
+  @OneToMany(() => UserDetails, (detail) => detail.user) // note: we will create user property in the UserDetails class
+  users: UserDetails[] | undefined;
 }

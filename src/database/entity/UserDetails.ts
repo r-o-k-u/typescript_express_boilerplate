@@ -4,15 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from "typeorm";
-
+import { User } from "./User";
 @Entity("user_details")
 export class UserDetails {
   @PrimaryGeneratedColumn()
   id!: number | undefined;
-
-  @Column("int4", { comment: "" })
-  user: number | undefined;
 
   @Column("varchar", { length: 200, comment: "" })
   first_name: string | undefined;
@@ -63,4 +61,7 @@ export class UserDetails {
   @Column()
   @UpdateDateColumn({ name: "updated_at" })
   public updatedAt!: Date;
+
+  @ManyToOne(() => User, (user) => user.users)
+  user: any | undefined;
 }
