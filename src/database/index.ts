@@ -6,7 +6,7 @@ const dbUser = Locals.config().dbUser as string;
 const dbHost = Locals.config().dbHost;
 const dbDriver = Locals.config().dbDriver;
 const dbPassword = Locals.config().dbPassword;
-
+console.log(Locals.config());
 import Log from "../utils/Log";
 
 /**

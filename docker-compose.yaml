@@ -26,5 +26,6 @@ services:
       - 3333
 
 networks:
+  goodhope_sakataka:
   typescript_api:
     driver: bridge
