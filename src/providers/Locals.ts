@@ -46,59 +46,41 @@ class Locals {
       LOG_DAYS,
       JWT_EXPIRATION,
     } = process.env;
-    const url = APP_URL || `http://localhost:${process.env.PORT}`;
-    const port = PORT || 4040;
-    const appSecret = APP_SECRET || "This is your responsibility!";
-    const dbName = DB_NAME;
-    const dbUser = DB_USER;
-    const dbHost = DB_HOST;
-    const dbDriver = DB_DRIVER;
-    const dbPassword = DB_PASSWORD;
-    const dbPort = DB_PORT;
-    const name = APP_NAME || "Express TS Boilerplate";
     const year = new Date().getFullYear();
-    const copyright = `Copyright ${year} ${name} | All Rights Reserved`;
-    const company = COMPANY_NAME || "Qwerty Systems";
-
-    const isCORSEnabled = CORS_ENABLED || true;
-    const jwtExpiresIn = JWT_EXPIRES_IN || 3;
-    const apiPrefix = API_PREFIX || "api";
-
-    const logDays = LOG_DAYS || 10;
 
     return {
-      appSecret,
-      apiPrefix,
-      company,
-      copyright,
-      isCORSEnabled,
-      jwtExpiresIn,
-      logDays,
-      dbName,
-      dbUser,
-      dbHost,
-      dbDriver,
-      dbPassword,
-      dbPort,
-      name,
-      port,
-      url,
-      smtp_host: SMTP_HOST,
-      smtp_port: SMTP_PORT,
-      smtp_username: SMTP_USERNAME,
-      smtp_password: SMTP_PASSWORD,
-      email_from: EMAIL_FROM,
-      jwt_refresh_expiration_days: JWT_REFRESH_EXPIRATION_DAYS,
-      jwt_expiration: JWT_EXPIRATION,
-      jwt_reset_password_expiration_minutes:
-        JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
-      jwt_verify_email_expiration_minutes: JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
-      sms_api_key: SMS_API_KEY,
-      sms_client_id: SMS_CLIENT_ID,
-      sms_sender_id: SMS_SENDER_ID,
-      sms_access_key: SMS_ACCESS_KEY,
-      refreshTokenSecretKey: REFRESH_TOKEN_SECRET_KEY,
-      jwtSecretKey: JWT_SECRET_KEY,
+      PORT: PORT || 4040,
+      APP_URL: APP_URL || `http://localhost:${process.env.PORT}`,
+      APP_NAME: APP_NAME || "Express TS Boilerplate",
+      APP_SECRET: APP_SECRET || "This is your responsibility!",
+      COMPANY_NAME: COMPANY_NAME || "Qwerty Systems",
+      COPYRIGHT: `Copyright ${year} ${APP_NAME} | All Rights Reserved`,
+      YEAR: year,
+      API_PREFIX: API_PREFIX || "api",
+      CORS_ENABLED: CORS_ENABLED || true,
+      JWT_EXPIRES_IN: JWT_EXPIRES_IN || 3,
+      LOG_DAYS: LOG_DAYS || 10,
+      DB_NAME,
+      DB_USER,
+      DB_HOST,
+      DB_DRIVER,
+      DB_PASSWORD,
+      DB_PORT,
+      SMTP_HOST,
+      SMTP_PORT,
+      SMTP_USERNAME,
+      SMTP_PASSWORD,
+      EMAIL_FROM,
+      JWT_REFRESH_EXPIRATION_DAYS,
+      JWT_EXPIRATION,
+      JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
+      JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
+      SMS_API_KEY,
+      SMS_CLIENT_ID,
+      SMS_SENDER_ID,
+      SMS_ACCESS_KEY,
+      REFRESH_TOKEN_SECRET_KEY,
+      JWT_SECRET_KEY,
     };
   }
 

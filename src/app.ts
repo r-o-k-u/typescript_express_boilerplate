@@ -3,15 +3,15 @@
  *
  */
 
-import * as path from "path";
 import * as dotenv from "dotenv";
 import express from "express";
 
-import Express from "./providers/Express";
+import ExpressApp from "./providers/Express";
+const Express = new ExpressApp();
 
-import Log from "./utils/Log";
+import Logger from "./utils/Log";
 import Database from "./database/index";
-
+let Log = new Logger();
 /**
  * This is the main class.
  *
@@ -62,5 +62,4 @@ class App {
     Database.init();
   }
 }
-
-export default new App();
+export default App;

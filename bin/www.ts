@@ -2,9 +2,11 @@
  * Bootstrap your App
  *
  */
+import { appendFile } from "fs";
 import http from "http";
 import "reflect-metadata";
-import app from "../src/app";
+import App from "../src/app";
+const app = new App();
 const port = process.env.port || 3333;
 /**
  * Run the Database pool

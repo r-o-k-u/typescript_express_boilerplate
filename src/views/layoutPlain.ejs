@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title><%- title %> | Qwerty systems</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="Qwerty systems" name="description" />
+    <meta content="Qwerty systems" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="public/favicon.ico" />
+
+    <base href="/" />
+    <%- include ('./Partials/HeaderStyle') %>
+  </head>
+
+  <body>
+    <!-- Begin page -->
+    <div id="layout-wrapper"><%- body %>
+    </div>
+    <%- include ('./Partials/VendorScript') %>
+
+    <script src="public/assets/js/app.js"></script>
+  </body>
+</html>

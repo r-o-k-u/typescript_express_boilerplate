@@ -1,24 +1,10 @@
-import "reflect-metadata";
-import { DataSource } from "typeorm";
+import fs from "fs";
+import path from "path";
+import { Sequelize } from "sequelize-typescript";
 import Locals from "../providers/Locals";
-const dbName = Locals.config().dbName as string;
-const dbUser = Locals.config().dbUser as string;
-const dbHost = Locals.config().dbHost;
-const dbDriver = Locals.config().dbDriver;
-const dbPassword = Locals.config().dbPassword;
-console.log(
-  "dbName",
-  dbName,
-  "dbUser",
-  dbUser,
-  "dbHost",
-  dbHost,
-  "dbDriver",
-  dbDriver,
-  "dbPassword",
-  dbPassword
-);
-import Log from "../utils/Log";
+const modelsDir = path.resolve(__dirname + "/models");
+import Logger from "../utils/Log";
+const Log = new Logger();
 
 /**
  * This class instantiates all database.
@@ -33,39 +19,34 @@ class Database {
    * Create the express object
    */
   public database: any;
+  public sequelize: Sequelize;
 
   /**
    * Initializes the express server
    */
   constructor() {
-    this.database = new DataSource({
-      type: dbDriver,
-      host: dbHost,
-      port: 5432,
-      username: dbUser,
-      password: dbPassword,
-      database: dbName,
-      synchronize: true,
-      logging: false,
-      entities: [__dirname + `/entity/**/*.ts`],
-      migrations: [__dirname + `/migrations/**/*.ts`],
-      subscribers: [],
-    });
+    this.database = {};
   }
   // Loads the Database Pool
   public async init(): Promise<void> {
     Log.info("Database :: Booting @ Master...");
     try {
-      await this.database
-        .initialize()
-
-        .then(async () => {
-          this.database.synchronize();
+      this.sequelize = new Sequelize(
+        Locals.config().DB_NAME,
+        Locals.config().DB_USER,
+        Locals.config().DB_PASSWORD,
+        {
+          dialect: Locals.config().DB_DRIVER,
+          port: Locals.config().DB_PORT,
+        }
+      );
+      this.sequelize
+        .authenticate()
+        .then(() => {
           console.log("DB connected");
           Log.info("Database :: connected...");
         })
         .catch((error: Error) => {
-          console.log(`Database error:: ${error.message}`);
           Log.error(`Database error:: ${error.message}`);
           process.exit(1);
         });
@@ -73,6 +54,24 @@ class Database {
       console.error(error);
       process.exit(1);
     }
+  }
+
+  public async addSequelizeConnectionToRepo(
+    dbRepo: any,
+    dbkey: string
+  ): Promise<void> {
+    /* const database = {};
+    console.log("addSequelizeConnectionToRepo", dbkey);
+    let sequelize;
+    if (dbkey === db.database) {
+      sequelize = new Sequelize(db.database, db.username, db.password, db);
+    } else {
+      sequelize = new Sequelize(dbkey, db.username, db.password, db);
+    }
+    if (!dbRepo[dbkey]) {
+      try {
+      } catch (err) {}
+    } */
   }
 }
 

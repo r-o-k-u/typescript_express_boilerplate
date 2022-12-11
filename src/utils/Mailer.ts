@@ -11,7 +11,16 @@ const SMTP_HOST = Locals.config().smtp_host as string;
 const SMTP_USERNAME = Locals.config().smtp_username as string;
 const SMTP_PASSWORD = Locals.config().smtp_password;
 
+/**
+ * Mailer Class
+ */
 class Mailer {
+  /**
+   *
+   * @param email
+   * @param subject
+   * @param html
+   */
   static sendEmail(email: any, subject: string, html: string) {
     new Promise(async (resolve, reject) => {
       if (!email || !subject || !html) {
@@ -44,6 +53,11 @@ class Mailer {
       }
     });
   }
+  /**
+   *
+   * @param account
+   * @param origin
+   */
   public static async sendVerificationEmail(account: any, origin: any) {
     origin == null ? origin == "test.com" : "";
     let message;
@@ -65,6 +79,11 @@ class Mailer {
     );
   }
 
+  /**
+   *
+   * @param account
+   * @param origin
+   */
   public static async sendAlreadyRegisteredEmail(account: any, origin: any) {
     let message;
     origin == null ? origin == "test.com" : "";
@@ -82,7 +101,11 @@ class Mailer {
                ${message}`
     );
   }
-
+  /**
+   *
+   * @param account
+   * @param origin
+   */
   public static async sendPasswordResetEmail(account: any, origin: any) {
     origin == null ? origin == "test.com" : "";
     let message;

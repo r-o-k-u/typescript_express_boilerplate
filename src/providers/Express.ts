@@ -6,13 +6,16 @@
 import express from "express";
 
 import Locals from "./Locals";
-import Routes from "../routes";
+import Routes_ from "../routes";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 import ExceptionHandler from "../utils/Handler";
-import Log from "../utils/Log";
+import Logger from "../utils/Log";
+import expressLayouts from "express-ejs-layouts";
+const Log = new Logger();
+const Routes = new Routes_();
 
 class Express {
   /**
@@ -45,9 +48,16 @@ class Express {
     this.express.set("env", process.env.NODE_ENV);
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: false }));
-    this.express.use(express.static(path.join(__dirname, "../../public")));
+    this.express.get("/layouts/", function (req, res) {
+      res.render("view");
+    });
+    this.express.use(express.static(path.join(__dirname, "public")));
+    this.express.use("/public", express.static("public"));
+    this.express.use("/docs", express.static("public/docs"));
     this.express.set("views", path.join(__dirname, "../views"));
     this.express.set("view engine", "ejs");
+
+    this.express.use(expressLayouts);
   }
 
   /**
@@ -55,7 +65,7 @@ class Express {
    */
   private mountRoutes(): void {
     this.express = Routes.mountDocs(this.express);
-    this.express = Routes.mountApi(this.express);
+    //this.express = Routes.mountApi(this.express);
     this.express = Routes.mountWeb(this.express);
   }
 
@@ -92,4 +102,4 @@ class Express {
 }
 
 /** Export the express module */
-export default new Express();
+export default Express;

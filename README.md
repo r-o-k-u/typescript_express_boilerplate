@@ -43,9 +43,19 @@
 
 ### Built With
 
-- [`typescript`]()
-- [`express`]()
-- [`node js`]()
+A boilerplate for [Node.js](https://nodejs.org/en) App.
+
+- This boilerplate is built using [Express.js](https://expressjs.com/) web framework, and is using [Typescript Lang](https://www.typescriptlang.org/) for writing the app's logic.
+- It uses Node's [Cluster API](https://nodejs.org/api/cluster.html), this helps us to take advantage of multi-core systems & to handle the load.
+- For storing custom constant configurations within the `process.env` - [DotEnv](https://github.com/motdotla/dotenv) package is used.
+- For Database - Repo contains the use of [Postgres](https://www.postgresql.org/) (ie. [Postgres](https://www.postgresql.org/) object modeling for [Node.js](https://nodejs.org/en/)).
+- For Routing - Repo contains the use of [express-router](https://expressjs.com/en/guide/routing.html) & have distributed Routes into two files ie. Web Routes & API Routes.
+- For Route Auth Middleware - Web routes are configured with [CSRF Token]() while the API routes are configured with [JSON Web Token](https://github.com/auth0/express-jwt).
+- For Logging - Repo uses custom Log class built in middlewares folder, and it creates logs file by date & removes the log files after 'X' days (You can define that 'X' in the `.env` file).
+- For Handling Exception - Repo contains two classes ie. `Handler` & `NativeEvent`.
+- To Log - use `Log.info('Your message should go here!')`. Other options for logging are `Log.warn`, `Log.error` & `Log.custom`.
+- For views - Repo contains the use of [ejs](https://ejs.co/) template engine.
+- For background queues - Repo contains the use of [rabbitmq](https://www.rabbitmq.com/).
 
 ## Architecture
 
@@ -89,21 +99,137 @@ To get a local copy up and running follow these simple steps.
 
 **Note:**
 
-### Installation
+# Contents
 
-1. Clone the repo
+- [Global Requisites](#global-requisites)
+- [App Structure](#app-structure)
+- [Install, Configure & Run](#install-configure--run)
 
-```sh
-git clone https://github.com/r-o-k-u/typescript_express_boilerplate.git
+# Global Requisites
+
+- node (>= 14.0)
+- tsc (>= 3.0.1)
+- typescript (>= 3.0.1)
+- postgres (>= 3.6.2)
+
+# App Structure
+
+```bash
+├── bin
+├── config
+├── logs
+├── nginx
+├── public
+├── src
+│   ├── controllers
+│   │   ├── api
+│   │   │   ├── admin
+│   │   │   │   ├── admin.controller.ts
+│   │   ├── ├── authentication
+│   │   │   │   ├── authentication.controller.ts
+│   │   ├── ├── user
+│   │   │   │   ├── user.controller.ts
+│   │   ├── web
+│   │   │   ├── index.ts
+│   ├── database
+│   │   ├── entity
+│   │   ├── migrations
+│   │   ├── seeders
+│   │   ├── subscriber
+│   │   └── index.ts
+│   ├── middlewares
+│   │   ├── CORS.ts
+│   │   ├── CsrfToken.ts
+│   │   ├── Http.ts
+│   │   ├── Kernel.ts
+│   │   ├── Log.ts
+│   │   ├── Statics.ts
+│   │   ├── StatusMonitor.ts
+│   │   └── View.ts
+│   ├── providers
+│   │   ├── Express.ts
+│   │   ├── Locals.ts
+│   ├── routes
+│   │   ├── api.ts
+│   │   ├── docs.ts
+│   │   ├── index.ts
+│   │   └── web.ts
+│   ├── services
+│   │   └── auth
+│   │        ├── Token.ts
+│   │   ├── user
+│   │        ├── user.ts
+│   │        ├── userRepository.ts
+│   ├── Utils
+│   │   ├── Handler.ts
+│   │   ├── jwt.ts
+│   │   ├── Log.ts
+│   │   └── Mailer.ts
+│   │   └── Sms.ts
+│   │   └── swagger.ts
+├── views
+│   ├── change_password.ejs
+│   ├── error.ejs
+│   ├── forgot_password.ejs
+│   ├── home.ejs
+│   ├── signin.ejs
+│   ├── signup.ejs
+│   └── verify_email.ejs
+├── .app.ts
+├── .env
+├── .env.development
+├── .env.example
+├── .gitignore
+├── .docker-compose.yaml
+├── .Dockerfile
+├── .env.production
+├── nodemon.json
+├── .ormconfig.ts
+├── package.json
+├── README.md
+├── tsconfig.json
 ```
 
-2. Install NPM packages
+# Install, Configure & Run
 
-```sh
-npm install
+Below mentioned are the steps to install, configure & run in your platform/distributions.
+
+```bash
+# Clone the repo.
+git clone https://github.com/r-o-k-u/typescript_express_boilerplate.git;
+
+# Goto the cloned project folder.
+cd nodets;
 ```
 
-<!-- USAGE EXAMPLES -->
+```bash
+# Without Docker
+
+# Note: It is assumed here that you have MongoDB running in the background and that you have created the database.
+
+# Install NPM dependencies.
+npm install;
+
+# Edit your DotEnv file using any editor of your choice.
+# Please Note: You should add all the configurations details
+# or else default values will be used!
+vim .env;
+
+# Run the app
+npm run dev;
+```
+
+```bash
+# With Docker
+
+# Note: It is assumed here that you have Docker running in the background.
+
+# Run the app in docker as a foreground process
+docker-compose up
+
+# Run the app in docker as a background process
+docker-compose up -d
+```
 
 ## Usage
 

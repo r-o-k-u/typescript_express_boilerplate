@@ -16,7 +16,13 @@ const options = {
   )}); width:50px; height:auto;}
   .swagger-ui .topbar { background-color: #000000; color:FFFF}`, */
   customSiteTitle: "Qwerty Systems",
-  customfavIcon: `${path.join(__dirname, "..", `public`, `favicon.ico`)}`,
+  customfavIcon: `${path.join(
+    __dirname,
+    "..",
+    "/..",
+    `public`,
+    `favicon.ico`
+  )}`,
   explorer: true,
 };
 

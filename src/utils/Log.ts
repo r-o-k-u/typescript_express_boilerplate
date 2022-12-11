@@ -4,7 +4,9 @@
 
 import * as fs from "fs";
 import * as path from "path";
-
+/**
+ * System logger class
+ */
 class Log {
   public baseDir: string;
   public fileName: string;
@@ -27,13 +29,20 @@ class Log {
   public info(_string: string): void {
     this.addLog("INFO", _string);
   }
-
-  // Adds WARN prefix string to the log string
+  /**
+   *
+   * Adds WARN prefix string to the log string
+   * @param _string
+   */
   public warn(_string: string): void {
     this.addLog("WARN", _string);
   }
 
-  // Adds ERROR prefix string to the log string
+  /**
+   *
+   * Adds ERROR prefix string to the log string
+   * @param _string
+   */
   public error(_string: string): void {
     // Line break and show the first line
     console.log("\x1b[31m%s\x1b[0m", "[ERROR] :: " + _string.split(/r?\n/)[0]);
@@ -41,14 +50,22 @@ class Log {
     this.addLog("ERROR", _string);
   }
 
-  // Adds the custom prefix string to the log string
+  /**
+   *
+   * Adds the custom prefix string to the log string
+   * @param _filename
+   * @param _string
+   */
   public custom(_filename: string, _string: string): void {
     this.addLog(_filename, _string);
   }
 
   /**
+   *
    * Creates the file if does not exist, and
    * append the log kind & string into the file.
+   * @param _kind
+   * @param _string
    */
   private addLog(_kind: string, _string: string): void {
     const _that = this;
@@ -103,4 +120,4 @@ class Log {
   }
 }
 
-export default new Log();
+export default Log;
