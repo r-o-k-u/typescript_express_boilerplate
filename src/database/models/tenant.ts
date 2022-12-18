@@ -1,43 +1,49 @@
-import { Organization } from "./organization";
 // @/models.ts
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface TenantAttributes {
+export interface TenantAddModel {
+  id?: number;
+  name: string;
+}
+
+export interface TenantModel {
+  id?: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TenantViewModel {
   id: number;
   name: string;
 }
 
-interface TenantCreationAttributes extends Optional<TenantAttributes, "id"> {}
+//export class Tenant extends Model<TenantModel, TenantCreationAttributes> {}
 
-@Table({
-  timestamps: true,
-  tableName: "tenants",
-})
-export class Tenant extends Model<TenantAttributes, TenantCreationAttributes> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Organization)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Organization)
-  organization: Organization;
-}
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class Tenant extends Model<TenantModel> implements TenantModel {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      Tenant.belongsTo(models.Organization, { targetKey: "id" });
+      Tenant.hasMany(models.User);
+    }
+  }
+  Tenant.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: "",
+      createdAt: "",
+      updatedAt: "",
+    },
+    { sequelize }
+  );
+  //
+};

@@ -1,47 +1,57 @@
 // @/models.ts
-import { Tenant } from "./tenant";
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface AuthPermissionAttributes {
-  id: number;
-  name: string;
+export interface AuthPermissionAddModel {
+  id?: number;
+  status: string;
+  verified: string;
 }
 
-interface AuthPermissionCreationAttributes
-  extends Optional<AuthPermissionAttributes, "id"> {}
-
-@Table({
-  timestamps: true,
-  tableName: "auth_permissions",
-})
-export class AuthPermission extends Model<
-  AuthPermissionAttributes,
-  AuthPermissionCreationAttributes
-> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Tenant)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Tenant)
-  organization: Tenant;
+export interface AuthPermissionModel {
+  id?: number;
+  status: string;
+  verified: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface AuthPermissionViewModel {
+  id?: number;
+  status: string;
+  verified: string;
+}
+
+//export class AuthPermission extends Model<AuthPermissionModel, AuthPermissionCreationAttributes> {}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class AuthPermission
+    extends Model<AuthPermissionModel>
+    implements AuthPermissionModel
+  {
+    status: string;
+    verified: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      AuthPermission.belongsTo(models.Tenant, { targetKey: "id" });
+      AuthPermission.hasMany(models.AuthPermissionDetails);
+    }
+  }
+  AuthPermission.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: "",
+      updatedAt: "",
+      status: "",
+      verified: "",
+    },
+    { sequelize }
+  );
+  //
+};

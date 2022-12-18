@@ -1,47 +1,54 @@
 // @/models.ts
-import { Tenant } from "./tenant";
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface AuthRoleAttributes {
-  id: number;
+export interface AuthRoleAddModel {
+  id?: number;
+  status: string;
   name: string;
 }
 
-interface AuthRoleCreationAttributes
-  extends Optional<AuthRoleAttributes, "id"> {}
-
-@Table({
-  timestamps: true,
-  tableName: "auth_roles",
-})
-export class AuthRole extends Model<
-  AuthRoleAttributes,
-  AuthRoleCreationAttributes
-> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Tenant)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Tenant)
-  organization: Tenant;
+export interface AuthRoleModel {
+  id?: number;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface AuthRoleViewModel {
+  id?: number;
+  status: string;
+  name: string;
+}
+
+//export class AuthRole extends Model<AuthRoleModel, AuthRoleCreationAttributes> {}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class AuthRole extends Model<AuthRoleModel> implements AuthRoleModel {
+    name: string;
+    status: string;
+    verified: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      AuthRole.belongsTo(models.Tenant, { targetKey: "id" });
+    }
+  }
+  AuthRole.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: "",
+      updatedAt: "",
+      status: "",
+      name: "",
+    },
+    { sequelize }
+  );
+  //
+};

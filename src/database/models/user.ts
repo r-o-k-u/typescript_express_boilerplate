@@ -1,43 +1,54 @@
 // @/models.ts
-import { Tenant } from "./tenant";
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface UserAttributes {
-  id: number;
-  name: string;
+export interface UserAddModel {
+  id?: number;
+  status: string;
+  verified: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
-
-@Table({
-  timestamps: true,
-  tableName: "users",
-})
-export class User extends Model<UserAttributes, UserCreationAttributes> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Tenant)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Tenant)
-  organization: Tenant;
+export interface UserModel {
+  id?: number;
+  status: string;
+  verified: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface UserViewModel {
+  id?: number;
+  status: string;
+  verified: string;
+}
+
+//export class User extends Model<UserModel, UserCreationAttributes> {}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class User extends Model<UserModel> implements UserModel {
+    status: string;
+    verified: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      User.belongsTo(models.Tenant, { targetKey: "id" });
+      User.hasMany(models.UserDetails);
+    }
+  }
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: "",
+      updatedAt: "",
+      status: "",
+      verified: "",
+    },
+    { sequelize }
+  );
+  //
+};

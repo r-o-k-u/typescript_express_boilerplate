@@ -1,47 +1,57 @@
 // @/models.ts
-import { Tenant } from "./tenant";
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface TenantDetailAttributes {
-  id: number;
+export interface TenantDetailsAddModel {
+  id?: number;
+  status: string;
   name: string;
 }
 
-interface TenantDetailCreationAttributes
-  extends Optional<TenantDetailAttributes, "id"> {}
-
-@Table({
-  timestamps: true,
-  tableName: "tenant_details",
-})
-export class TenantDetail extends Model<
-  TenantDetailAttributes,
-  TenantDetailCreationAttributes
-> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Tenant)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Tenant)
-  organization: Tenant;
+export interface TenantDetailsModel {
+  id?: number;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface TenantDetailsViewModel {
+  id?: number;
+  status: string;
+  name: string;
+}
+
+//export class TenantDetails extends Model<TenantDetailsModel, TenantDetailsCreationAttributes> {}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class TenantDetails
+    extends Model<TenantDetailsModel>
+    implements TenantDetailsModel
+  {
+    name: string;
+    status: string;
+    verified: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      TenantDetails.belongsTo(models.Tenant, { targetKey: "id" });
+    }
+  }
+  TenantDetails.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: "",
+      updatedAt: "",
+      status: "",
+      name: "",
+    },
+    { sequelize }
+  );
+  //
+};

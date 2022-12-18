@@ -18,61 +18,98 @@ class Database {
   /**
    * Create the express object
    */
-  public database: any;
-  public sequelize: Sequelize;
+  public repo: any;
+  sequelize: Sequelize;
 
   /**
    * Initializes the express server
    */
-  constructor() {
-    this.database = {};
-  }
-  // Loads the Database Pool
-  public async init(): Promise<void> {
-    Log.info("Database :: Booting @ Master...");
-    try {
-      this.sequelize = new Sequelize(
-        Locals.config().DB_NAME,
-        Locals.config().DB_USER,
-        Locals.config().DB_PASSWORD,
-        {
-          dialect: Locals.config().DB_DRIVER,
-          port: Locals.config().DB_PORT,
-        }
-      );
-      this.sequelize
-        .authenticate()
-        .then(() => {
-          console.log("DB connected");
-          Log.info("Database :: connected...");
-        })
-        .catch((error: Error) => {
-          Log.error(`Database error:: ${error.message}`);
-          process.exit(1);
-        });
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
-    }
+  constructor(DB_NAME: string) {
+    this.repo = {};
+    this.sequelize = new Sequelize(
+      DB_NAME || "",
+      Locals.config().DB_USER || "",
+      Locals.config().DB_PASSWORD || "",
+      {
+        host: Locals.config().DB_HOST || "",
+        dialect: Locals.config().DB_DRIVER || "",
+        port: Locals.config().DB_PORT || "",
+      }
+    );
   }
 
-  public async addSequelizeConnectionToRepo(
-    dbRepo: any,
-    dbkey: string
-  ): Promise<void> {
-    /* const database = {};
-    console.log("addSequelizeConnectionToRepo", dbkey);
-    let sequelize;
-    if (dbkey === db.database) {
-      sequelize = new Sequelize(db.database, db.username, db.password, db);
-    } else {
-      sequelize = new Sequelize(dbkey, db.username, db.password, db);
+  async associate() {}
+
+  async seed() {}
+  async authenticate() {
+    try {
+      //Create associations
+      await this.associate();
+
+      //Sync DB
+      await this.sequelize
+        .sync({ force: false })
+        .then(() => console.log("DB Connection established successfully."))
+        .catch((err) =>
+          console.error(`DB Sequelize Connection Failed: ${err}`)
+        );
+    } catch (error) {
+      console.error("Unable to connect to the database:", error);
     }
-    if (!dbRepo[dbkey]) {
+  }
+  async addSequelizeConnectionToRepo(DB_REPO: any, DB_NAME: any) {
+    if (DB_NAME != Locals.config().DB_NAME) {
+      this.sequelize = new Sequelize(
+        DB_NAME || "",
+        Locals.config().DB_USER || "",
+        Locals.config().DB_PASSWORD || "",
+        {
+          host: Locals.config().DB_HOST || "",
+          dialect: Locals.config().DB_DRIVER || "",
+          port: Locals.config().DB_PORT || "",
+        }
+      );
+    }
+    if (!DB_REPO[DB_NAME]) {
       try {
-      } catch (err) {}
-    } */
+        await this.sequelize.authenticate();
+        console.log("Connection has been established successfully.");
+        fs.readdirSync(modelsDir)
+          .filter((file) => {
+            return (
+              file.indexOf(".") !== 0 &&
+              file !== "index.js" &&
+              file.slice(-3) === ".js"
+            );
+          })
+          .forEach((file) => {
+            const model = require(path.join(modelsDir, file));
+            this.repo[model.name] = model;
+          });
+
+        Object.keys(this.repo).forEach((modelName) => {
+          if (this.repo[modelName].associate) {
+            this.repo[modelName].associate(this.repo);
+          }
+        });
+
+        DB_REPO[DB_NAME] = this.repo;
+        // console.log("dbRepo", dbRepo);
+        return DB_REPO;
+      } catch (error) {
+        console.error("Unable to connect to the database:", error);
+      }
+    } else {
+      console.log("tenant already connected  ");
+    }
   }
 }
 
-export default new Database();
+//export default Database;
+
+export const getDBInstance = async (DB_NAME: string) => {
+  const DB = new Database(DB_NAME);
+  await DB.authenticate();
+  //await DB.seed();
+  return DB;
+};

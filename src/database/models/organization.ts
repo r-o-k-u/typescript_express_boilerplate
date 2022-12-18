@@ -1,40 +1,51 @@
 // @/models.ts
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface OrganizationAttributes {
+export interface OrganizationAddModel {
+  id?: number;
+  name: string;
+}
+
+export interface OrganizationModel {
+  id?: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrganizationViewModel {
   id: number;
   name: string;
 }
 
-interface OrganizationCreationAttributes
-  extends Optional<OrganizationAttributes, "id"> {}
+//export class Organization extends Model<OrganizationModel, OrganizationCreationAttributes> {}
 
-@Table({
-  timestamps: true,
-  tableName: "organizations",
-})
-export class Organization extends Model<
-  OrganizationAttributes,
-  OrganizationCreationAttributes
-> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-}
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class Organization
+    extends Model<OrganizationModel>
+    implements OrganizationModel
+  {
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      Organization.hasMany(models.Tenant);
+    }
+  }
+  Organization.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: "",
+      createdAt: "",
+      updatedAt: "",
+    },
+    { sequelize }
+  );
+  //
+};

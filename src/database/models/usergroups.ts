@@ -1,47 +1,54 @@
 // @/models.ts
-import { Tenant } from "./tenant";
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface UserGroupAttributes {
-  id: number;
+export interface UserGroupAddModel {
+  id?: number;
+  status: string;
   name: string;
 }
 
-interface UserGroupCreationAttributes
-  extends Optional<UserGroupAttributes, "id"> {}
-
-@Table({
-  timestamps: true,
-  tableName: "user_groups",
-})
-export class UserGroup extends Model<
-  UserGroupAttributes,
-  UserGroupCreationAttributes
-> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Tenant)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Tenant)
-  organization: Tenant;
+export interface UserGroupModel {
+  id?: number;
+  status: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface UserGroupViewModel {
+  id?: number;
+  status: string;
+  name: string;
+}
+
+//export class UserGroup extends Model<UserGroupModel, UserGroupCreationAttributes> {}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class UserGroup extends Model<UserGroupModel> implements UserGroupModel {
+    name: string;
+    status: string;
+    verified: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      UserGroup.belongsTo(models.Tenant, { targetKey: "id" });
+    }
+  }
+  UserGroup.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: "",
+      updatedAt: "",
+      status: "",
+      name: "",
+    },
+    { sequelize }
+  );
+  //
+};

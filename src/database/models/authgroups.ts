@@ -1,47 +1,54 @@
 // @/models.ts
-import { Tenant } from "./tenant";
-import { Optional } from "sequelize";
-import {
-  Table,
-  Model,
-  Column,
-  DataType,
-  ForeignKey,
-  BelongsTo,
-} from "sequelize-typescript";
+import { Sequelize, Model, CreationOptional } from "sequelize";
 
-interface AuthGroupAttributes {
-  id: number;
-  name: string;
+export interface AuthGroupAddModel {
+  id?: number;
+  status: string;
+  verified: string;
 }
 
-interface AuthGroupCreationAttributes
-  extends Optional<AuthGroupAttributes, "id"> {}
-
-@Table({
-  timestamps: true,
-  tableName: "auth_groups",
-})
-export class AuthGroup extends Model<
-  AuthGroupAttributes,
-  AuthGroupCreationAttributes
-> {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name!: string;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: true,
-  })
-  active!: boolean;
-  @ForeignKey(() => Tenant)
-  @Column
-  organizationId: number;
-
-  @BelongsTo(() => Tenant)
-  organization: Tenant;
+export interface AuthGroupModel {
+  id?: number;
+  status: string;
+  verified: string;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface AuthGroupViewModel {
+  id?: number;
+  status: string;
+  verified: string;
+}
+
+//export class AuthGroup extends Model<AuthGroupModel, AuthGroupCreationAttributes> {}
+
+module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  class AuthGroup extends Model<AuthGroupModel> implements AuthGroupModel {
+    status: string;
+    verified: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    id: CreationOptional<number>;
+    static associate(models: any) {
+      AuthGroup.belongsTo(models.Tenant, { targetKey: "id" });
+      AuthGroup.hasMany(models.AuthGroupDetails);
+    }
+  }
+  AuthGroup.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: "",
+      updatedAt: "",
+      status: "",
+      verified: "",
+    },
+    { sequelize }
+  );
+  //
+};
