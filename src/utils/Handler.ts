@@ -29,7 +29,7 @@ class Handler {
         });
       } else {
         res.status(404);
-        return res.render("error", {
+        return res.render("pages/404", {
           title: "Page Not Found",
           message: "Page Not Found",
           error: {
@@ -106,7 +106,7 @@ class Handler {
       });
     }
 
-    return res.render("pages/error", {
+    return res.render("pages/500", {
       error: err.stack,
       title: "Under Maintenance",
     });

@@ -10,7 +10,6 @@ import ExpressApp from "./providers/Express";
 const Express = new ExpressApp();
 
 import Logger from "./utils/Log";
-import Database from "./database/index";
 let Log = new Logger();
 /**
  * This is the main class.
@@ -59,7 +58,7 @@ class App {
    */
   public loadDatabase(): void {
     Log.info("Database :: Booting @ Master...");
-    Database.init();
+    // Database.init();
   }
 }
 export default App;

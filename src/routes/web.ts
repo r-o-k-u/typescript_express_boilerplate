@@ -13,6 +13,16 @@ router.get("/profile", homeController.profile);
 router.get("/verify-email", homeController.verifyEmail);
 router.get("/forgot-password", homeController.forgotPassword);
 router.get("/change-password", homeController.changePassword);
+router.get("/user-list", homeController.UserList);
+router.get("/user-grid", homeController.UserGrid);
+router.get("/auth-group", homeController.AuthGroups);
+router.get("/auth-permission", homeController.AuthPermissions);
+router.get("/organization", homeController.Organization);
+router.get("/organization/:id", homeController.Organization);
+router.get("/tenants", homeController.Tenants);
+router.get("/tenant/:id", homeController.Tenants);
+router.get("/modules", homeController.Modules);
+router.get("/modules/:id", homeController.Modules);
 router.get("*", function (req, res) {
   return res.render("pages/404", {
     layout: "layout",
