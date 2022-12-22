@@ -6,13 +6,14 @@ export interface AuditLogAddModel {
   status: string;
   verified: string;
 }
-
+// interface for the AuditLog model
 export interface AuditLogModel {
   id?: number;
-  status: string;
-  verified: string;
-  createdAt: string;
-  updatedAt: string;
+  action: string;
+  entityName: string;
+  entityId: number;
+  values: object;
+  timestamp: Date;
 }
 
 export interface AuditLogViewModel {
@@ -25,6 +26,11 @@ export interface AuditLogViewModel {
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   class AuditLog extends Model<AuditLogModel> implements AuditLogModel {
+    action: string;
+    entityName: string;
+    entityId: number;
+    values: object;
+    timestamp: Date;
     status: string;
     verified: string;
     password: string;
@@ -43,10 +49,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      createdAt: "",
-      updatedAt: "",
-      status: "",
-      verified: "",
+      values: "",
+      action: "",
+      entityName: "",
+      entityId: "",
+      timestamp: "",
     },
     { sequelize }
   );

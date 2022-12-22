@@ -41,22 +41,7 @@ class Database {
   async associate() {}
 
   async seed() {}
-  async authenticate() {
-    try {
-      //Create associations
-      await this.associate();
 
-      //Sync DB
-      await this.sequelize
-        .sync({ force: false })
-        .then(() => console.log("DB Connection established successfully."))
-        .catch((err) =>
-          console.error(`DB Sequelize Connection Failed: ${err}`)
-        );
-    } catch (error) {
-      console.error("Unable to connect to the database:", error);
-    }
-  }
   async addSequelizeConnectionToRepo(DB_REPO: any, DB_NAME: any) {
     if (DB_NAME != Locals.config().DB_NAME) {
       this.sequelize = new Sequelize(
@@ -100,6 +85,7 @@ class Database {
         console.error("Unable to connect to the database:", error);
       }
     } else {
+      return DB_REPO;
       console.log("tenant already connected  ");
     }
   }
@@ -109,7 +95,7 @@ class Database {
 
 export const getDBInstance = async (DB_NAME: string) => {
   const DB = new Database(DB_NAME);
-  await DB.authenticate();
+  //await DB.authenticate();
   //await DB.seed();
   return DB;
 };

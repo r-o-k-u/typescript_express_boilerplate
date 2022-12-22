@@ -7,10 +7,12 @@ export interface AuthRoleAddModel {
   name: string;
 }
 
+// interface for the AuthRole model
 export interface AuthRoleModel {
   id?: number;
   status: string;
   name: string;
+  codename: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,10 +27,9 @@ export interface AuthRoleViewModel {
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   class AuthRole extends Model<AuthRoleModel> implements AuthRoleModel {
+    codename: string;
     name: string;
     status: string;
-    verified: string;
-    password: string;
     createdAt: string;
     updatedAt: string;
     id: CreationOptional<number>;
@@ -47,6 +48,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       updatedAt: "",
       status: "",
       name: "",
+      codename: "",
     },
     { sequelize }
   );

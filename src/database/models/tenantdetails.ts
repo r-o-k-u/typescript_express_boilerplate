@@ -10,7 +10,9 @@ export interface TenantDetailsAddModel {
 export interface TenantDetailsModel {
   id?: number;
   status: string;
-  name: string;
+  tenantId: number;
+  key: string;
+  value: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -28,10 +30,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     extends Model<TenantDetailsModel>
     implements TenantDetailsModel
   {
+    tenantId: number;
+    key: string;
+    value: string;
     name: string;
     status: string;
-    verified: string;
-    password: string;
     createdAt: string;
     updatedAt: string;
     id: CreationOptional<number>;
@@ -49,7 +52,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       createdAt: "",
       updatedAt: "",
       status: "",
-      name: "",
+      tenantId: "",
+      key: "",
+      value: "",
     },
     { sequelize }
   );

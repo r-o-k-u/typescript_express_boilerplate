@@ -7,10 +7,11 @@ export interface AuthGroupAddModel {
   verified: string;
 }
 
+// interface for the AuthGroup model
 export interface AuthGroupModel {
   id?: number;
   status: string;
-  verified: string;
+  name: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,9 +26,8 @@ export interface AuthGroupViewModel {
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   class AuthGroup extends Model<AuthGroupModel> implements AuthGroupModel {
+    name: string;
     status: string;
-    verified: string;
-    password: string;
     createdAt: string;
     updatedAt: string;
     id: CreationOptional<number>;
@@ -46,7 +46,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       createdAt: "",
       updatedAt: "",
       status: "",
-      verified: "",
+      name: "",
     },
     { sequelize }
   );

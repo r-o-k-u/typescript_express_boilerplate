@@ -9,8 +9,10 @@ export interface UserDetailAddModel {
 
 export interface UserDetailModel {
   id?: number;
-  email: string;
-  password: string;
+  status: string;
+  tenantId: number;
+  key: string;
+  value: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -24,8 +26,10 @@ export interface UserDetailViewModel {
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   class UserDetail extends Model<UserDetailModel> implements UserDetailModel {
-    email: string;
-    password: string;
+    status: string;
+    tenantId: number;
+    key: string;
+    value: string;
     createdAt: string;
     updatedAt: string;
     id: CreationOptional<number>;
@@ -40,10 +44,12 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      email: "",
-      password: "",
       createdAt: "",
       updatedAt: "",
+      status: "",
+      tenantId: "",
+      key: "",
+      value: "",
     },
     { sequelize }
   );

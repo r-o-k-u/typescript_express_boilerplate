@@ -6,11 +6,11 @@ export interface AuthPermissionAddModel {
   status: string;
   verified: string;
 }
-
+// interface for the AuthPermission model
 export interface AuthPermissionModel {
   id?: number;
-  status: string;
-  verified: string;
+  name: string;
+  codename: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -28,9 +28,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     extends Model<AuthPermissionModel>
     implements AuthPermissionModel
   {
+    name: string;
+    codename: string;
     status: string;
-    verified: string;
-    password: string;
     createdAt: string;
     updatedAt: string;
     id: CreationOptional<number>;
@@ -48,8 +48,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       },
       createdAt: "",
       updatedAt: "",
-      status: "",
-      verified: "",
+      name: "",
+      codename: "",
     },
     { sequelize }
   );

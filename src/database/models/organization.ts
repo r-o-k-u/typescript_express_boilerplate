@@ -5,10 +5,21 @@ export interface OrganizationAddModel {
   id?: number;
   name: string;
 }
-
+//interface for the Organization model
 export interface OrganizationModel {
   id?: number;
   name: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  zipCode: string;
+  phone: string;
+  email: string;
+  website: string;
+  registrationNumber: string;
+  vatNumber: string;
+  logo: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,6 +36,17 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     extends Model<OrganizationModel>
     implements OrganizationModel
   {
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    zipCode: string;
+    phone: string;
+    email: string;
+    website: string;
+    registrationNumber: string;
+    vatNumber: string;
+    logo: string;
     name: string;
     createdAt: string;
     updatedAt: string;
@@ -44,6 +66,17 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       name: "",
       createdAt: "",
       updatedAt: "",
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      zipCode: "",
+      phone: "",
+      email: "",
+      website: "",
+      registrationNumber: "",
+      vatNumber: "",
+      logo: "",
     },
     { sequelize }
   );

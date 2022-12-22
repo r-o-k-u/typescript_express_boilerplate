@@ -9,6 +9,9 @@ export interface TenantAddModel {
 export interface TenantModel {
   id?: number;
   name: string;
+  databaseName: string;
+  schemaName: string;
+  domainName: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -22,6 +25,9 @@ export interface TenantViewModel {
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   class Tenant extends Model<TenantModel> implements TenantModel {
+    databaseName: string;
+    schemaName: string;
+    domainName: string;
     name: string;
     createdAt: string;
     updatedAt: string;
@@ -42,6 +48,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       name: "",
       createdAt: "",
       updatedAt: "",
+      databaseName: "",
+      schemaName: "",
+      domainName: "",
     },
     { sequelize }
   );
