@@ -7,6 +7,12 @@ export interface AuditLogAddModel {
   verified: string;
 }
 // interface for the AuditLog model
+/**
+ * AuditLog:
+ * @remarks
+ * This model represents a record of an auditable event in the system.
+ * It includes fields such as id, event, entity, entityId, tenantId, userId, createdAt, and updatedAt.
+ */
 export interface AuditLogModel {
   id?: number;
   action: string;
@@ -25,6 +31,12 @@ export interface AuditLogViewModel {
 //export class AuditLog extends Model<AuditLogModel, AuditLogCreationAttributes> {}
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
+  /**
+   * AuditLog:
+   *  @remarks
+   * This class represents the AuditLog model, which is used to track changes made to the data within the API.
+   * It includes fields such as id, description, entityName, and createdAt.
+   */
   class AuditLog extends Model<AuditLogModel> implements AuditLogModel {
     action: string;
     entityName: string;
@@ -38,8 +50,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     updatedAt: string;
     id: CreationOptional<number>;
     static associate(models: any) {
-      AuditLog.belongsTo(models.Tenant, { targetKey: "id" });
-      AuditLog.hasMany(models.AuditLogDetails);
+      AuditLog.belongsTo(models.Tenant, {
+        foreignKey: "tenantId",
+        as: "tenant",
+      });
     }
   }
   AuditLog.init(
@@ -49,11 +63,31 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      values: "",
-      action: "",
-      entityName: "",
-      entityId: "",
-      timestamp: "",
+      values: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        comment: "comment",
+      },
+      action: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        comment: "comment",
+      },
+      entityName: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        comment: "comment",
+      },
+      entityId: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        comment: "comment",
+      },
+      timestamp: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        comment: "comment",
+      },
     },
     { sequelize }
   );

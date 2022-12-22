@@ -1,9 +1,10 @@
 import express from "express";
 
 /**
- * Admin controller
+ * TenantController
  * @remarks
- * Handles all system administration related  requests.
+ * This class is responsible for managing tenants in the system.
+ * It includes functions for creating new tenants, fetching tenants, and deleting tenants.
  */
 // define the Tenant controller
 class TenantController {
@@ -96,7 +97,12 @@ class TenantController {
     }
   }
 }
-
+/**
+ * AuditLog Controller
+ * @remarks
+ * This class is responsible for managing audit logs in the system. It includes functions for creating new audit logs,
+ * fetching audit logs for a particular tenant or organization, and deleting audit logs.
+ */
 // define the AuditLog controller
 class AuditLogController {
   /**
@@ -190,7 +196,12 @@ class AuditLogController {
     }
   }
 }
-
+/**
+ * OrganizationController
+ * @remarks
+ * This class is responsible for managing organizations in the system.
+ * It includes functions for creating new organizations, fetching organizations, and deleting organizations.
+ */
 // define the Organization controller
 class OrganizationController {
   /**
@@ -282,7 +293,13 @@ class OrganizationController {
     }
   }
 }
-
+/**
+ * ModulesController
+ * @remarks
+ * This class is responsible for managing the different modules that tenants or organizations have access to.
+ * It includes functions for creating new modules, fetching modules for a particular tenant or organization,
+ * and deleting modules.
+ */
 // define the Modules controller
 class ModulesController {
   /**

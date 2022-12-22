@@ -6,7 +6,12 @@
 
 import express from "express";
 
-// define the AuthGroup controller
+/**
+ * AuthGroupController
+ * @remarks
+ * This class is responsible for managing user groups in the system. It includes functions for creating new user groups,
+ * fetching user groups for a particular tenant or organization, and deleting user groups
+ */
 class AuthGroupController {
   /**
    *  This function retrieves a list of all authentication groups.
@@ -101,7 +106,12 @@ class AuthGroupController {
   }
 }
 
-// define the AuthPermission controller
+/**
+ * AuthPermissionController
+ * @remarks
+ * This class is responsible for managing permissions in the system. It includes functions for creating new permissions,
+ * fetching permissions for a particular tenant or organization, and deleting permissions.
+ */
 class AuthPermissionController {
   /**
    * This function retrieves a list of all authentication permissions.
@@ -177,7 +187,12 @@ class AuthPermissionController {
   }
 }
 
-// define the AuthRole controller
+/**
+ * AuthRoleController
+ * @remarks
+ * This class is responsible for managing roles in the system. It includes functions for creating new roles,
+ * fetching roles for a particular tenant or organization, and deleting roles.
+ */
 class AuthRoleController {
   /**
    * This function retrieves a list of all authentication roles.
@@ -270,8 +285,11 @@ class AuthRoleController {
     }
   }
 }
-
-// define the Authentication controller
+/**
+ * AuthenticationController
+ * @remarks
+ * This class is responsible for managing user authentication in the system. It includes functions for logging in and logging out, as well as functions for email and phone two-factor authentication, password reset, and email verification.
+ */
 class AuthenticationController {
   /**
    *  This function registers a new user for the API.

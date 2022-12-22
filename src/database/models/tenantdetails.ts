@@ -1,23 +1,16 @@
 // @/models.ts
 import { Sequelize, Model, CreationOptional } from "sequelize";
 
-export interface TenantDetailsAddModel {
-  id?: number;
-  status: string;
-  name: string;
+export interface ITenantDetails {
+  id: number; // ID for the tenant details (primary key)
+  tenantId: number; // ID for the tenant (foreign key)
+  phone: string; // Phone number for the tenant
+  address: string; // Address for the tenant
+  city: string; // City for the tenant
+  country: string; // Country for the tenant
 }
 
-export interface TenantDetailsModel {
-  id?: number;
-  status: string;
-  tenantId: number;
-  key: string;
-  value: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface TenantDetailsViewModel {
+export interface ITenantDetailsView {
   id?: number;
   status: string;
   name: string;
@@ -26,21 +19,14 @@ export interface TenantDetailsViewModel {
 //export class TenantDetails extends Model<TenantDetailsModel, TenantDetailsCreationAttributes> {}
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
-  class TenantDetails
-    extends Model<TenantDetailsModel>
-    implements TenantDetailsModel
-  {
+  class TenantDetails extends Model<ITenantDetails> implements ITenantDetails {
     tenantId: number;
-    key: string;
-    value: string;
-    name: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
+    phone: string;
+    address: string;
+    city: string;
+    country: string;
     id: CreationOptional<number>;
-    static associate(models: any) {
-      TenantDetails.belongsTo(models.Tenant, { targetKey: "id" });
-    }
+    static associate(models: any) {}
   }
   TenantDetails.init(
     {
@@ -49,12 +35,31 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      createdAt: "",
-      updatedAt: "",
-      status: "",
-      tenantId: "",
-      key: "",
-      value: "",
+      // Phone number for the tenant
+      phone: {
+        type: DataTypes.STRING,
+      },
+      // Address for the tenant
+      address: {
+        type: DataTypes.STRING,
+      },
+      // City for the tenant
+      city: {
+        type: DataTypes.STRING,
+      },
+      // Country for the tenant
+      country: {
+        type: DataTypes.STRING,
+      },
+      // ID for the tenant (foreign key)
+      tenantId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "tenants",
+          key: "id",
+        },
+      },
     },
     { sequelize }
   );
