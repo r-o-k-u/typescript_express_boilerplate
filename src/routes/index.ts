@@ -8,7 +8,7 @@ import Locals from "../providers/Locals";
 import Logger from "../utils/Log";
 const Log = new Logger();
 
-/* import apiRouter from "./api"; */
+import apiRouter from "./api";
 import webRouter from "./web";
 import docsRouter from "./docs";
 
@@ -30,13 +30,13 @@ class Routes {
 
     return _express.use("/", webRouter);
   }
-  /* 
+
   public mountApi(_express: Application): Application {
     const apiPrefix = Locals.config().apiPrefix;
     Log.info("Routes :: Mounting API Routes...");
 
     return _express.use(`/${apiPrefix}`, apiRouter);
-  } */
+  }
 }
 
 export default Routes;

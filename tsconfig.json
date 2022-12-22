@@ -101,20 +101,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "typedocOptions": {
-    "entryPoints": [
-      "bin/www.ts",
-      "src/app.ts",
-      "src/routes/index.ts",
-      "src/db/index.ts",
-      "src/utils/Handler.ts",
-      "src/utils/Jwt.ts",
-      "src/utils/Log.ts",
-      "src/utils/Mailer.ts",
-      "src/utils/Sms.ts",
-      "src/utils/swagger.ts",
-      "src/providers/Express.ts",
-      "src/providers/Locals.ts"
-    ],
+    "entryPoints": ["src/database/models/*.ts", "src/controllers/api/*.ts"],
     "out": "public/docs"
   }
 }

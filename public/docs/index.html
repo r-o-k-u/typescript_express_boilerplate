@@ -66,10 +66,19 @@
 <a href="#built-with" id="built-with" style="color: inherit; text-decoration: none;">
   <h3>Built With</h3>
 </a>
+<p>A boilerplate for <a href="https://nodejs.org/en">Node.js</a> App.</p>
 <ul>
-<li><a href=""><code>typescript</code></a></li>
-<li><a href=""><code>express</code></a></li>
-<li><a href=""><code>node js</code></a></li>
+<li>This boilerplate is built using <a href="https://expressjs.com/">Express.js</a> web framework, and is using <a href="https://www.typescriptlang.org/">Typescript Lang</a> for writing the app&#39;s logic.</li>
+<li>It uses Node&#39;s <a href="https://nodejs.org/api/cluster.html">Cluster API</a>, this helps us to take advantage of multi-core systems &amp; to handle the load.</li>
+<li>For storing custom constant configurations within the <code>process.env</code> - <a href="https://github.com/motdotla/dotenv">DotEnv</a> package is used.</li>
+<li>For Database - Repo contains the use of <a href="https://www.postgresql.org/">Postgres</a> (ie. <a href="https://www.postgresql.org/">Postgres</a> object modeling for <a href="https://nodejs.org/en/">Node.js</a>).</li>
+<li>For Routing - Repo contains the use of <a href="https://expressjs.com/en/guide/routing.html">express-router</a> &amp; have distributed Routes into two files ie. Web Routes &amp; API Routes.</li>
+<li>For Route Auth Middleware - Web routes are configured with <a href="">CSRF Token</a> while the API routes are configured with <a href="https://github.com/auth0/express-jwt">JSON Web Token</a>.</li>
+<li>For Logging - Repo uses custom Log class built in middlewares folder, and it creates logs file by date &amp; removes the log files after &#39;X&#39; days (You can define that &#39;X&#39; in the <code>.env</code> file).</li>
+<li>For Handling Exception - Repo contains two classes ie. <code>Handler</code> &amp; <code>NativeEvent</code>.</li>
+<li>To Log - use <code>Log.info(&#39;Your message should go here!&#39;)</code>. Other options for logging are <code>Log.warn</code>, <code>Log.error</code> &amp; <code>Log.custom</code>.</li>
+<li>For views - Repo contains the use of <a href="https://ejs.co/">ejs</a> template engine.</li>
+<li>For background queues - Repo contains the use of <a href="https://www.rabbitmq.com/">rabbitmq</a>.</li>
 </ul>
 
 <a href="#architecture" id="architecture" style="color: inherit; text-decoration: none;">
@@ -124,21 +133,41 @@
 </ul>
 <p><strong>Note:</strong></p>
 
-<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
-  <h3>Installation</h3>
+<a href="#contents" id="contents" style="color: inherit; text-decoration: none;">
+  <h1>Contents</h1>
 </a>
-<ol>
-<li>Clone the repo</li>
-</ol>
-<pre><code class="language-sh"><span class="hl-0">git clone https://github.com/r-o-k-u/typescript_express_boilerplate.git</span>
-</code></pre>
-<ol start="2">
-<li>Install NPM packages</li>
-</ol>
-<pre><code class="language-sh"><span class="hl-0">npm install</span>
-</code></pre>
-<!-- USAGE EXAMPLES -->
+<ul>
+<li><a href="#global-requisites">Global Requisites</a></li>
+<li><a href="#app-structure">App Structure</a></li>
+<li><a href="#install-configure--run">Install, Configure &amp; Run</a></li>
+</ul>
 
+<a href="#global-requisites" id="global-requisites" style="color: inherit; text-decoration: none;">
+  <h1>Global Requisites</h1>
+</a>
+<ul>
+<li>node (&gt;= 14.0)</li>
+<li>tsc (&gt;= 3.0.1)</li>
+<li>typescript (&gt;= 3.0.1)</li>
+<li>postgres (&gt;= 3.6.2)</li>
+</ul>
+
+<a href="#app-structure" id="app-structure" style="color: inherit; text-decoration: none;">
+  <h1>App Structure</h1>
+</a>
+<pre><code class="language-bash"><span class="hl-0">├── bin</span><br/><span class="hl-0">├── config</span><br/><span class="hl-0">├── logs</span><br/><span class="hl-0">├── nginx</span><br/><span class="hl-0">├── public</span><br/><span class="hl-0">├── src</span><br/><span class="hl-0">│   ├── controllers</span><br/><span class="hl-0">│   │   ├── api</span><br/><span class="hl-0">│   │   │   ├── admin</span><br/><span class="hl-0">│   │   │   │   ├── admin.controller.ts</span><br/><span class="hl-0">│   │   ├── ├── authentication</span><br/><span class="hl-0">│   │   │   │   ├── authentication.controller.ts</span><br/><span class="hl-0">│   │   ├── ├── user</span><br/><span class="hl-0">│   │   │   │   ├── user.controller.ts</span><br/><span class="hl-0">│   │   ├── web</span><br/><span class="hl-0">│   │   │   ├── index.ts</span><br/><span class="hl-0">│   ├── database</span><br/><span class="hl-0">│   │   ├── entity</span><br/><span class="hl-0">│   │   ├── migrations</span><br/><span class="hl-0">│   │   ├── seeders</span><br/><span class="hl-0">│   │   ├── subscriber</span><br/><span class="hl-0">│   │   └── index.ts</span><br/><span class="hl-0">│   ├── middlewares</span><br/><span class="hl-0">│   │   ├── CORS.ts</span><br/><span class="hl-0">│   │   ├── CsrfToken.ts</span><br/><span class="hl-0">│   │   ├── Http.ts</span><br/><span class="hl-0">│   │   ├── Kernel.ts</span><br/><span class="hl-0">│   │   ├── Log.ts</span><br/><span class="hl-0">│   │   ├── Statics.ts</span><br/><span class="hl-0">│   │   ├── StatusMonitor.ts</span><br/><span class="hl-0">│   │   └── View.ts</span><br/><span class="hl-0">│   ├── providers</span><br/><span class="hl-0">│   │   ├── Express.ts</span><br/><span class="hl-0">│   │   ├── Locals.ts</span><br/><span class="hl-0">│   ├── routes</span><br/><span class="hl-0">│   │   ├── api.ts</span><br/><span class="hl-0">│   │   ├── docs.ts</span><br/><span class="hl-0">│   │   ├── index.ts</span><br/><span class="hl-0">│   │   └── web.ts</span><br/><span class="hl-0">│   ├── services</span><br/><span class="hl-0">│   │   └── auth</span><br/><span class="hl-0">│   │        ├── Token.ts</span><br/><span class="hl-0">│   │   ├── user</span><br/><span class="hl-0">│   │        ├── user.ts</span><br/><span class="hl-0">│   │        ├── userRepository.ts</span><br/><span class="hl-0">│   ├── Utils</span><br/><span class="hl-0">│   │   ├── Handler.ts</span><br/><span class="hl-0">│   │   ├── jwt.ts</span><br/><span class="hl-0">│   │   ├── Log.ts</span><br/><span class="hl-0">│   │   └── Mailer.ts</span><br/><span class="hl-0">│   │   └── Sms.ts</span><br/><span class="hl-0">│   │   └── swagger.ts</span><br/><span class="hl-0">├── views</span><br/><span class="hl-0">│   ├── change_password.ejs</span><br/><span class="hl-0">│   ├── error.ejs</span><br/><span class="hl-0">│   ├── forgot_password.ejs</span><br/><span class="hl-0">│   ├── home.ejs</span><br/><span class="hl-0">│   ├── signin.ejs</span><br/><span class="hl-0">│   ├── signup.ejs</span><br/><span class="hl-0">│   └── verify_email.ejs</span><br/><span class="hl-0">├── .app.ts</span><br/><span class="hl-0">├── .env</span><br/><span class="hl-0">├── .env.development</span><br/><span class="hl-0">├── .env.example</span><br/><span class="hl-0">├── .gitignore</span><br/><span class="hl-0">├── .docker-compose.yaml</span><br/><span class="hl-0">├── .Dockerfile</span><br/><span class="hl-0">├── .env.production</span><br/><span class="hl-0">├── nodemon.json</span><br/><span class="hl-0">├── .ormconfig.ts</span><br/><span class="hl-0">├── package.json</span><br/><span class="hl-0">├── README.md</span><br/><span class="hl-0">├── tsconfig.json</span>
+</code></pre>
+
+<a href="#install-configure-amp-run" id="install-configure-amp-run" style="color: inherit; text-decoration: none;">
+  <h1>Install, Configure &amp; Run</h1>
+</a>
+<p>Below mentioned are the steps to install, configure &amp; run in your platform/distributions.</p>
+<pre><code class="language-bash"><span class="hl-1"># Clone the repo.</span><br/><span class="hl-0">git clone https://github.com/r-o-k-u/typescript_express_boilerplate.git;</span><br/><br/><span class="hl-1"># Goto the cloned project folder.</span><br/><span class="hl-2">cd</span><span class="hl-0"> nodets;</span>
+</code></pre>
+<pre><code class="language-bash"><span class="hl-1"># Without Docker</span><br/><br/><span class="hl-1"># Note: It is assumed here that you have MongoDB running in the background and that you have created the database.</span><br/><br/><span class="hl-1"># Install NPM dependencies.</span><br/><span class="hl-0">npm install;</span><br/><br/><span class="hl-1"># Edit your DotEnv file using any editor of your choice.</span><br/><span class="hl-1"># Please Note: You should add all the configurations details</span><br/><span class="hl-1"># or else default values will be used!</span><br/><span class="hl-0">vim .env;</span><br/><br/><span class="hl-1"># Run the app</span><br/><span class="hl-0">npm run dev;</span>
+</code></pre>
+<pre><code class="language-bash"><span class="hl-1"># With Docker</span><br/><br/><span class="hl-1"># Note: It is assumed here that you have Docker running in the background.</span><br/><br/><span class="hl-1"># Run the app in docker as a foreground process</span><br/><span class="hl-0">docker-compose up</span><br/><br/><span class="hl-1"># Run the app in docker as a background process</span><br/><span class="hl-0">docker-compose up -d</span>
+</code></pre>
 
 <a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
   <h2>Usage</h2>
@@ -218,17 +247,22 @@
 <ul>
 <li class="current selected"><a href="modules.html">typescript_<wbr/>boilerplate</a>
 <ul>
-<li class="tsd-kind-module"><a href="modules/bin_www.html">bin/www</a></li>
-<li class="tsd-kind-module"><a href="modules/src_app.html">src/app</a></li>
-<li class="tsd-kind-module"><a href="modules/src_providers_Express.html">src/providers/<wbr/>Express</a></li>
-<li class="tsd-kind-module"><a href="modules/src_providers_Locals.html">src/providers/<wbr/>Locals</a></li>
-<li class="tsd-kind-module"><a href="modules/src_routes.html">src/routes</a></li>
-<li class="tsd-kind-module"><a href="modules/src_utils_Handler.html">src/utils/<wbr/>Handler</a></li>
-<li class="tsd-kind-module"><a href="modules/src_utils_Jwt.html">src/utils/<wbr/>Jwt</a></li>
-<li class="tsd-kind-module"><a href="modules/src_utils_Log.html">src/utils/<wbr/>Log</a></li>
-<li class="tsd-kind-module"><a href="modules/src_utils_Mailer.html">src/utils/<wbr/>Mailer</a></li>
-<li class="tsd-kind-module"><a href="modules/src_utils_Sms.html">src/utils/<wbr/>Sms</a></li>
-<li class="tsd-kind-module"><a href="modules/src_utils_swagger.html">src/utils/swagger</a></li></ul></li></ul></div></details></nav></div></div>
+<li class="tsd-kind-module"><a href="modules/controllers_api_adminController.html">controllers/api/admin<wbr/>Controller</a></li>
+<li class="tsd-kind-module"><a href="modules/controllers_api_authController.html">controllers/api/auth<wbr/>Controller</a></li>
+<li class="tsd-kind-module"><a href="modules/controllers_api_userController.html">controllers/api/user<wbr/>Controller</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models.html">database/models</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_auditlogs.html">database/models/auditlogs</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_authgroups.html">database/models/authgroups</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_authpermissions.html">database/models/authpermissions</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_authroles.html">database/models/authroles</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_modules.html">database/models/modules</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_organization.html">database/models/organization</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_tenant.html">database/models/tenant</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_tenantdetails.html">database/models/tenantdetails</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_tenantmodules.html">database/models/tenantmodules</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_user.html">database/models/user</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_userdetails.html">database/models/userdetails</a></li>
+<li class="tsd-kind-module"><a href="modules/database_models_usergroups.html">database/models/usergroups</a></li></ul></li></ul></div></details></nav></div></div>
 <div class="container tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div><script src="assets/main.js"></script></body></html>
