@@ -41,14 +41,14 @@ class Handler {
    * @returns
    */
   public static notFoundHandler(_express: express.Application): any {
-    const apiPrefix = Locals.config().apiPrefix;
+    const apiPrefix = Locals.config().API_PREFIX;
     _express.use("*", (req: Request, res: Response) => {
       const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
       Log.error(`Path '${req.originalUrl}' not found [IP: '${ip}']!`);
       if (req.xhr || req.originalUrl.includes(`/${apiPrefix}/`)) {
-        return res.json({
-          error: "Page Not Found",
+        return res.status(404).json({
+          Message: "Method not implemented",
         });
       } else {
         res.status(404);
@@ -112,7 +112,7 @@ class Handler {
     Log.error(err.stack);
     res.status(500);
 
-    const apiPrefix = Locals.config().apiPrefix;
+    const apiPrefix = Locals.config().API_PREFIX;
     if (req.originalUrl.includes(`/${apiPrefix}/`)) {
       if (err.name && err.name === "UnauthorizedError") {
         const innerMessage =

@@ -1960,8 +1960,8 @@ translation is not defined
     at View.render (C:\Users\Roku\Documents\Work\Qwerty\boilerplate\typeScript\node_modules\express\lib\view.js:135:8)
     at tryRender (C:\Users\Roku\Documents\Work\Qwerty\boilerplate\typeScript\node_modules\express\lib\application.js:657:10)
     at Function.render (C:\Users\Roku\Documents\Work\Qwerty\boilerplate\typeScript\node_modules\express\lib\application.js:609:3)
-[2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/users/avatar-3.jpg' not found [IP: '::1']!
-[2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/users/avatar-6.jpg' not found [IP: '::1']!
+[2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
+[2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 9:32:11] [ERROR] Path '/public/assets/images/giftbox.png' not found [IP: '::1']!
@@ -2855,8 +2855,8 @@ breadcrumb is not defined
 [2022-12-11 10:22:20] [INFO] Database :: Booting @ Master...
 [2022-12-11 10:22:20] [INFO] Database :: Booting @ Master...
 [2022-12-11 10:22:20] [INFO] Database :: connected...
-[2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/users/avatar-2.jpg' not found [IP: '::1']!
-[2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/users/avatar-3.jpg' not found [IP: '::1']!
+[2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
+[2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/auth-bg.jpg' not found [IP: '::1']!
 [2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/auth-bg.jpg' not found [IP: '::1']!
 [2022-12-11 10:22:19] [ERROR] Path '/public/assets/images/auth-bg.jpg' not found [IP: '::1']!
@@ -3465,8 +3465,8 @@ FooterJs is not defined
 [2022-12-11 11:1:46] [INFO] Database :: Booting @ Master...
 [2022-12-11 11:1:46] [INFO] Database :: Booting @ Master...
 [2022-12-11 11:1:46] [INFO] Database :: connected...
-[2022-12-11 11:1:45] [ERROR] Path '/public/assets/images/users/avatar-2.jpg' not found [IP: '::1']!
-[2022-12-11 11:1:45] [ERROR] Path '/public/assets/images/users/avatar-3.jpg' not found [IP: '::1']!
+[2022-12-11 11:1:45] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
+[2022-12-11 11:1:45] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 11:1:45] [ERROR] Path '/public/assets/images/auth-bg.jpg' not found [IP: '::1']!
 [2022-12-11 11:4:13] [INFO] Routes :: Mounting doc Routes...
 [2022-12-11 11:4:13] [INFO] Routes :: Mounting Web Routes...
@@ -3480,11 +3480,11 @@ FooterJs is not defined
 [2022-12-11 11:5:53] [INFO] Database :: Booting @ Master...
 [2022-12-11 11:5:53] [INFO] Database :: Booting @ Master...
 [2022-12-11 11:5:53] [INFO] Database :: connected...
-[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-2.jpg' not found [IP: '::1']!
-[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-3.jpg' not found [IP: '::1']!
+[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
+[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/auth-bg.jpg' not found [IP: '::1']!
-[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-3.jpg' not found [IP: '::1']!
-[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-2.jpg' not found [IP: '::1']!
+[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
+[2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/users/avatar-1.jpg' not found [IP: '::1']!
 [2022-12-11 11:5:52] [ERROR] Path '/public/assets/images/auth-bg.jpg' not found [IP: '::1']!
 [2022-12-11 11:6:27] [INFO] Routes :: Mounting doc Routes...
 [2022-12-11 11:6:27] [INFO] Routes :: Mounting Web Routes...

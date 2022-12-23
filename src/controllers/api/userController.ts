@@ -362,3 +362,7 @@ export class UserController {
     }
   }
 }
+
+export default {
+  UserController,
+};

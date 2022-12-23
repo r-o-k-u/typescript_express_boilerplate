@@ -28,6 +28,7 @@ const register = (req: Request, res: Response) => {
   try {
     return res.render("Auth/auth-register", {
       title: "Sign up",
+      layout: "layoutPlain",
       messages: messages,
       hasErrors: messages.length > 0,
     });
@@ -103,6 +104,7 @@ const lock = (req: Request, res: Response) => {
   try {
     return res.render("Auth/auth-lock-screen", {
       title: "Lock",
+      layout: "layoutPlain",
       messages: messages,
       hasErrors: messages.length > 0,
     });

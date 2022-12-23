@@ -32,9 +32,8 @@ class Routes {
   }
 
   public mountApi(_express: Application): Application {
-    const apiPrefix = Locals.config().apiPrefix;
+    const apiPrefix = Locals.config().API_PREFIX;
     Log.info("Routes :: Mounting API Routes...");
-
     return _express.use(`/${apiPrefix}`, apiRouter);
   }
 }

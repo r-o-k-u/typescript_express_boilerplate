@@ -22,12 +22,12 @@ router.get("/organization/:id", homeController.Organization);
 router.get("/tenants", homeController.Tenants);
 router.get("/tenant/:id", homeController.Tenants);
 router.get("/modules", homeController.Modules);
-router.get("/modules/:id", homeController.Modules);
+router.get("/modules/:id", homeController.Modules); /* 
 router.get("*", function (req, res) {
   return res.render("pages/404", {
     layout: "layout",
     title: "404",
     data: [],
   });
-});
+}); */
 export default router;
