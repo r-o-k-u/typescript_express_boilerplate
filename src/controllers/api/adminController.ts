@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import Handler from "../../utils/Handler";
 
 /**
  * TenantController
@@ -16,13 +17,29 @@ export class Tenant {
    * @param req
    * @param res
    */
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all tenants
       const tenants = {}; // await Tenant.findAll();
-      res.send(tenants);
-    } catch (error) {
-      res.status(500).send(error);
+      if (tenants) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          tenants,
+          "Tenants retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Tenants not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -33,13 +50,29 @@ export class Tenant {
    * @param req
    * @param res
    */
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single tenant by id
       const tenant = {}; // await Tenant.findByPk(req.params.id);
-      res.send(tenant);
-    } catch (error) {
-      res.status(500).send(error);
+      if (tenant) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          tenant,
+          "Tenant retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Tenant not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -50,13 +83,19 @@ export class Tenant {
    * @param req
    * @param res
    */
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new tenant
       const tenant = {}; // await Tenant.create(req.body);
-      res.send(tenant);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        tenant,
+        "Tenant created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -69,14 +108,20 @@ export class Tenant {
    * @param req
    * @param res
    */
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing tenant
       const tenant = {}; // await Tenant.findByPk(req.params.id);
       //tenant.update(req.body);
-      res.send(tenant);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        tenant,
+        "Tenant updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -87,14 +132,20 @@ export class Tenant {
    * @param req
    * @param res
    */
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing tenant
       const tenant = {}; //await Tenant.findByPk(req.params.id);
       //tenant.destroy();
-      res.send(tenant);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        tenant,
+        "Tenant deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
@@ -114,13 +165,29 @@ export class AuditLog {
    * @param req
    * @param res
    */
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all audit logs
       const auditLogs = {}; // await AuditLog.findAll();
-      res.send(auditLogs);
-    } catch (error) {
-      res.status(500).send(error);
+      if (auditLogs) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          auditLogs,
+          "Audit Log retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Audit Log not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -131,13 +198,29 @@ export class AuditLog {
    * @param req
    * @param res
    */
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single audit log by id
       const auditLog = {}; // await AuditLog.findByPk(req.params.id);
-      res.send(auditLog);
-    } catch (error) {
-      res.status(500).send(error);
+      if (auditLog) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          auditLog,
+          "Audit Log retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Audit Log not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -149,13 +232,19 @@ export class AuditLog {
    * @param req
    * @param res
    */
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new audit log
       const auditLog = {}; // await AuditLog.create(req.body);
-      res.send(auditLog);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        auditLog,
+        "Audit Log created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -168,14 +257,20 @@ export class AuditLog {
    * @param req
    * @param res
    */
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing audit log
       const auditLog = {}; // await AuditLog.findByPk(req.params.id);
       //auditLog.update(req.body);
-      res.send(auditLog);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        auditLog,
+        "Audit Log updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -186,14 +281,20 @@ export class AuditLog {
    * @param req
    * @param res
    */
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing audit log
       const auditLog = {}; // await AuditLog.findByPk(req.params.id);
       //auditLog.destroy();
-      res.send(auditLog);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        auditLog,
+        "Audit Log deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
@@ -212,13 +313,29 @@ export class Organization {
    * @param req
    * @param res
    */
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all organizations
       const organizations = {}; // await Organization.findAll();
-      res.send(organizations);
-    } catch (error) {
-      res.status(500).send(error);
+      if (organizations) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          organizations,
+          "Organizations retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Organizations not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -229,13 +346,29 @@ export class Organization {
    * @param req
    * @param res
    */
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single organization by id
       const organization = {}; // await Organization.findByPk(req.params.id);
-      res.send(organization);
-    } catch (error) {
-      res.status(500).send(error);
+      if (organization) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          organization,
+          "Organization retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Organization not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -246,13 +379,19 @@ export class Organization {
    * @param req
    * @param res
    */
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new organization
       const organization = {}; // await Organization.create(req.body);
-      res.send(organization);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        organization,
+        "Organization created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -265,14 +404,20 @@ export class Organization {
    * @param req
    * @param res
    */
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing organization
       const organization = {}; // await Organization.findByPk(req.params.id);
       //organization.update(req.body);
-      res.send(organization);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        organization,
+        "Organization updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -283,14 +428,20 @@ export class Organization {
    * @param req
    * @param res
    */
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing organization
       const organization = {}; // await Organization.findByPk(req.params.id);
       //organization.destroy();
-      res.send(organization);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        organization,
+        "Organization deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
@@ -311,7 +462,7 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async getModules(req: Request, res: Response) {
+  static async getModules(req: Request, res: Response, next: NextFunction) {
     try {
       // get the tenant's modules
       /*  const tenantId = req.user!.tenantId; */
@@ -319,9 +470,25 @@ export class Modules {
         where: { tenantId },
         include: [{ model: Module }],
       }); */
-      res.send(modules);
-    } catch (error) {
-      res.status(500).send(error);
+      if (modules) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          modules,
+          "Modules retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Modules not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -332,14 +499,30 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async getModule(req: Request, res: Response) {
+  static async getModule(req: Request, res: Response, next: NextFunction) {
     try {
       // get a single module
       const moduleId = req.params.id;
       const module = {}; //await Module.findByPk(moduleId);
-      res.send(module);
-    } catch (error) {
-      res.status(500).send(error);
+      if (module) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          module,
+          "Module retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Module not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -350,14 +533,20 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async createModule(req: Request, res: Response) {
+  static async createModule(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new module
       const { name, description } = req.body;
       const module = {}; //await Module.create({ name, description });
-      res.send(module);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        module,
+        "Module created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -370,7 +559,7 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async updateModule(req: Request, res: Response) {
+  static async updateModule(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing module
       /* const moduleId = req.params.id;
@@ -379,9 +568,15 @@ export class Modules {
       module.name = name;
       module.description = description;
       await module.save(); */
-      res.send({ message: "Module updated successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        module,
+        "Module updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -392,15 +587,21 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async deleteModule(req: Request, res: Response) {
+  static async deleteModule(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing module
       /* const moduleId = req.params.id;
       const module = await Module.findByPk(moduleId);
       await module.destroy(); */
-      res.send({ message: "Module deleted successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        module,
+        "Module deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 
@@ -413,7 +614,7 @@ export class Modules {
    * and sends a response indicating that the update was successful.
    *
    * */
-  static async updateModules(req: Request, res: Response) {
+  static async updateModules(req: Request, res: Response, next: NextFunction) {
     try {
       // update the tenant's modules
       /* const tenantId = req.user!.tenantId;
@@ -421,9 +622,15 @@ export class Modules {
       await EntityModule.destroy({ where: { tenantId } });
       const modules = moduleIds.map((moduleId) => ({ tenantId, moduleId }));
       await EntityModule.bulkCreate(modules); */
-      res.send({ message: "Modules updated successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        module,
+        "Module updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -438,7 +645,11 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async updateTenantModules(req: Request, res: Response) {
+  static async updateTenantModules(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       // update the tenant's modules
       /* const tenantId = req.user!.tenantId;
@@ -446,9 +657,15 @@ export class Modules {
       await EntityModule.destroy({ where: { tenantId } });
       const modules = moduleIds.map((moduleId) => ({ tenantId, moduleId }));
       await EntityModule.bulkCreate(modules); */
-      res.send({ message: "Modules updated successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        module,
+        "Tenant Modules successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }

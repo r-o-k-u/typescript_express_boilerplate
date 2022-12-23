@@ -1,10 +1,10 @@
+import { Request, Response, NextFunction } from "express";
+import Handler from "../../utils/Handler";
 /**
  * Auth controller
  * @remarks
  * Handles all authentication/ authorization  requests.
  */
-
-import express from "express";
 
 /**
  * AuthGroupController
@@ -21,13 +21,29 @@ export class AuthGroupController {
    * @param req
    * @param res
    */
-  static async getAll(req: express.Request, res: express.Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all auth groups
       const authGroups = {}; // await AuthGroup.findAll();
-      res.send(authGroups);
-    } catch (error) {
-      res.status(500).send(error);
+      if (authGroups) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          authGroups,
+          "Auth Groups retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "auth Groups not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -38,13 +54,29 @@ export class AuthGroupController {
    * @param req
    * @param res
    */
-  static async getById(req: express.Request, res: express.Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single auth group by id
       const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
-      res.send(authGroup);
-    } catch (error) {
-      res.status(500).send(error);
+      if (authGroup) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          authGroup,
+          "Auth Group retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Auth Group not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -56,13 +88,19 @@ export class AuthGroupController {
    * @param req
    * @param res
    */
-  static async create(req: express.Request, res: express.Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new auth group
       const authGroup = {}; // await AuthGroup.create(req.body);
-      res.send(authGroup);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authGroup,
+        "Auth Group created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -76,14 +114,20 @@ export class AuthGroupController {
    * @param req
    * @param res
    */
-  static async update(req: express.Request, res: express.Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing auth group
       const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
       //authGroup.update(req.body);
-      res.send(authGroup);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authGroup,
+        "Auth Group updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -94,14 +138,20 @@ export class AuthGroupController {
    * @param req
    * @param res
    */
-  static async delete(req: express.Request, res: express.Response) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing auth group
       const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
       //authGroup.destroy();
-      res.send(authGroup);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authGroup,
+        "Auth Group deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
@@ -121,13 +171,29 @@ export class AuthPermissionController {
    * @param req
    * @param res
    */
-  static async getAll(req: express.Request, res: express.Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all auth permissions
       const authPermissions = {}; // await AuthPermission.findAll();
-      res.send(authPermissions);
-    } catch (error) {
-      res.status(500).send(error);
+      if (authPermissions) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          authPermissions,
+          "Auth Permissions retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Auth Permissions not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -138,13 +204,29 @@ export class AuthPermissionController {
    * @param req
    * @param res
    */
-  static async getById(req: express.Request, res: express.Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single auth permission by id
       const authPermission = {}; // await AuthPermission.findByPk(req.params.id);
-      res.send(authPermission);
-    } catch (error) {
-      res.status(500).send(error);
+      if (authPermission) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          authPermission,
+          "Auth Permission retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Auth Permission not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -155,13 +237,19 @@ export class AuthPermissionController {
    * @param req
    * @param res
    */
-  static async create(req: express.Request, res: express.Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new auth permission
       const authPermission = {}; // await AuthPermission.create(req.body);
-      res.send(authPermission);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authPermission,
+        "Auth Permission created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -175,14 +263,20 @@ export class AuthPermissionController {
    * @param req
    * @param res
    */
-  static async update(req: express.Request, res: express.Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing auth permission
       const authPermission = {}; // await AuthPermission.findByPk(req.params.id);
       //authPermission.update(req.body);
-      res.send(authPermission);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authPermission,
+        "Auth Permission updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
@@ -202,13 +296,29 @@ export class AuthRoleController {
    * @param req
    * @param res
    */
-  static async getAll(req: express.Request, res: express.Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all auth roles
       const authRoles = {}; // await AuthRole.findAll();
-      res.send(authRoles);
-    } catch (error) {
-      res.status(500).send(error);
+      if (authRoles) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          authRoles,
+          "Auth Roles retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Auth Roles not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -219,13 +329,29 @@ export class AuthRoleController {
    * @param req
    * @param res
    */
-  static async getById(req: express.Request, res: express.Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single auth role by id
       const authRole = {}; // await AuthRole.findByPk(req.params.id);
-      res.send(authRole);
-    } catch (error) {
-      res.status(500).send(error);
+      if (authRole) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          authRole,
+          "Auth Role retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Auth Role not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -237,13 +363,19 @@ export class AuthRoleController {
    * @param req
    * @param res
    */
-  static async create(req: express.Request, res: express.Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new auth role
       const authRole = {}; // await AuthRole.create(req.body);
-      res.send(authRole);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authRole,
+        "Auth Role created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -256,14 +388,20 @@ export class AuthRoleController {
    * @param req
    * @param res
    */
-  static async update(req: express.Request, res: express.Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing auth role
       const authRole = {}; // await AuthRole.findByPk(req.params.id);
       //authRole.update(req.body);
-      res.send(authRole);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authRole,
+        "Auth Role updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -274,14 +412,20 @@ export class AuthRoleController {
    * @param req
    * @param res
    */
-  static async delete(req: express.Request, res: express.Response) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing auth role
       const authRole = {}; // await AuthRole.findByPk(req.params.id);
       //authRole.destroy();
-      res.send(authRole);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        authRole,
+        "Auth Role deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
@@ -300,15 +444,21 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async register(req: express.Request, res: express.Response) {
+  static async register(req: Request, res: Response, next: NextFunction) {
     try {
       // register a new user
       const { firstName, lastName, email, password, phone } = req.body;
       const user = {}; //new User({ firstName, lastName, email, password, phone });
       //await user.save();
-      res.send({ message: "User registered successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        null,
+        "User registered successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -322,16 +472,28 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async login(req: express.Request, res: express.Response) {
+  static async login(req: Request, res: Response, next: NextFunction) {
     try {
       // login an existing user
       const email = req.body.email;
       const password = req.body.password;
       const user = null; //await User.findOne({ where: { email } });
       if (!user) {
-        res.status(401).send({ message: "Invalid email or password" });
+        Handler.responseHandler(
+          res,
+          401,
+          "Unauthorized",
+          null,
+          "Invalid email or password"
+        );
       } else if (/* !(await user.validatePassword(password)) */ false) {
-        res.status(401).send({ message: "Invalid email or password" });
+        Handler.responseHandler(
+          res,
+          401,
+          "Unauthorized",
+          null,
+          "Invalid email or password"
+        );
       } else {
         // create a session for the user
         /* req.session!.userId = user.id;
@@ -348,8 +510,8 @@ export class AuthenticationController {
           }
         }); */
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -360,18 +522,24 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async logout(req: express.Request, res: express.Response) {
+  static async logout(req: Request, res: Response, next: NextFunction) {
     try {
       // destroy the user's session
       /* req.session!.destroy((error) => {
         if (error) {
-          res.status(500).send(error);
+           Handler.errorHandler(error, req, res, next);
         } else {
-          res.send({ message: "Logged out successfully" });
+          Handler.responseHandler(
+            res,
+            200,
+            "Success",
+            null,
+            "Logged out successfully"
+          );
         }
       }); */
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -383,23 +551,35 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async refreshToken(req: express.Request, res: express.Response) {
+  static async refreshToken(req: Request, res: Response, next: NextFunction) {
     try {
       // verify the refresh token provided by the user
       const refreshToken = req.body.refreshToken;
       const token: any = null; //jwt.verify(refreshToken, process.env.JWT_SECRET!);
       if (!token || !token.userId) {
-        res.status(401).send({ message: "Invalid refresh token" });
+        Handler.responseHandler(
+          res,
+          401,
+          "Unauthorized",
+          null,
+          "Invalid refresh token"
+        );
       } else {
         // create a new JWT token for the user
         const newToken = null; /* jwt.sign(
           { userId: token.userId },
           process.env.JWT_SECRET!
         ); */
-        res.send({ message: "Token refreshed successfully", token: newToken });
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          { token: newToken },
+          "Token refreshed successfully"
+        );
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -411,13 +591,13 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async forgetPassword(req: express.Request, res: express.Response) {
+  static async forgetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       // send a password reset email to the user
       const email = req.body.email;
       const user: any = null; //await User.findOne({ where: { email: email } });
       if (!user) {
-        res.status(404).send({ message: "User not found" });
+        Handler.responseHandler(res, 404, "Success", null, "User not found");
       } else {
         // generate a password reset token
         const resetToken = ""; //generateResetToken();
@@ -427,11 +607,16 @@ export class AuthenticationController {
 
         // send the password reset email
         //sendPasswordResetEmail(email, resetToken);
-
-        res.send({ message: "Password reset email sent" });
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          null,
+          "Password reset email sent"
+        );
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -444,7 +629,7 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async resetPassword(req: express.Request, res: express.Response) {
+  static async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       // reset the user's password
       const resetToken = req.body.resetToken;
@@ -452,11 +637,23 @@ export class AuthenticationController {
         where: { resetToken: resetToken },
       }); */
       if (!user) {
-        res.status(404).send({ message: "Invalid password reset token" });
+        Handler.responseHandler(
+          res,
+          404,
+          "Not Found",
+          null,
+          "Invalid password reset token"
+        );
       } else {
         // check if the password reset token has expired
         if (user.resetTokenExpiration < Date.now()) {
-          res.status(401).send({ message: "Password reset token expired" });
+          Handler.responseHandler(
+            res,
+            401,
+            "Unauthorized",
+            null,
+            "Password reset token expired"
+          );
         } else {
           // set the new password and clear the reset token
           user.password = req.body.password;
@@ -464,11 +661,17 @@ export class AuthenticationController {
           user.resetTokenExpiration = null;
           await user.save();
 
-          res.send({ message: "Password reset successful" });
+          Handler.responseHandler(
+            res,
+            200,
+            "Success",
+            null,
+            "Password reset successful"
+          );
         }
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -480,14 +683,14 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async twoFactorAuth(req: express.Request, res: express.Response) {
+  static async twoFactorAuth(req: Request, res: Response, next: NextFunction) {
     try {
       // send a two-factor authentication code to the user's phone or email
       const userId = req.body.userId;
       const type = req.body.type; // "phone" or "email"
       const user: any = null; //await User.findByPk(userId);
       if (!user) {
-        res.status(404).send({ message: "User not found" });
+        Handler.responseHandler(res, 404, "Not Found", null, "User not found");
       } else {
         // generate a two-factor authentication code
         const code = ""; //generateAuthCode();
@@ -501,10 +704,16 @@ export class AuthenticationController {
         } else if (type === "email") {
           //sendAuthCodeEmail(user.email, code);
         }
-        res.send({ message: "Two-factor authentication code sent" });
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          null,
+          "Two-factor authentication code sent"
+        );
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -516,29 +725,39 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async verifyAuthCode(req: express.Request, res: express.Response) {
+  static async verifyAuthCode(req: Request, res: Response, next: NextFunction) {
     try {
       // verify the two-factor authentication code provided by the user
       const userId = req.body.userId;
       const code = req.body.code;
       const user: any = null; //await User.findByPk(userId);
       if (!user) {
-        res.status(404).send({ message: "User not found" });
+        Handler.responseHandler(res, 404, "Not Found", null, "User not found");
       } else {
         if (user.authCode !== code || user.authCodeExpiration < Date.now()) {
-          res
-            .status(401)
-            .send({ message: "Invalid two-factor authentication code" });
+          Handler.responseHandler(
+            res,
+            401,
+            "Unauthorized",
+            null,
+            "Invalid two-factor authentication code"
+          );
         } else {
           // clear the two-factor authentication code
           user.authCode = null;
           user.authCodeExpiration = null;
           await user.save();
-          res.send({ message: "Two-factor authentication successful" });
+          Handler.responseHandler(
+            res,
+            200,
+            "Success",
+            null,
+            "Two-factor authentication successful"
+          );
         }
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -550,7 +769,11 @@ export class AuthenticationController {
    * @param req
    * @param res
    */
-  static async apiAuthentication(req: express.Request, res: express.Response) {
+  static async apiAuthentication(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       // authenticate the API request
       const apiKey = req.headers["x-api-key"];
@@ -559,12 +782,31 @@ export class AuthenticationController {
         where: { apiKey, apiSecret },
       }); */
       if (!organization) {
-        res.status(401).send({ message: "Invalid API key or secret" });
+        Handler.responseHandler(
+          res,
+          401,
+          "Unauthorized",
+          null,
+          "Invalid API key or secret"
+        );
       } else {
-        res.send({ message: "API authentication successful" });
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          null,
+          "API authentication successful"
+        );
       }
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 }
+
+export default {
+  AuthenticationController,
+  AuthRoleController,
+  AuthPermissionController,
+  AuthGroupController,
+};

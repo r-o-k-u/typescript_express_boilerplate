@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from "express";
+import Handler from "../../utils/Handler";
 /**
  * User controller
  * @remarks
@@ -18,13 +20,23 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getAll(req: Express.Request, res: express.Response) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all users
       const users = {}; // await User.findAll();
-      res.send(users);
-    } catch (error) {
-      res.status(500).send(error);
+      if (users) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          users,
+          "Users retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(res, 404, "Not found", null, "Users not found");
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -34,13 +46,23 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getById(req: express.Request, res: express.Response) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single user by id
       const user = {}; // await User.findByPk(req.params.id);
-      res.send(user);
-    } catch (error) {
-      res.status(500).send(error);
+      if (user) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          user,
+          "user retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(res, 404, "Not found", null, "User not found");
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -52,13 +74,19 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async create(req: express.Request, res: express.Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new user
       const user = {}; // await User.create(req.body);
-      res.send(user);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        user,
+        "user created successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -72,14 +100,20 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async update(req: express.Request, res: express.Response) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing user
       const user = {}; // await User.findByPk(req.params.id);
       //user.update(req.body);
-      res.send(user);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        user,
+        "user updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -90,14 +124,20 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async delete(req: express.Request, res: express.Response) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing user
       const user = {}; // await User.findByPk(req.params.id);
       //user.destroy();
-      res.send(user);
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        user,
+        "user deleted successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -108,16 +148,32 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getProfile(req: express.Request, res: express.Response) {
+  static async getProfile(req: Request, res: Response, next: NextFunction) {
     try {
       // get the user's profile
       const userId = null; //req.user!.id;
       const user = {}; /*  await User.findByPk(userId, {
         include: [{ model: UserDetail }],
       }); */
-      res.send(user);
-    } catch (error) {
-      res.status(500).send(error);
+      if (user) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          user,
+          "User retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Tenant not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -131,7 +187,7 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async updateProfile(req: express.Request, res: express.Response) {
+  static async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       // update the user's profile
       const userId = null; // req.user!.id;
@@ -143,8 +199,8 @@ export class UserController {
       user.phone = phone;
       await user.save();
       res.send({ message: "Profile updated successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -155,7 +211,7 @@ export class UserController {
    * @param req
    * @param res
    */
-  async addUserToGroup(req: express.Request, res: express.Response) {
+  async addUserToGroup(req: Request, res: Response, next: NextFunction) {
     // Get user ID and user group ID from request parameters
     //const { userId, groupId } = req.params;
 
@@ -166,7 +222,13 @@ export class UserController {
     }); */
 
     // Send response indicating that user was added to group successfully
-    res.send(userGroup);
+    Handler.responseHandler(
+      res,
+      200,
+      "Success",
+      userGroup,
+      "user added to group successfully"
+    );
   }
   /**
    * This function removes a user from a user group.
@@ -176,7 +238,7 @@ export class UserController {
    * @param req
    * @param res
    */
-  async removeUserFromGroup(req: express.Request, res: express.Response) {
+  async removeUserFromGroup(req: Request, res: Response, next: NextFunction) {
     // Get user ID and user group ID from request parameters
     const { userId, groupId } = req.params;
 
@@ -189,7 +251,13 @@ export class UserController {
     }); */
 
     // Send response indicating that user was removed from group successfully
-    res.send({ message: "User removed from group successfully" });
+    Handler.responseHandler(
+      res,
+      200,
+      "Success",
+      null,
+      "User removed from group successfully"
+    );
   }
   /**
    * This function retrieves a list of user groups that a user belongs to.
@@ -199,7 +267,7 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getGroups(req: express.Request, res: express.Response) {
+  static async getGroups(req: Request, res: Response, next: NextFunction) {
     try {
       // get the user's groups
       /* const userId = req.user!.id;
@@ -207,9 +275,25 @@ export class UserController {
         include: [{ model: UserGroup, include: [{ model: AuthGroup }] }],
       }); */
       const groups = null; // user.UserGroups.map((group) => group.AuthGroup);
-      res.send(groups);
-    } catch (error) {
-      res.status(500).send(error);
+      if (groups) {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          groups,
+          "Groups retrieved successfully"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          404,
+          "Not found",
+          null,
+          "Tenant not found"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
   /**
@@ -221,7 +305,7 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async updateGroups(req: express.Request, res: express.Response) {
+  static async updateGroups(req: Request, res: Response, next: NextFunction) {
     try {
       // update the user's groups
       const userId = null; //req.user!.id;
@@ -229,9 +313,15 @@ export class UserController {
       /* await UserGroup.destroy({ where: { userId } });
       const groups = groupIds.map((groupId) => ({ userId, groupId }));
       await UserGroup.bulkCreate(groups); */
-      res.send({ message: "Groups updated successfully" });
-    } catch (error) {
-      res.status(500).send(error);
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        groupIds,
+        "Groups updated successfully"
+      );
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
     }
   }
 
@@ -243,12 +333,12 @@ export class UserController {
    * @param req
    * @param res
    */
-  async getRoles(req: express.Request, res: express.Response) {
+  async getRoles(req: Request, res: Response, next: NextFunction) {
     // Get user ID from request parameters
     const { id } = req.params;
 
     // Use Sequelize's `include` method to retrieve user's roles along with their corresponding names and descriptions
-    const user: any = {}; /* await User.findByPk(id, {
+    const roles: any = {}; /* await User.findByPk(id, {
       include: [
         {
           model: AuthRole,
@@ -259,6 +349,16 @@ export class UserController {
     }); */
 
     // Send response with user's roles
-    res.send(user.roles);
+    if (roles) {
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        roles,
+        "Roles retrieved successfully"
+      );
+    } else {
+      Handler.responseHandler(res, 404, "Not found", null, "Roles not found");
+    }
   }
 }

@@ -13,6 +13,29 @@ import express, { NextFunction, Request, Response } from "express";
 class Handler {
   /**
    *
+   * Handles all express successful responses"!
+   * @param res
+   * @param statusCode
+   * @param status
+   * @param data
+   * @param message
+   * @returns
+   */
+  public static responseHandler(
+    res: Response,
+    statusCode: number,
+    status?: string,
+    data?: any,
+    message?: string
+  ): any {
+    return res.status(statusCode).json({
+      status: status,
+      data: data,
+      message: message,
+    });
+  }
+  /**
+   *
    * Handles all the not found routes
    * @param _express
    * @returns
