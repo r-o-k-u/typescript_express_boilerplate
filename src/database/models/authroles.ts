@@ -13,8 +13,7 @@ export interface IAuthRole {
   code: string; // unique code used to identify the role in codebase or API calls
   name: string; // name of the role
   description: string; // optional description of the role
-  createdAt: Date; // date when the role was created
-  updatedAt: Date; // date when the role was last updated
+  tenantId: number; // ID for the tenant that the user belongs to (foreign key)
 }
 
 export interface AuthRoleView {
@@ -34,6 +33,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
    *  It includes fields such as id, name, and description
    */
   class AuthRole extends Model<IAuthRole> implements IAuthRole {
+    tenantId: number;
     code: string;
     description: string;
     createdAt: Date;
@@ -47,6 +47,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "tenantId",
         as: "tenant",
       });
+      AuthRole.belongsTo(models.AuthGroup, {
+        foreignKey: "groupId",
+        as: "group",
+      });
     }
   }
   AuthRole.init(
@@ -55,31 +59,38 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.INTEGER, // integer data type
         primaryKey: true, // sets the column as the primary key
         autoIncrement: true, // increments the value automatically
+        comment: " ",
       },
       code: {
         // unique code used to identify the role in codebase or API calls
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        comment:
+          "unique code used to identify the role in codebase or API calls",
       },
       name: {
         // name of the role
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        comment: "name of the role",
       },
       description: {
         // optional description of the role
         type: DataTypes.STRING, // string data type
+        comment: "optional description of the role",
       },
-      createdAt: {
-        // date when the role was created
-        type: DataTypes.DATE, // date data type
-      },
-      updatedAt: {
-        // date when the role was last updated
-        type: DataTypes.DATE, // date data type
+      tenantId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "ID for the tenant that the user belongs to (foreign key) ",
+        /*  references: {
+          model: "tenants",
+          key: "id",
+        }, */
       },
     },
     { sequelize }
   );
   //
+  return AuthRole;
 };

@@ -1,11 +1,6 @@
 // @/models.ts
 import { Sequelize, Model, CreationOptional } from "sequelize";
 
-export interface AuditLogAddModel {
-  id?: number;
-  status: string;
-  verified: string;
-}
 // interface for the AuditLog model
 /**
  * AuditLog:
@@ -13,16 +8,17 @@ export interface AuditLogAddModel {
  * This model represents a record of an auditable event in the system.
  * It includes fields such as id, event, entity, entityId, tenantId, userId, createdAt, and updatedAt.
  */
-export interface AuditLogModel {
+interface AuditLogModel {
   id?: number;
   action: string;
-  entityName: string;
-  entityId: number;
+  description: string;
+  userId: number; // ID for the user that the log belongs to (foreign key)
+  tenantId: number; // ID for the tenant that the user belongs to (foreign key)
   values: object;
   timestamp: Date;
 }
 
-export interface AuditLogViewModel {
+interface AuditLogViewModel {
   id?: number;
   status: string;
   verified: string;
@@ -38,6 +34,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
    * It includes fields such as id, description, entityName, and createdAt.
    */
   class AuditLog extends Model<AuditLogModel> implements AuditLogModel {
+    description: string;
+    userId: number;
+    tenantId: number;
     action: string;
     entityName: string;
     entityId: number;
@@ -54,14 +53,33 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "tenantId",
         as: "tenant",
       });
+      AuditLog.belongsTo(models.User, { foreignKey: "userId", as: "user" });
     }
   }
   AuditLog.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+      },
+      tenantId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "ID for the tenant that the user belongs to (foreign key) ",
+        /*  references: {
+          model: "tenants",
+          key: "id",
+        }, */
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "ID for the tenant that the user belongs to (foreign key) ",
+        /*  references: {
+          model: "tenants",
+          key: "id",
+        }, */
       },
       values: {
         allowNull: false,
@@ -73,17 +91,12 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.STRING,
         comment: "comment",
       },
-      entityName: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        comment: "comment",
-      },
-      entityId: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        comment: "comment",
-      },
       timestamp: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        comment: "comment",
+      },
+      description: {
         allowNull: false,
         type: DataTypes.STRING,
         comment: "comment",
@@ -92,4 +105,5 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     { sequelize }
   );
   //
+  return AuditLog;
 };

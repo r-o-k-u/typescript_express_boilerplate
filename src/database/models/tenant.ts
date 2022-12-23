@@ -54,12 +54,13 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "tenantId",
         as: "users",
       });
+      Tenant.belongsToMany(models.Modules, { through: "TenantModule" });
     }
   }
   Tenant.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
@@ -68,50 +69,59 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: " ",
       },
       // Email address for the tenant
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        comment: " ",
       },
       // Password for the tenant
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: " ",
       },
       // Status for the tenant (active, inactive, etc.)
       status: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: " ",
       },
       // Code for the tenant
       code: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        comment: " ",
       },
       // Name of the database for the tenant
       databaseName: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: " ",
       },
       // Domain name for the tenant
       domainName: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: " ",
       },
       // ID for the organization the tenant belongs to (foreign key)
       organizationId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: "organizations",
+        comment: " ",
+        /* references: {
+          model: "organization",
           key: "id",
-        },
+        }, */
       },
     },
     { sequelize }
   );
   //
+  return Tenant;
 };

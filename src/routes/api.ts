@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import AdminController from "../controllers/api/adminController";
 import AuthController from "../controllers/api/authController";
 import UserController from "../controllers/api/userController";
+import checkTenant from "../middleware/check_tenant";
 const router = Router();
 //AUTHENTICATION
 /**
@@ -37,7 +38,19 @@ router.post("/auth/register", AuthController.AuthenticationController.register);
  *     - Authentication
  *     summary: User Login
  *     requestBody:
- *      required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             phone_email:
+ *              description: Users phone or email
+ *              type: string
+ *             password:
+ *              description: Users password
+ *              type: string
+ *            required:
+ *              - phone_email
+ *              - password
  *     responses:
  *      '200':
  *        description: OK
@@ -52,7 +65,11 @@ router.post("/auth/register", AuthController.AuthenticationController.register);
  *      5XX':
  *        description: server error.
  */
-router.post("/auth/login", AuthController.AuthenticationController.login);
+router.post(
+  "/auth/login",
+  checkTenant,
+  AuthController.AuthenticationController.login
+);
 /**
  * @openapi
  * '/api/auth/logout':

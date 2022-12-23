@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Sequelize } from "sequelize-typescript";
+import { Sequelize, DataTypes } from "sequelize";
 import Locals from "../providers/Locals";
 const modelsDir = path.resolve(__dirname + "/models");
 import Logger from "../utils/Log";
@@ -18,16 +18,17 @@ class Database {
   /**
    * Create the express object
    */
-  public repo: any;
   sequelize: Sequelize;
+  repo: any;
+  Sequelize: Sequelize;
 
   /**
    * Initializes the express server
    */
-  constructor(DB_NAME: string) {
+  constructor() {
     this.repo = {};
     this.sequelize = new Sequelize(
-      DB_NAME || "",
+      Locals.config().DB_NAME,
       Locals.config().DB_USER || "",
       Locals.config().DB_PASSWORD || "",
       {
@@ -36,13 +37,14 @@ class Database {
         port: Locals.config().DB_PORT || "",
       }
     );
+    this.sequelize.sync();
   }
 
   async associate() {}
 
   async seed() {}
 
-  async addSequelizeConnectionToRepo(DB_REPO: any, DB_NAME: any) {
+  public async addSequelizeConnectionToRepo(DB_REPO: any, DB_NAME: any) {
     if (DB_NAME != Locals.config().DB_NAME) {
       this.sequelize = new Sequelize(
         DB_NAME || "",
@@ -58,17 +60,21 @@ class Database {
     if (!DB_REPO[DB_NAME]) {
       try {
         await this.sequelize.authenticate();
+        await this.sequelize.sync();
         console.log("Connection has been established successfully.");
         fs.readdirSync(modelsDir)
           .filter((file) => {
             return (
               file.indexOf(".") !== 0 &&
-              file !== "index.js" &&
-              file.slice(-3) === ".js"
+              file !== "index.ts" &&
+              file.slice(-3) === ".ts"
             );
           })
           .forEach((file) => {
-            const model = require(path.join(modelsDir, file));
+            const model = require(path.join(modelsDir, file))(
+              this.sequelize,
+              DataTypes
+            );
             this.repo[model.name] = model;
           });
 
@@ -77,8 +83,9 @@ class Database {
             this.repo[modelName].associate(this.repo);
           }
         });
-
+        await this.sequelize.sync();
         DB_REPO[DB_NAME] = this.repo;
+
         // console.log("dbRepo", dbRepo);
         return DB_REPO;
       } catch (error) {
@@ -91,11 +98,4 @@ class Database {
   }
 }
 
-//export default Database;
-
-export const getDBInstance = async (DB_NAME: string) => {
-  const DB = new Database(DB_NAME);
-  //await DB.authenticate();
-  //await DB.seed();
-  return DB;
-};
+export default new Database();

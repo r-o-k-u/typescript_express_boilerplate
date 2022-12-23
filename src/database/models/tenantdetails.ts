@@ -26,42 +26,54 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     city: string;
     country: string;
     id: CreationOptional<number>;
-    static associate(models: any) {}
+    static associate(models: any) {
+      TenantDetails.belongsTo(models.Tenant, {
+        foreignKey: "tenantId",
+        as: "tenant",
+      });
+    }
   }
   TenantDetails.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        comment: " ",
       },
       // Phone number for the tenant
       phone: {
         type: DataTypes.STRING,
+        comment: "Phone number for the tenant ",
       },
       // Address for the tenant
       address: {
         type: DataTypes.STRING,
+        comment: "Address for the tenant ",
       },
       // City for the tenant
       city: {
         type: DataTypes.STRING,
+        comment: "City for the tenant ",
       },
       // Country for the tenant
       country: {
         type: DataTypes.STRING,
+        comment: "Country for the tenant ",
       },
       // ID for the tenant (foreign key)
       tenantId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
+        comment: "ID for the tenant (foreign key) ",
+        /* references: {
           model: "tenants",
           key: "id",
-        },
+        }, */
       },
     },
     { sequelize }
   );
   //
+  return TenantDetails;
 };

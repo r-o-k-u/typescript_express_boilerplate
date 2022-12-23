@@ -9,9 +9,10 @@ import { Sequelize, Model, CreationOptional } from "sequelize";
 export interface ITenantModule {
   id: number; // ID for the tenant-module relationship (primary key)
   tenantId: number; // ID for the tenant (foreign key)
+  createdBy: number; // ID for the user (foreign key)
+  updatedBy: number; // ID for the user (foreign key)
+  approvedBy: number; // ID for the user (foreign key)
   moduleId: number; // ID for the module (foreign key)
-  createdAt: Date; // Timestamp for when the tenant-module relationship was created
-  updatedAt: Date; // Timestamp for when the tenant-module relationship was last updated
   startDate: Date; // Date when the tenant's access to the module starts
   endDate: Date; // Date when the tenant's access to the module ends
   status: string; // Status of the tenant's access to the module (e.g. "active", "inactive", "expired")
@@ -23,7 +24,7 @@ export interface ITenantModuleView {
   name: string;
 }
 
-//export class EntityModule extends Model<EntityModuleModel, EntityModuleCreationAttributes> {}
+//export class TenantModule extends Model<TenantModuleModel, TenantModuleCreationAttributes> {}
 
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   /**
@@ -32,72 +33,100 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
    * This class represents the TenantModule model,
    * which is used to define the modules that a tenant has access to. It includes fields such as id, tenantId, and moduleId.
    */
-  class EntityModule extends Model<ITenantModule> implements ITenantModule {
+  class TenantModule extends Model<ITenantModule> implements ITenantModule {
+    createdBy: number;
+    updatedBy: number;
+    approvedBy: number;
+    userId: number;
     tenantId: number;
     moduleId: number;
-    createdAt: Date;
-    updatedAt: Date;
     startDate: Date;
     endDate: Date;
     status: string;
     id: CreationOptional<number>;
-    static associate(models: any) {
-      EntityModule.belongsTo(models.Tenant, { targetKey: "id" });
-    }
+    static associate(models: any) {}
   }
-  EntityModule.init(
+  TenantModule.init(
     {
       // ID for the tenant-module relationship (primary key)
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        comment: "ID for the tenant-module relationship (primary key) ",
       },
       // ID for the tenant (foreign key)
       tenantId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
+        comment: "ID for the tenant (foreign key) ",
+        /* references: {
           model: "tenants",
           key: "id",
-        },
+        }, */
       },
       // ID for the module (foreign key)
       moduleId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
+        comment: "ID for the module (foreign key) ",
+        /* references: {
           model: "modules",
           key: "id",
-        },
+        }, */
       },
       // Timestamp for when the tenant-module relationship was created
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+      createdBy: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "ID for  user that created (foreign key) ",
+        /*  references: {
+          model: "users",
+          key: "id",
+        }, */
       },
-      // Timestamp for when the tenant-module relationship was last updated
-      updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+      // Timestamp for when the tenant-module relationship was created
+      updatedBy: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: "ID for  user that updated  (foreign key) ",
+        /*  references: {
+          model: "users",
+          key: "id",
+        }, */
+      },
+      // Timestamp for when the tenant-module relationship was created
+      approvedBy: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: "ID for  user that approved (foreign key) ",
+        /*  references: {
+          model: "users",
+          key: "id",
+        }, */
       },
       // Date when the tenant's access to the module starts
       startDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        comment: " Date when the tenant's access to the module starts",
       },
       // Date when the tenant's access to the module ends
       endDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        comment: "Date when the tenant's access to the module ends ",
       },
       // Status of the tenant's access to the module (e.g. "active", "inactive", "expired")
       status: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
+        comment:
+          "Status of the tenant's access to the module (e.g. 1.active, 0.inactive, 2.expired) ",
       },
     },
     { sequelize }
   );
   //
+  return TenantModule;
 };

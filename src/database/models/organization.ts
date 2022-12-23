@@ -71,74 +71,91 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
   Organization.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
+        comment: " ",
       },
       // Name for the organization
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: "Name for the organization",
       },
       // Email address for the organization
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        comment: "Email address for the organization",
       },
       // Password for the organization
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: "Password for the organization",
       },
       // Status for the organization (active, inactive, etc.)
       status: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: "Status for the organization (active, inactive, etc.)",
       },
       // Website for the organization
       website: {
         type: DataTypes.STRING,
+        comment: "Website for the organization",
       },
       // Registration number for the organization
       registrationNumber: {
         type: DataTypes.STRING,
+        comment: "Registration number for the organization",
       },
       // Logo for the organization
       logo: {
         type: DataTypes.STRING,
+        comment: "Logo for the organization",
       },
       // Address for the organization
       address: {
         type: DataTypes.STRING,
+        comment: "Address for the organization",
       },
       // City for the organization
       city: {
         type: DataTypes.STRING,
+        comment: "City for the organization",
       },
       // State for the organization
       state: {
         type: DataTypes.STRING,
+        comment: "State for the organization",
       },
       // Country for the organization
       country: {
         type: DataTypes.STRING,
+        comment: "Country for the organization ",
       },
       // ZIP code for the organization
       zipCode: {
         type: DataTypes.STRING,
+        comment: "ZIP code for the organization ",
       },
       // Phone number for the organization (optional)
       phoneNumber: {
         type: DataTypes.STRING,
+        comment: "Phone number for the organization (optional) ",
       },
       // Description for the organization (optional)
       description: {
         type: DataTypes.STRING,
+        comment: "Description for the organization (optional) ",
       },
     },
     { sequelize }
   );
   //
+
+  return Organization;
 };

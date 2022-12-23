@@ -13,8 +13,7 @@ export interface IAuthGroup {
   code: string; // unique code used to identify the permission in codebase or API calls
   name: string; // name of the permission
   description?: string; // optional description of the permission
-  createdAt: Date; // date when the permission was created
-  updatedAt: Date; // date when the permission was last updated
+  tenantId: number; // ID for the tenant that the user belongs to (foreign key)
 }
 
 export interface AuthGroupViewModel {
@@ -32,6 +31,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
    * It includes fields such as id, name, and description.
    */
   class AuthGroup extends Model<IAuthGroup> implements IAuthGroup {
+    tenantId: number;
     code: string;
     description?: string | undefined;
     createdAt: Date;
@@ -56,31 +56,38 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.INTEGER, // integer data type
         primaryKey: true, // sets the column as the primary key
         autoIncrement: true, // increments the value automatically
+        comment: " ",
       },
       code: {
         // unique code used to identify the permission in codebase or API calls
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        comment:
+          "unique code used to identify the permission in codebase or API calls ",
       },
       name: {
         // name of the permission
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        comment: "name of the permission ",
+      },
+      tenantId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "ID for the tenant that the user belongs to (foreign key) ",
+        /*  references: {
+          model: "tenants",
+          key: "id",
+        }, */
       },
       description: {
         // optional description of the permission
         type: DataTypes.STRING, // string data type
-      },
-      createdAt: {
-        // date when the permission was created
-        type: DataTypes.DATE, // date data type
-      },
-      updatedAt: {
-        // date when the permission was last updated
-        type: DataTypes.DATE, // date data type
+        comment: "optional description of the permission ",
       },
     },
     { sequelize }
   );
   //
+  return AuthGroup;
 };

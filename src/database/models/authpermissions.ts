@@ -13,8 +13,7 @@ export interface IAuthPermission {
   code: string; // unique code used to identify the permission in codebase or API calls
   name: string; // name of the permission
   description?: string; // optional description of the permission
-  createdAt: Date; // date when the permission was created
-  updatedAt: Date; // date when the permission was last updated
+  tenantId: number; // ID for the tenant that the user belongs to (foreign key)
 }
 
 //export class AuthPermission extends Model<AuthPermissionModel, AuthPermissionCreationAttributes> {}
@@ -31,6 +30,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     extends Model<IAuthPermission>
     implements IAuthPermission
   {
+    tenantId: number;
     code: string;
     name: string;
     description?: string | undefined;
@@ -42,7 +42,6 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "tenantId",
         as: "tenant",
       });
-      AuthPermission.hasMany(models.AuthPermissionDetails);
     }
   }
   AuthPermission.init(
@@ -51,31 +50,38 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.INTEGER, // integer data type
         primaryKey: true, // sets the column as the primary key
         autoIncrement: true, // increments the value automatically
+        comment: " ",
       },
       code: {
         // unique code used to identify the permission in codebase or API calls
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        comment:
+          " unique code used to identify the permission in codebase or API calls",
       },
       name: {
         // name of the permission
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        comment: "name of the permission ",
       },
       description: {
         // optional description of the permission
         type: DataTypes.STRING, // string data type
+        comment: " optional description of the permission",
       },
-      createdAt: {
-        // date when the permission was created
-        type: DataTypes.DATE, // date data type
-      },
-      updatedAt: {
-        // date when the permission was last updated
-        type: DataTypes.DATE, // date data type
+      tenantId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: "ID for the tenant that the user belongs to (foreign key) ",
+        /*  references: {
+          model: "tenants",
+          key: "id",
+        }, */
       },
     },
     { sequelize }
   );
   //
+  return AuthPermission;
 };

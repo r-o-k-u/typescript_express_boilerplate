@@ -1,8 +1,8 @@
 "use strict";
-const { getDBInstance } = require("../index");
+import Database from "../index";
 import Locals from "../../providers/Locals";
 
 let Repo_: any = {};
-getDBInstance.addSequelizeConnectionToRepo(Repo_, Locals.config().DB_NAME);
+Database.addSequelizeConnectionToRepo(Repo_, Locals.config().DB_NAME);
 
-export let Repo = Repo_;
+export default Repo_;

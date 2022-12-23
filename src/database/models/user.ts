@@ -10,26 +10,11 @@ import { Sequelize, Model, CreationOptional } from "sequelize";
 export interface IUser {
   id: number; // ID for the user (primary key)
   tenantId: number; // ID for the tenant that the user belongs to (foreign key)
-  username: string; // Unique username for the user
-  password: string; // Hashed password for the user
-  email: string; // Email address for the user
-  firstName: string; // First name of the user
-  lastName: string; // Last name of the user
-  phone: string; // Phone number for the user
-  address1: string; // First line of the user's address
-  address2: string; // Second line of the user's address (optional)
-  city: string; // City of the user's address
-  state: string; // State or region of the user's address
-  zip: string; // Zip code of the user's address
-  country: string; // Country of the user's address
-  createdAt: Date; // Timestamp for when the user was created
-  updatedAt: Date; // Timestamp for when the user was last updated
   lastLoginAt: Date; // Timestamp for when the user last logged in
   status: string; // Status of the user (e.g. "active", "inactive", "suspended")
   twoFactorAuth: boolean; // Whether the user has enabled two-factor authentication
   emailVerified: boolean; // Whether the user's email address has been verified
   phoneVerified: boolean; // Whether the user's phone number has been verified
-  avatar: string; // URL for the user's avatar image
 }
 
 //export class User extends Model<UserModel, UserCreationAttributes> {}
@@ -81,7 +66,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         as: "detail",
       });
       // User belongs to many UserGroups through UserGroup
-      User.belongsToMany(models.UserGroup, { through: "UserGroup" });
+      User.belongsToMany(models.AuthGroup, { through: "UserGroup" });
       // User belongs to many AuthRoles through UserRole
       User.belongsToMany(models.AuthRole, { through: "UserRole" });
     }
@@ -90,105 +75,54 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     {
       // ID for the user (primary key)
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-      },
-      // Email address for the user
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      // Password hash for the user
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      // First name for the user
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      // Last name for the user
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      // Phone number for the user
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      // Avatar image for the user
-      avatar: {
-        type: DataTypes.STRING,
+        comment: "ID for the user (primary key) ",
       },
       // Two-factor authentication enabled for the user
       twoFactorAuth: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        comment: "Two-factor authentication enabled for the user ",
       },
       // Email verification status for the user
       emailVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        comment: "Email verification status for the user ",
       },
+      // Phone verification status for the user
       phoneVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        comment: "Phone verification status for the user",
       },
       // ID for the tenant that the user belongs to (foreign key)
       tenantId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
+        comment: "ID for the tenant that the user belongs to (foreign key) ",
+        /*  references: {
           model: "tenants",
           key: "id",
-        },
+        }, */
       },
-      // Unique username for the user
-      username: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      address1: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      address2: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      state: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      zip: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      country: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      createdAt: "",
-      updatedAt: "",
       lastLoginAt: {
         type: DataTypes.DATE,
         allowNull: false,
+        comment: "Last time user logged in",
       },
       status: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
+        comment:
+          "Status of the User (e.g.  0.inactive,1.active, 2.dormant 3.blocked 4.other) ",
       },
     },
     { sequelize }
   );
   //
+  return User;
 };
