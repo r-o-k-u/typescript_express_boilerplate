@@ -1,42 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import { UserService } from "../../services/userService";
-import Handler from "../../utils/Handler";
+import Handler from "../utils/Handler";
 /**
- * User controller
+ * User Service
  * @remarks
  * Handles all user requests.
  */
-
 /**
- * User controller
+ * User Service
  * @remarks
  * This class is responsible for managing users in the system.
  * It includes functions for creating new users, fetching users,
  * deleting users, and managing user profiles. It also includes functions for managing user groups and roles.
  */
-export class UserController {
+export class UserService {
   /**
    * This function retrieves a list of all users. It gets the tenant ID from the request object, then uses the findAll function to retrieve the User records with the matching tenant ID. It then sends the list of users as the response.
    * @param req
    * @param res
    */
-  static async getAll(req: Request, res: Response, next: NextFunction) {
+  static async getAll(DB_NAME: string) {
     try {
       // retrieve all users
-      const users = await UserService.getAll(req.params.database);
+      const users = {}; // await User.findAll();
       if (users) {
-        Handler.responseHandler(
-          res,
-          200,
-          "Success",
-          users,
-          "Users retrieved successfully"
-        );
+        return null;
       } else {
-        Handler.responseHandler(res, 404, "Not found", null, "Users not found");
+        return null;
       }
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -46,24 +38,17 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getById(req: Request, res: Response, next: NextFunction) {
+  static async getById(DB_NAME: string, Id: number) {
     try {
-      let { id } = req.params;
       // retrieve a single user by id
-      const user = await UserService.getById(req.params.database, parseInt(id));
+      const user = {}; // await User.findByPk(req.params.id);
       if (user) {
-        Handler.responseHandler(
-          res,
-          200,
-          "Success",
-          user,
-          "user retrieved successfully"
-        );
+        return null;
       } else {
-        Handler.responseHandler(res, 404, "Not found", null, "User not found");
+        return null;
       }
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -75,19 +60,13 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async create(req: Request, res: Response, next: NextFunction) {
+  static async create(DB_NAME: string, Payload: any) {
     try {
       // create a new user
-      const user = await UserService.create(req.params.database, req.body);
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        user,
-        "user created successfully"
-      );
+      const user = {}; // await User.create(req.body);
+      return null;
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -101,24 +80,14 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async update(req: Request, res: Response, next: NextFunction) {
+  static async update(DB_NAME: string, Id: number, Update: any) {
     try {
-      let { id } = req.params;
       // update an existing user
-      const user = await UserService.update(
-        req.params.database,
-        parseInt(id),
-        req.body
-      );
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        user,
-        "user updated successfully"
-      );
+      const user = {}; // await User.findByPk(req.params.id);
+      //user.update(req.body);
+      return null;
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -129,20 +98,14 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async delete(req: Request, res: Response, next: NextFunction) {
+  static async delete(DB_NAME: string, Id: number) {
     try {
-      let { id } = req.params;
       // delete an existing user
-      const user = await UserService.delete(req.params.database, parseInt(id));
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        user,
-        "user deleted successfully"
-      );
+      const user = {}; // await User.findByPk(req.params.id);
+      //user.destroy();
+      return null;
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -153,33 +116,20 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getProfile(req: Request, res: Response, next: NextFunction) {
+  static async getProfile(DB_NAME: string, UserId: number) {
     try {
       // get the user's profile
-      let { id } = req.params;
-      const user = await UserService.getProfile(
-        req.params.database,
-        parseInt(id)
-      );
+      const userId = null; //req.user!.id;
+      const user = {}; /*  await User.findByPk(userId, {
+        include: [{ model: UserDetail }],
+      }); */
       if (user) {
-        Handler.responseHandler(
-          res,
-          200,
-          "Success",
-          user,
-          "User retrieved successfully"
-        );
+        return null;
       } else {
-        Handler.responseHandler(
-          res,
-          404,
-          "Not found",
-          null,
-          "Tenant not found"
-        );
+        return null;
       }
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -193,24 +143,62 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async updateProfile(req: Request, res: Response, next: NextFunction) {
+  static async updateProfile(DB_NAME: string, UserId: number, Update: any) {
     try {
       // update the user's profile
-      let { id } = req.params;
-      const user = await UserService.updateProfile(
-        req.params.database,
-        parseInt(id),
-        req.body
-      );
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        user,
-        "user updated successfully"
-      );
+      /* const userId = null; // req.user!.id;
+      const { firstName, lastName, email, phone } = req.body;
+      const user: any = null; //await User.findByPk(userId);
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.email = email;
+      user.phone = phone;
+      await user.save(); */
+      return null;
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
+    }
+  }
+  /**
+   *  This function updates an existing user.
+   * It gets the user ID from the request parameters,
+   *  then gets the updated email, password, and name from the request body.
+   * It uses the findByPk function to retrieve the existing user with the matching ID,
+   * then updates its email, password, and name with the new values.
+   * It then saves the updated user to the database
+   * and sends a response indicating that the update was successful.
+   * @param req
+   * @param res
+   */
+  static async updateUserToken(DB_NAME: string, Id: number, Update: any) {
+    try {
+      // update an existing user
+      const user = {}; // await User.findByPk(req.params.id);
+      //user.update(req.body);
+      return null;
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
+  /**
+   *  This function updates an existing user.
+   * It gets the user ID from the request parameters,
+   *  then gets the updated email, password, and name from the request body.
+   * It uses the findByPk function to retrieve the existing user with the matching ID,
+   * then updates its email, password, and name with the new values.
+   * It then saves the updated user to the database
+   * and sends a response indicating that the update was successful.
+   * @param req
+   * @param res
+   */
+  static async updatePassword(DB_NAME: string, Id: number, Update: any) {
+    try {
+      // update an existing user
+      const user = {}; // await User.findByPk(req.params.id);
+      //user.update(req.body);
+      return null;
+    } catch (error: any) {
+      throw Error(error);
     }
   }
   /**
@@ -221,22 +209,18 @@ export class UserController {
    * @param req
    * @param res
    */
-  async addUserToGroup(req: Request, res: Response, next: NextFunction) {
-    let { id } = req.params;
+  async addUserToGroup(DB_NAME: string, UserId: number, groupID: number) {
     // Get user ID and user group ID from request parameters
-    /* const userGroup = await UserService.updateGroups(
-      req.params.database,
-      parseInt(id),
-      req.body
-    ); */
+    //const { userId, groupId } = req.params;
+
+    // Insert new UserGroup record into database with matching user ID and user group ID
+    const userGroup: any = {}; /* await UserGroup.create({
+      userId: userId,
+      groupId: groupId,
+    }); */
+
     // Send response indicating that user was added to group successfully
-    Handler.responseHandler(
-      res,
-      200,
-      "Success",
-      null,
-      "Method not implemented" //"user added to group successfully"
-    );
+    return null;
   }
   /**
    * This function removes a user from a user group.
@@ -246,23 +230,20 @@ export class UserController {
    * @param req
    * @param res
    */
-  async removeUserFromGroup(req: Request, res: Response, next: NextFunction) {
-    let { id } = req.params;
+  async removeUserFromGroup(DB_NAME: string, UserId: number, groupID: number) {
     // Get user ID and user group ID from request parameters
-    /* const userGroup = await UserService.updateGroups(
-      req.params.database,
-      parseInt(id),
-      req.body
-    ); */
+    //const { userId, groupId } = req.params;
+
+    // Delete UserGroup record with matching user ID and user group ID
+    /*  await UserGroup.destroy({
+      where: {
+        userId: userId,
+        groupId: groupId,
+      },
+    }); */
 
     // Send response indicating that user was removed from group successfully
-    Handler.responseHandler(
-      res,
-      200,
-      "Success",
-      null,
-      "Method not implemented" //"User removed from group successfully"
-    );
+    return null;
   }
   /**
    * This function retrieves a list of user groups that a user belongs to.
@@ -272,34 +253,21 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async getGroups(req: Request, res: Response, next: NextFunction) {
+  static async getGroups(DB_NAME: string, UserId: number) {
     try {
       // get the user's groups
-      let { id } = req.params;
-      let groups = await UserService.getGroups(
-        req.params.database,
-        parseInt(id)
-      );
-      // groups = groups.UserGroups.map((group:any) => group.AuthGroup);
+      /* const userId = req.user!.id;
+      const user = await User.findByPk(userId, {
+        include: [{ model: UserGroup, include: [{ model: AuthGroup }] }],
+      }); */
+      const groups = null; // user.UserGroups.map((group) => group.AuthGroup);
       if (groups) {
-        Handler.responseHandler(
-          res,
-          200,
-          "Success",
-          groups,
-          "Groups retrieved successfully"
-        );
+        return null;
       } else {
-        Handler.responseHandler(
-          res,
-          404,
-          "Not found",
-          null,
-          "Tenant not found"
-        );
+        return null;
       }
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
   /**
@@ -311,24 +279,17 @@ export class UserController {
    * @param req
    * @param res
    */
-  static async updateGroups(req: Request, res: Response, next: NextFunction) {
+  static async updateGroups(DB_NAME: string, UserId: number, Update: any) {
     try {
       // update the user's groups
-      let { id } = req.params;
-      const groups = await UserService.updateGroups(
-        req.params.database,
-        parseInt(id),
-        req.body
-      );
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        groups,
-        "Groups updated successfully"
-      );
+      const userId = null; //req.user!.id;
+      // const groupIds = req.body.groupIds;
+      /* await UserGroup.destroy({ where: { userId } });
+      const groups = groupIds.map((groupId) => ({ userId, groupId }));
+      await UserGroup.bulkCreate(groups); */
+      return null;
     } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
+      throw Error(error);
     }
   }
 
@@ -340,32 +301,30 @@ export class UserController {
    * @param req
    * @param res
    */
-  async getRoles(req: Request, res: Response, next: NextFunction) {
+  async getRoles(DB_NAME: string, UserId: number) {
     // Get user ID from request parameters
-    const { id } = req.params;
+    //const { id } = req.params;
 
     // Use Sequelize's `include` method to retrieve user's roles along with their corresponding names and descriptions
-    const roles = null; /* await UserService.getRoles(
-      req.params.database,
-      parseInt(id),
-      req.body
-    ); */
+    const roles: any = {}; /* await User.findByPk(id, {
+      include: [
+        {
+          model: AuthRole,
+          as: "roles",
+          attributes: ["name", "description"],
+        },
+      ],
+    }); */
 
     // Send response with user's roles
-    if (!roles) {
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        roles,
-        "Method not implemented" //"Roles retrieved successfully"
-      );
+    if (roles) {
+      return null;
     } else {
-      Handler.responseHandler(res, 404, "Not found", null, "Roles not found");
+      return null;
     }
   }
 }
 
 export default {
-  UserController,
+  UserService,
 };

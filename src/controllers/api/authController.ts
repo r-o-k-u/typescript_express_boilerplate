@@ -1,5 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import Handler from "../../utils/Handler";
+import {
+  AuthGroupService,
+  AuthPermissionService,
+  AuthRoleService,
+  AuthenticationService,
+} from "../../services/authService";
+import { UserService } from "../../services/userService";
 /**
  * Auth controller
  * @remarks
@@ -24,7 +31,7 @@ export class AuthGroupController {
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all auth groups
-      const authGroups = {}; // await AuthGroup.findAll();
+      const authGroups = await AuthGroupService.getAll(req.params.database);
       if (authGroups) {
         Handler.responseHandler(
           res,
@@ -57,7 +64,11 @@ export class AuthGroupController {
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single auth group by id
-      const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
+      let { id } = req.params;
+      const authGroup = await AuthGroupService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (authGroup) {
         Handler.responseHandler(
           res,
@@ -91,7 +102,10 @@ export class AuthGroupController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new auth group
-      const authGroup = {}; // await AuthGroup.create(req.body);
+      const authGroup = await AuthGroupService.create(
+        req.params.database,
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -116,9 +130,13 @@ export class AuthGroupController {
    */
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // update an existing auth group
-      const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
-      //authGroup.update(req.body);
+      const authGroup = await AuthGroupService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -140,8 +158,12 @@ export class AuthGroupController {
    */
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // delete an existing auth group
-      const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
+      const authGroup = await AuthGroupService.delete(
+        req.params.database,
+        parseInt(id)
+      );
       //authGroup.destroy();
       Handler.responseHandler(
         res,
@@ -174,7 +196,9 @@ export class AuthPermissionController {
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all auth permissions
-      const authPermissions = {}; // await AuthPermission.findAll();
+      const authPermissions = await AuthPermissionService.getAll(
+        req.params.database
+      );
       if (authPermissions) {
         Handler.responseHandler(
           res,
@@ -207,7 +231,11 @@ export class AuthPermissionController {
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single auth permission by id
-      const authPermission = {}; // await AuthPermission.findByPk(req.params.id);
+      let { id } = req.params;
+      const authPermission = await AuthPermissionService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (authPermission) {
         Handler.responseHandler(
           res,
@@ -240,7 +268,10 @@ export class AuthPermissionController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new auth permission
-      const authPermission = {}; // await AuthPermission.create(req.body);
+      const authPermission = await AuthPermissionService.create(
+        req.params.database,
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -265,9 +296,13 @@ export class AuthPermissionController {
    */
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // update an existing auth permission
-      const authPermission = {}; // await AuthPermission.findByPk(req.params.id);
-      //authPermission.update(req.body);
+      const authPermission = await AuthPermissionService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -299,7 +334,7 @@ export class AuthRoleController {
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all auth roles
-      const authRoles = {}; // await AuthRole.findAll();
+      const authRoles = await AuthRoleService.getAll(req.params.database);
       if (authRoles) {
         Handler.responseHandler(
           res,
@@ -332,7 +367,11 @@ export class AuthRoleController {
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single auth role by id
-      const authRole = {}; // await AuthRole.findByPk(req.params.id);
+      let { id } = req.params;
+      const authRole = await AuthRoleService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (authRole) {
         Handler.responseHandler(
           res,
@@ -366,7 +405,10 @@ export class AuthRoleController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new auth role
-      const authRole = {}; // await AuthRole.create(req.body);
+      const authRole = await AuthRoleService.create(
+        req.params.database,
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -390,9 +432,13 @@ export class AuthRoleController {
    */
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // update an existing auth role
-      const authRole = {}; // await AuthRole.findByPk(req.params.id);
-      //authRole.update(req.body);
+      const authRole = await AuthRoleService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -414,9 +460,12 @@ export class AuthRoleController {
    */
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // delete an existing auth role
-      const authRole = {}; // await AuthRole.findByPk(req.params.id);
-      //authRole.destroy();
+      const authRole = await AuthRoleService.delete(
+        req.params.database,
+        parseInt(id)
+      );
       Handler.responseHandler(
         res,
         200,
@@ -448,7 +497,10 @@ export class AuthenticationController {
     try {
       // register a new user
       const { firstName, lastName, email, password, phone } = req.body;
-      const user = {}; //new User({ firstName, lastName, email, password, phone });
+      const user = AuthenticationService.register(
+        req.params.database,
+        req.body
+      );
       //await user.save();
       Handler.responseHandler(
         res,
@@ -477,7 +529,10 @@ export class AuthenticationController {
       // login an existing user
       const email = req.body.email;
       const password = req.body.password;
-      const user = null; //await User.findOne({ where: { email } });
+      const user = await AuthenticationService.login(
+        req.params.database,
+        req.body
+      );
       if (!user) {
         Handler.responseHandler(
           res,
@@ -524,20 +579,24 @@ export class AuthenticationController {
    */
   static async logout(req: Request, res: Response, next: NextFunction) {
     try {
-      // destroy the user's session
-      /* req.session!.destroy((error) => {
+      /* req.session!.destroy(async(error :Error) => {
         if (error) {
-           Handler.errorHandler(error, req, res, next);
+           return error
         } else {
-          Handler.responseHandler(
-            res,
-            200,
-            "Success",
-            null,
-            "Logged out successfully"
-          );
+         const logout = await AuthenticationService.logout(
+           req.params.database,
+           req.body
+         );
         }
-      }); */
+      });  */
+
+      Handler.responseHandler(
+        res,
+        200,
+        "Success",
+        null,
+        "Logged out successfully"
+      );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
     }
@@ -555,7 +614,10 @@ export class AuthenticationController {
     try {
       // verify the refresh token provided by the user
       const refreshToken = req.body.refreshToken;
-      const token: any = null; //jwt.verify(refreshToken, process.env.JWT_SECRET!);
+      const token: any = await AuthenticationService.verifyToken(
+        req.params.database,
+        req.body
+      );
       if (!token || !token.userId) {
         Handler.responseHandler(
           res,
@@ -566,10 +628,10 @@ export class AuthenticationController {
         );
       } else {
         // create a new JWT token for the user
-        const newToken = null; /* jwt.sign(
-          { userId: token.userId },
-          process.env.JWT_SECRET!
-        ); */
+        const newToken = await AuthenticationService.signJWTToken(
+          req.params.database,
+          { userId: token.userId }
+        );
         Handler.responseHandler(
           res,
           200,
@@ -594,19 +656,27 @@ export class AuthenticationController {
   static async forgetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       // send a password reset email to the user
-      const email = req.body.email;
-      const user: any = null; //await User.findOne({ where: { email: email } });
+      const user: any = null; //await UserService.findOne(req.params.database,req.body);
       if (!user) {
         Handler.responseHandler(res, 404, "Success", null, "User not found");
       } else {
         // generate a password reset token
-        const resetToken = ""; //generateResetToken();
-        user.resetToken = resetToken;
-        user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
-        await user.save();
+        const resetToken = await AuthenticationService.generateResetToken(
+          req.params.database,
+          req.body
+        );
+        // update user token
+        const user_update = await AuthenticationService.updateUserToken(
+          req.params.database,
+          req.body,
+          user.id
+        );
 
-        // send the password reset email
-        //sendPasswordResetEmail(email, resetToken);
+        // send the password reset notification
+        await AuthenticationService.sendPasswordResetNotification(
+          user,
+          resetToken
+        );
         Handler.responseHandler(
           res,
           200,
@@ -632,42 +702,54 @@ export class AuthenticationController {
   static async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       // reset the user's password
-      const resetToken = req.body.resetToken;
-      const user: any = null; /* await User.findOne({
-        where: { resetToken: resetToken },
-      }); */
+      let { id } = req.params;
+      const user: any = await UserService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (!user) {
-        Handler.responseHandler(
-          res,
-          404,
-          "Not Found",
-          null,
-          "Invalid password reset token"
-        );
+        Handler.responseHandler(res, 404, "Success", null, "User not found");
       } else {
-        // check if the password reset token has expired
-        if (user.resetTokenExpiration < Date.now()) {
+        // gener
+        const user: any = null;
+        await UserService.updatePassword(
+          req.params.database,
+          req.body,
+          user.id
+        );
+        if (!user) {
           Handler.responseHandler(
             res,
-            401,
-            "Unauthorized",
+            404,
+            "Not Found",
             null,
-            "Password reset token expired"
+            "Invalid password reset token"
           );
         } else {
-          // set the new password and clear the reset token
-          user.password = req.body.password;
-          user.resetToken = null;
-          user.resetTokenExpiration = null;
-          await user.save();
+          // check if the password reset token has expired
+          if (user.resetTokenExpiration < Date.now()) {
+            Handler.responseHandler(
+              res,
+              401,
+              "Unauthorized",
+              null,
+              "Password reset token expired"
+            );
+          } else {
+            // set the new password and clear the reset token
+            user.password = req.body.password;
+            user.resetToken = null;
+            user.resetTokenExpiration = null;
+            await user.save();
 
-          Handler.responseHandler(
-            res,
-            200,
-            "Success",
-            null,
-            "Password reset successful"
-          );
+            Handler.responseHandler(
+              res,
+              200,
+              "Success",
+              null,
+              "Password reset successful"
+            );
+          }
         }
       }
     } catch (error: any) {
@@ -686,24 +768,13 @@ export class AuthenticationController {
   static async twoFactorAuth(req: Request, res: Response, next: NextFunction) {
     try {
       // send a two-factor authentication code to the user's phone or email
-      const userId = req.body.userId;
-      const type = req.body.type; // "phone" or "email"
-      const user: any = null; //await User.findByPk(userId);
+      const user: any = await AuthenticationService.twoFactorAuth(
+        req.params.database,
+        req.body
+      );
       if (!user) {
         Handler.responseHandler(res, 404, "Not Found", null, "User not found");
       } else {
-        // generate a two-factor authentication code
-        const code = ""; //generateAuthCode();
-        user.authCode = code;
-        user.authCodeExpiration = Date.now() + 300000; // 5 minutes
-        await user.save();
-
-        // send the two-factor authentication code
-        if (type === "phone") {
-          //sendAuthCodeSms(user.phone, code);
-        } else if (type === "email") {
-          //sendAuthCodeEmail(user.email, code);
-        }
         Handler.responseHandler(
           res,
           200,
@@ -728,13 +799,14 @@ export class AuthenticationController {
   static async verifyAuthCode(req: Request, res: Response, next: NextFunction) {
     try {
       // verify the two-factor authentication code provided by the user
-      const userId = req.body.userId;
-      const code = req.body.code;
-      const user: any = null; //await User.findByPk(userId);
-      if (!user) {
+      const code: any = await AuthenticationService.verifyAuthCode(
+        req.params.database,
+        req.body
+      );
+      if (!code) {
         Handler.responseHandler(res, 404, "Not Found", null, "User not found");
       } else {
-        if (user.authCode !== code || user.authCodeExpiration < Date.now()) {
+        if (code.authCode !== code || code.authCodeExpiration < Date.now()) {
           Handler.responseHandler(
             res,
             401,
@@ -743,10 +815,6 @@ export class AuthenticationController {
             "Invalid two-factor authentication code"
           );
         } else {
-          // clear the two-factor authentication code
-          user.authCode = null;
-          user.authCodeExpiration = null;
-          await user.save();
           Handler.responseHandler(
             res,
             200,
@@ -776,12 +844,11 @@ export class AuthenticationController {
   ) {
     try {
       // authenticate the API request
-      const apiKey = req.headers["x-api-key"];
-      const apiSecret = req.headers["x-api-secret"];
-      const organization = null; /* await Organization.findOne({
-        where: { apiKey, apiSecret },
-      }); */
-      if (!organization) {
+      const auth: any = await AuthenticationService.apiAuthentication(
+        req.params.database,
+        req.body
+      );
+      if (!auth) {
         Handler.responseHandler(
           res,
           401,
@@ -794,7 +861,7 @@ export class AuthenticationController {
           res,
           200,
           "Success",
-          null,
+          auth,
           "API authentication successful"
         );
       }

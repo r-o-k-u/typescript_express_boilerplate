@@ -1,18 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import Handler from "../../utils/Handler";
+import {
+  TenantService,
+  OrganizationService,
+  AuditLogService,
+  ModulesService,
+} from "../../services/adminService";
 
 /**
- * TenantController
+ * Tenant Controller
  * @remarks
  * This class is responsible for managing tenants in the system.
  * It includes functions for creating new tenants, fetching tenants, and deleting tenants.
  */
 // define the Tenant controller
 
-export class Tenant {
+export class TenantController {
   /**
    * This function retrieves a list of all tenants.
-   * It uses the findAll function to retrieve all Tenant records from the database,
+   * It uses the findAll function to retrieve all TenantService records from the database,
    * then sends the list of tenants as the response.
    * @param req
    * @param res
@@ -20,7 +26,7 @@ export class Tenant {
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all tenants
-      const tenants = {}; // await Tenant.findAll();
+      const tenants = await TenantService.getAll(req.params.database);
       if (tenants) {
         Handler.responseHandler(
           res,
@@ -45,7 +51,7 @@ export class Tenant {
   /**
    * This function retrieves a single tenant by ID.
    * It gets the tenant ID from the request parameters,
-   * then uses the findByPk function to retrieve the Tenant record with the matching ID.
+   * then uses the findByPk function to retrieve the TenantService record with the matching ID.
    * It then sends the tenant as the response.
    * @param req
    * @param res
@@ -53,14 +59,18 @@ export class Tenant {
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve a single tenant by id
-      const tenant = {}; // await Tenant.findByPk(req.params.id);
+      let { id } = req.params;
+      const tenant = await TenantService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (tenant) {
         Handler.responseHandler(
           res,
           200,
           "Success",
           tenant,
-          "Tenant retrieved successfully"
+          "TenantService retrieved successfully"
         );
       } else {
         Handler.responseHandler(
@@ -68,7 +78,7 @@ export class Tenant {
           404,
           "Not found",
           null,
-          "Tenant not found"
+          "TenantService not found"
         );
       }
     } catch (error: any) {
@@ -78,7 +88,7 @@ export class Tenant {
   /**
    * This function creates a new tenant.
    * It gets the name, description, and organization ID from the request body,
-   * then uses the create function to insert a new Tenant record into the database with the provided values.
+   * then uses the create function to insert a new TenantService record into the database with the provided values.
    * It then sends the new tenant as the response.
    * @param req
    * @param res
@@ -86,13 +96,13 @@ export class Tenant {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new tenant
-      const tenant = {}; // await Tenant.create(req.body);
+      const tenant = await TenantService.create(req.params.database, req.body);
       Handler.responseHandler(
         res,
         200,
         "Success",
         tenant,
-        "Tenant created successfully"
+        "TenantService created successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -110,15 +120,20 @@ export class Tenant {
    */
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // update an existing tenant
-      const tenant = {}; // await Tenant.findByPk(req.params.id);
+      const tenant = await TenantService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       //tenant.update(req.body);
       Handler.responseHandler(
         res,
         200,
         "Success",
         tenant,
-        "Tenant updated successfully"
+        "TenantService updated successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -127,22 +142,26 @@ export class Tenant {
   /**
    * This function deletes an existing tenant.
    * It gets the tenant ID from the request parameters,
-   * then uses the destroy function to delete the Tenant record with the matching ID.
+   * then uses the destroy function to delete the TenantService record with the matching ID.
    * It then sends a response indicating that the tenant was deleted successfully.
    * @param req
    * @param res
    */
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // delete an existing tenant
-      const tenant = {}; //await Tenant.findByPk(req.params.id);
+      const tenant = await TenantService.delete(
+        req.params.database,
+        parseInt(id)
+      );
       //tenant.destroy();
       Handler.responseHandler(
         res,
         200,
         "Success",
         tenant,
-        "Tenant deleted successfully"
+        "TenantService deleted successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -155,12 +174,12 @@ export class Tenant {
  * This class is responsible for managing audit logs in the system. It includes functions for creating new audit logs,
  * fetching audit logs for a particular tenant or organization, and deleting audit logs.
  */
-// define the AuditLog controller
-export class AuditLog {
+// define the AuditLogService controller
+export class AuditLogController {
   /**
    * This function retrieves a list of all audit logs.
    * It gets the tenant ID from the request object,
-   * then uses the findAll function to retrieve the AuditLog records with the matching tenant ID.
+   * then uses the findAll function to retrieve the AuditLogService records with the matching tenant ID.
    * It then sends the list of audit logs as the response.
    * @param req
    * @param res
@@ -168,7 +187,7 @@ export class AuditLog {
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all audit logs
-      const auditLogs = {}; // await AuditLog.findAll();
+      const auditLogs = await AuditLogService.getAll(req.params.database);
       if (auditLogs) {
         Handler.responseHandler(
           res,
@@ -193,15 +212,19 @@ export class AuditLog {
   /**
    * This function retrieves a single audit log by ID.
    * It gets the audit log ID from the request parameters,
-   * then uses the findByPk function to retrieve the AuditLog record with the matching ID.
+   * then uses the findByPk function to retrieve the AuditLogService record with the matching ID.
    * It then sends the audit log as the response.
    * @param req
    * @param res
    */
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // retrieve a single audit log by id
-      const auditLog = {}; // await AuditLog.findByPk(req.params.id);
+      const auditLog = await AuditLogService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (auditLog) {
         Handler.responseHandler(
           res,
@@ -226,7 +249,7 @@ export class AuditLog {
   /**
    * This function creates a new audit log.
    * It gets the user ID, action, and entity from the request body,
-   * then uses the create function to insert a new AuditLog record
+   * then uses the create function to insert a new AuditLogService record
    * into the database with the current tenant ID, user ID, action, and entity.
    * It then sends the new audit log as the response.
    * @param req
@@ -235,7 +258,10 @@ export class AuditLog {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new audit log
-      const auditLog = {}; // await AuditLog.create(req.body);
+      const auditLog = await AuditLogService.create(
+        req.params.database,
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -260,7 +286,12 @@ export class AuditLog {
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
       // update an existing audit log
-      const auditLog = {}; // await AuditLog.findByPk(req.params.id);
+      let { id } = req.params;
+      const auditLog = await AuditLogService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       //auditLog.update(req.body);
       Handler.responseHandler(
         res,
@@ -276,15 +307,19 @@ export class AuditLog {
   /**
    * This function deletes an existing audit log.
    * It gets the audit log ID from the request parameters,
-   * then uses the destroy function to delete the AuditLog record with the matching ID.
+   * then uses the destroy function to delete the AuditLogService record with the matching ID.
    * It then sends a response indicating that the audit log was deleted successfully.
    * @param req
    * @param res
    */
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // delete an existing audit log
-      const auditLog = {}; // await AuditLog.findByPk(req.params.id);
+      const auditLog = await AuditLogService.delete(
+        req.params.database,
+        parseInt(id)
+      );
       //auditLog.destroy();
       Handler.responseHandler(
         res,
@@ -305,10 +340,10 @@ export class AuditLog {
  * It includes functions for creating new organizations, fetching organizations, and deleting organizations.
  */
 // define the Organization controller
-export class Organization {
+export class OrganizationController {
   /**
    * This function retrieves a list of all organizations.
-   * It uses the findAll function to retrieve all Organization records from the database,
+   * It uses the findAll function to retrieve all OrganizationService records from the database,
    * then sends the list of organizations as the response.
    * @param req
    * @param res
@@ -316,7 +351,9 @@ export class Organization {
   static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // retrieve all organizations
-      const organizations = {}; // await Organization.findAll();
+      const organizations = await OrganizationService.getAll(
+        req.params.database
+      );
       if (organizations) {
         Handler.responseHandler(
           res,
@@ -341,22 +378,26 @@ export class Organization {
   /**
    * This function retrieves a single organization by ID.
    * It gets the organization ID from the request parameters,
-   * then uses the findByPk function to retrieve the Organization record with the matching ID.
+   * then uses the findByPk function to retrieve the OrganizationService record with the matching ID.
    * It then sends the organization as the response
    * @param req
    * @param res
    */
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // retrieve a single organization by id
-      const organization = {}; // await Organization.findByPk(req.params.id);
+      const organization = await OrganizationService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (organization) {
         Handler.responseHandler(
           res,
           200,
           "Success",
           organization,
-          "Organization retrieved successfully"
+          "OrganizationService retrieved successfully"
         );
       } else {
         Handler.responseHandler(
@@ -364,7 +405,7 @@ export class Organization {
           404,
           "Not found",
           null,
-          "Organization not found"
+          "OrganizationService not found"
         );
       }
     } catch (error: any) {
@@ -374,7 +415,7 @@ export class Organization {
   /**
    * This function creates a new organization.
    * It gets the name and description from the request body,
-   * then uses the create function to insert a new Organization record into the database.
+   * then uses the create function to insert a new OrganizationService record into the database.
    * It then sends the new organization as the response.
    * @param req
    * @param res
@@ -382,13 +423,16 @@ export class Organization {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new organization
-      const organization = {}; // await Organization.create(req.body);
+      const organization = await OrganizationService.create(
+        req.params.database,
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
         "Success",
         organization,
-        "Organization created successfully"
+        "OrganizationService created successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -406,15 +450,19 @@ export class Organization {
    */
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // update an existing organization
-      const organization = {}; // await Organization.findByPk(req.params.id);
-      //organization.update(req.body);
+      const organization = await OrganizationService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
         "Success",
         organization,
-        "Organization updated successfully"
+        "OrganizationService updated successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -423,22 +471,25 @@ export class Organization {
   /**
    * This function deletes an existing organization.
    * It gets the organization ID from the request parameters,
-   * then uses the destroy function to delete the Organization record with the matching ID.
+   * then uses the destroy function to delete the OrganizationService record with the matching ID.
    * It then sends a response indicating that the organization was deleted successfully
    * @param req
    * @param res
    */
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // delete an existing organization
-      const organization = {}; // await Organization.findByPk(req.params.id);
-      //organization.destroy();
+      const organization = await OrganizationService.delete(
+        req.params.database,
+        parseInt(id)
+      );
       Handler.responseHandler(
         res,
         200,
         "Success",
         organization,
-        "Organization deleted successfully"
+        "OrganizationService deleted successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -453,7 +504,7 @@ export class Organization {
  * and deleting modules.
  */
 // define the Modules controller
-export class Modules {
+export class ModulesController {
   /**
    * This function retrieves a list of all modules for a tenant.
    * It gets the tenant ID from the request object,
@@ -462,21 +513,17 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async getModules(req: Request, res: Response, next: NextFunction) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       // get the tenant's modules
-      /*  const tenantId = req.user!.tenantId; */
-      const modules = {}; /* wait EntityModule.findAll({
-        where: { tenantId },
-        include: [{ model: Module }],
-      }); */
+      const modules = await ModulesService.get(req.params.database);
       if (modules) {
         Handler.responseHandler(
           res,
           200,
           "Success",
           modules,
-          "Modules retrieved successfully"
+          "ModulesService retrieved successfully"
         );
       } else {
         Handler.responseHandler(
@@ -484,7 +531,7 @@ export class Modules {
           404,
           "Not found",
           null,
-          "Modules not found"
+          "ModulesService not found"
         );
       }
     } catch (error: any) {
@@ -499,11 +546,14 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async getModule(req: Request, res: Response, next: NextFunction) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       // get a single module
-      const moduleId = req.params.id;
-      const module = {}; //await Module.findByPk(moduleId);
+      let { id } = req.params;
+      const module = await ModulesService.getById(
+        req.params.database,
+        parseInt(id)
+      );
       if (module) {
         Handler.responseHandler(
           res,
@@ -533,11 +583,10 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async createModule(req: Request, res: Response, next: NextFunction) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       // create a new module
-      const { name, description } = req.body;
-      const module = {}; //await Module.create({ name, description });
+      const module = await ModulesService.create(req.params.database, req.body);
       Handler.responseHandler(
         res,
         200,
@@ -559,15 +608,15 @@ export class Modules {
    * @param req
    * @param res
    */
-  static async updateModule(req: Request, res: Response, next: NextFunction) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      let { id } = req.params;
       // update an existing module
-      /* const moduleId = req.params.id;
-      const { name, description } = req.body;
-      const module = await Module.findByPk(moduleId);
-      module.name = name;
-      module.description = description;
-      await module.save(); */
+      const module = await ModulesService.update(
+        req.params.database,
+        parseInt(id),
+        req.body
+      );
       Handler.responseHandler(
         res,
         200,
@@ -590,9 +639,11 @@ export class Modules {
   static async deleteModule(req: Request, res: Response, next: NextFunction) {
     try {
       // delete an existing module
-      /* const moduleId = req.params.id;
-      const module = await Module.findByPk(moduleId);
-      await module.destroy(); */
+      let { id } = req.params;
+      const module = await ModulesService.delete(
+        req.params.database,
+        parseInt(id)
+      );
       Handler.responseHandler(
         res,
         200,
@@ -605,34 +656,6 @@ export class Modules {
     }
   }
 
-  /**
-   * This function first retrieves the module ID from the request parameters,
-   * then gets the updated name and description from the request body.
-   * It uses the findByPk function to retrieve the existing module with
-   * the matching ID, then updates its name and description with the new values.
-   * Finally, it saves the updated module to the database
-   * and sends a response indicating that the update was successful.
-   *
-   * */
-  static async updateModules(req: Request, res: Response, next: NextFunction) {
-    try {
-      // update the tenant's modules
-      /* const tenantId = req.user!.tenantId;
-      const moduleIds = req.body.moduleIds;
-      await EntityModule.destroy({ where: { tenantId } });
-      const modules = moduleIds.map((moduleId) => ({ tenantId, moduleId }));
-      await EntityModule.bulkCreate(modules); */
-      Handler.responseHandler(
-        res,
-        200,
-        "Success",
-        module,
-        "Module updated successfully"
-      );
-    } catch (error: any) {
-      Handler.errorHandler(error, req, res, next);
-    }
-  }
   /**
    * This function first retrieves the tenant ID from the request object,
    * then gets the list of module IDs from the request body.
@@ -652,27 +675,18 @@ export class Modules {
   ) {
     try {
       // update the tenant's modules
-      /* const tenantId = req.user!.tenantId;
-      const moduleIds = req.body.moduleIds;
-      await EntityModule.destroy({ where: { tenantId } });
-      const modules = moduleIds.map((moduleId) => ({ tenantId, moduleId }));
-      await EntityModule.bulkCreate(modules); */
+      const modules = req.body;
+      //await ModulesController.destroy({ where: { tenantId } });
+      await ModulesService.updateTenantModules(req.params.database, modules);
       Handler.responseHandler(
         res,
         200,
         "Success",
         module,
-        "Tenant Modules successfully"
+        "Tenant Modules updated  successfully"
       );
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
     }
   }
 }
-
-export default {
-  Tenant,
-  AuditLog,
-  Organization,
-  Modules,
-};

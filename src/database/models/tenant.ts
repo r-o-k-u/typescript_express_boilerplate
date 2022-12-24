@@ -75,7 +75,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: "true",
         comment: " ",
       },
       // Password for the tenant
@@ -94,7 +94,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       code: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: "true",
         comment: " ",
       },
       // Name of the database for the tenant

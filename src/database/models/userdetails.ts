@@ -12,20 +12,16 @@ export interface IUserDetail {
   tenantId: number; // ID for the tenant that the user belongs to (foreign key)
   dob: Date; // Date of birth for the user
   gender: string; // Gender for the user
-  address: string; // Address for the user
   city: string; // City for the user
   country: string; // Country for the user
-  username: string; // Unique username for the user
-  password: string; // Hashed password for the user
   email: string; // Email address for the user
-  firstName: string; // First name of the user
-  lastName: string; // Last name of the user
   phone: string; // Phone number for the user
   address1: string; // First line of the user's address
   address2: string; // Second line of the user's address (optional)
   state: string; // State or region of the user's address
   zip: string; // Zip code of the user's address
   avatar: string; // URL for the user's avatar image
+  status: number; // Status of the record ("0.inactive" "2.active", "3.suspended")
 }
 
 export interface IUserDetailView {
@@ -43,29 +39,32 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
    * It includes fields such as id, userId, and lastName.
    */
   class UserDetail extends Model<IUserDetail> implements IUserDetail {
-    username: string;
-    password: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    address1: string;
-    address2: string;
-    state: string;
-    zip: string;
-    avatar: string;
-    userId: number;
-    dob: Date;
-    gender: string;
-    address: string;
-    city: string;
-    country: string;
-    status: string;
-    tenantId: number;
-    key: string;
-    value: string;
-    id: CreationOptional<number>;
-    static associate(models: any) {}
+    id: CreationOptional<number>; // ID for the user details (primary key)
+    userId: number; // ID for the user (foreign key)
+    tenantId: number; // ID for the tenant that the user belongs to (foreign key)
+    dob: Date; // Date of birth for the user
+    gender: string; // Gender for the user
+    address: string; // Address for the user
+    city: string; // City for the user
+    country: string; // Country for the user
+    email: string; // Email address for the user
+    phone: string; // Phone number for the user
+    address1: string; // First line of the user's address
+    address2: string; // Second line of the user's address (optional)
+    state: string; // State or region of the user's address
+    zip: string; // Zip code of the user's address
+    avatar: string; // URL for the user's avatar image,
+    status: number; // Status of the record ("0.inactive" "2.active", "3.suspended")
+    static associate(models: any) {
+      UserDetail.belongsTo(models.Tenant, {
+        foreignKey: "tenantId",
+        as: "tenant",
+      });
+      UserDetail.belongsTo(models.User, {
+        foreignKey: "userId",
+        as: "user",
+      });
+    }
   }
   UserDetail.init(
     {
@@ -73,7 +72,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        comment: " ",
+        comment: "ID for the user details (primary key)",
       },
       tenantId: {
         type: DataTypes.INTEGER,
@@ -98,22 +97,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-      },
-      // Password hash for the user
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      // First name for the user
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      // Last name for the user
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        unique: "true",
       },
       // Phone number for the user
       phone: {
@@ -124,13 +108,6 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       // Avatar image for the user
       avatar: {
         type: DataTypes.STRING,
-        comment: " ",
-      },
-      // Unique username for the user
-      username: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
         comment: " ",
       },
       address1: {
@@ -174,10 +151,12 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.STRING,
         comment: " ",
       },
-      // Address for the user
-      address: {
-        type: DataTypes.STRING,
-        comment: " ",
+      //Status of the record
+      status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        comment: "Status of the record (0.inactive,2.active, 3.suspended)",
       },
     },
     { sequelize }

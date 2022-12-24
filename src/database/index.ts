@@ -35,6 +35,7 @@ class Database {
         host: Locals.config().DB_HOST || "",
         dialect: Locals.config().DB_DRIVER || "",
         port: Locals.config().DB_PORT || "",
+        logging: false, //(msg) => console.log(msg),
       }
     );
     this.sequelize.sync();
@@ -54,6 +55,7 @@ class Database {
           host: Locals.config().DB_HOST || "",
           dialect: Locals.config().DB_DRIVER || "",
           port: Locals.config().DB_PORT || "",
+          logging: false, //(msg) => console.log(msg),
         }
       );
     }
@@ -85,13 +87,16 @@ class Database {
         });
         await this.sequelize.sync();
         DB_REPO[DB_NAME] = this.repo;
-
+        DB_REPO.sequelize = this.sequelize;
+        DB_REPO.Sequelize = this.Sequelize;
         // console.log("dbRepo", dbRepo);
         return DB_REPO;
       } catch (error) {
         console.error("Unable to connect to the database:", error);
       }
     } else {
+      DB_REPO.sequelize = this.sequelize;
+      DB_REPO.Sequelize = this.Sequelize;
       return DB_REPO;
       console.log("tenant already connected  ");
     }

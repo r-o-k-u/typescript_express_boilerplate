@@ -1,6 +1,9 @@
 import { Router } from "express";
-import { Request, Response } from "express";
-import AdminController from "../controllers/api/adminController";
+import {
+  TenantController,
+  OrganizationController,
+  AuditLogController,
+} from "../controllers/api/adminController";
 import AuthController from "../controllers/api/authController";
 import UserController from "../controllers/api/userController";
 import checkTenant from "../middleware/check_tenant";
@@ -12,9 +15,29 @@ const router = Router();
  *  post:
  *     tags:
  *     - Authentication
- *     summary: Register a user
+ *     description: Registers a new user
+ *     summary: User Registration
  *     requestBody:
- *      required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             name:
+ *              description: Full name of the user
+ *              type: string
+ *              required: true
+ *             phone_email:
+ *              description: Phone number or email address of the user
+ *              type: string
+ *              required: true
+ *             password:
+ *              description: Password for the user
+ *              type: string
+ *              required: true
+ *            required:
+ *              - name
+ *              - phone_email
+ *              - password
  *     responses:
  *      '200':
  *        description: OK
@@ -29,28 +52,37 @@ const router = Router();
  *      5XX':
  *        description: server error.
  */
-router.post("/auth/register", AuthController.AuthenticationController.register);
+router.post(
+  "/auth/register",
+  checkTenant,
+  AuthController.AuthenticationController.register
+);
 /**
  * @openapi
  * '/api/auth/login':
  *  post:
  *     tags:
  *     - Authentication
+ *     description: Logs in a user
  *     summary: User Login
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *            properties:
- *             phone_email:
- *              description: Users phone or email
+ *             email:
+ *              description: Users email
  *              type: string
+ *             phone:
+ *              description: Users phone
+ *              type: number
  *             password:
  *              description: Users password
  *              type: string
  *            required:
- *              - phone_email
  *              - password
+ *              - phone
+ *              - email
  *     responses:
  *      '200':
  *        description: OK
@@ -78,7 +110,7 @@ router.post(
  *     - Authentication
  *     summary: User Logout
  *     requestBody:
- *      required: true
+ *      required: false
  *     responses:
  *      '200':
  *        description: OK
@@ -93,16 +125,30 @@ router.post(
  *      5XX':
  *        description: server error.
  */
-router.post("/auth/logout", AuthController.AuthenticationController.logout);
+router.post(
+  "/auth/logout",
+  checkTenant,
+  AuthController.AuthenticationController.logout
+);
 /**
  * @openapi
- * '/api/auth/forgetPassword':
+ * '/api/auth/forgot-password':
  *  post:
  *     tags:
  *     - Authentication
- *     summary: forget Password
+ *     description: Sends password reset email to a user
+ *     summary: Forgot Password
  *     requestBody:
- *      required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             email:
+ *              description: User's email
+ *              type: string
+ *             phone:
+ *              description: User's phone
+ *              type: string
  *     responses:
  *      '200':
  *        description: OK
@@ -119,6 +165,7 @@ router.post("/auth/logout", AuthController.AuthenticationController.logout);
  */
 router.post(
   "/auth/forgetPassword",
+  checkTenant,
   AuthController.AuthenticationController.forgetPassword
 );
 /**
@@ -146,6 +193,7 @@ router.post(
  */
 router.post(
   "/auth/refreshToken",
+  checkTenant,
   AuthController.AuthenticationController.refreshToken
 );
 /**
@@ -173,6 +221,7 @@ router.post(
  */
 router.post(
   "/auth/resetPassword",
+  checkTenant,
   AuthController.AuthenticationController.resetPassword
 );
 /**
@@ -200,6 +249,7 @@ router.post(
  */
 router.post(
   "/auth/twoFactorAuth",
+  checkTenant,
   AuthController.AuthenticationController.twoFactorAuth
 );
 /**
@@ -227,6 +277,7 @@ router.post(
  */
 router.post(
   "/auth/verifyAuthCode",
+  checkTenant,
   AuthController.AuthenticationController.verifyAuthCode
 );
 /**
@@ -254,6 +305,7 @@ router.post(
  */
 router.post(
   "/auth/authenticate",
+  checkTenant,
   AuthController.AuthenticationController.apiAuthentication
 );
 /**
@@ -277,7 +329,11 @@ router.post(
  *      5XX':
  *        description: server error.
  */
-router.get("/auth/group", AuthController.AuthGroupController.getAll);
+router.get(
+  "/auth/group",
+  checkTenant,
+  AuthController.AuthGroupController.getAll
+);
 /**
  * @openapi
  * '/api/auth/group/{id}':
@@ -306,8 +362,51 @@ router.get("/auth/group", AuthController.AuthGroupController.getAll);
  *      5XX':
  *        description: server error.
  */
-router.get("/auth/group/:id", AuthController.AuthGroupController.getById);
-router.post("/auth/group", AuthController.AuthGroupController.create);
+router.get(
+  "/auth/group/:id",
+  checkTenant,
+  AuthController.AuthGroupController.getById
+);
+/**
+ * @openapi
+ * '/api/auth-groups':
+ *  post:
+ *     tags:
+ *     - Authentication
+ *     description: Creates a new auth group
+ *     summary: Create Auth Group
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             name:
+ *              description: Name of the auth group
+ *              type: string
+ *             description:
+ *              description: Description of the auth group
+ *              type: string
+ *            required:
+ *              - name
+ *     responses:
+ *      '200':
+ *        description: OK
+ *      400:
+ *        description: Bad request
+ *      401':
+ *        description: Authorization information is missing or invalid.
+ *      404':
+ *        description: Not found.
+ *      409:
+ *        description: Conflict
+ *      5XX':
+ *        description: server error.
+ */
+router.post(
+  "/auth/group",
+  checkTenant,
+  AuthController.AuthGroupController.create
+);
 /**
  * @openapi
  * '/api/auth/group/{id}':
@@ -336,7 +435,11 @@ router.post("/auth/group", AuthController.AuthGroupController.create);
  *      5XX':
  *        description: server error.
  */
-router.patch("/auth/group/:id", AuthController.AuthGroupController.update);
+router.patch(
+  "/auth/group/:id",
+  checkTenant,
+  AuthController.AuthGroupController.update
+);
 /**
  * @openapi
  * '/api/auth/group/{id}':
@@ -365,7 +468,11 @@ router.patch("/auth/group/:id", AuthController.AuthGroupController.update);
  *      5XX':
  *        description: server error.
  */
-router.delete("/auth/group/:id", AuthController.AuthGroupController.delete);
+router.delete(
+  "/auth/group/:id",
+  checkTenant,
+  AuthController.AuthGroupController.delete
+);
 /**
  * @openapi
  * '/api/auth/roles':
@@ -387,7 +494,11 @@ router.delete("/auth/group/:id", AuthController.AuthGroupController.delete);
  *      5XX':
  *        description: server error.
  */
-router.get("/auth/roles", AuthController.AuthRoleController.getAll);
+router.get(
+  "/auth/roles",
+  checkTenant,
+  AuthController.AuthRoleController.getAll
+);
 /**
  * @openapi
  * '/api/auth/role/{id}':
@@ -416,8 +527,52 @@ router.get("/auth/roles", AuthController.AuthRoleController.getAll);
  *      5XX':
  *        description: server error.
  */
-router.get("/auth/role/:id", AuthController.AuthRoleController.getById);
-router.post("/auth/role", AuthController.AuthRoleController.create);
+router.get(
+  "/auth/role/:id",
+  checkTenant,
+  AuthController.AuthRoleController.getById
+);
+/**
+ * @openapi
+ * '/api/auth-roles':
+ *  post:
+ *     tags:
+ *     - Auth Roles
+ *     description: Creates a new auth role
+ *     summary: Create Auth Role
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             name:
+ *              description: Name of the auth role
+ *              type: string
+ *             code:
+ *              description: Code of the auth role
+ *              type: string
+ *            required:
+ *              - name
+ *              - code
+ *     responses:
+ *      '201':
+ *        description: Created
+ *      400:
+ *        description: Bad request
+ *      401':
+ *        description: Authorization information is missing or invalid.
+ *      404':
+ *        description: Not found.
+ *      409:
+ *        description: Conflict
+ *      5XX':
+ *        description: server error.
+ */
+router.post(
+  "/auth/role",
+  checkTenant,
+  AuthController.AuthRoleController.create
+);
 /**
  * @openapi
  * '/api/auth/role/{id}':
@@ -446,7 +601,11 @@ router.post("/auth/role", AuthController.AuthRoleController.create);
  *      5XX':
  *        description: server error.
  */
-router.patch("/auth/role/:id", AuthController.AuthRoleController.update);
+router.patch(
+  "/auth/role/:id",
+  checkTenant,
+  AuthController.AuthRoleController.update
+);
 /**
  * @openapi
  * '/api/auth/role/{id}':
@@ -475,7 +634,11 @@ router.patch("/auth/role/:id", AuthController.AuthRoleController.update);
  *      5XX':
  *        description: server error.
  */
-router.delete("/auth/role/:id", AuthController.AuthRoleController.delete);
+router.delete(
+  "/auth/role/:id",
+  checkTenant,
+  AuthController.AuthRoleController.delete
+);
 /**
  * @openapi
  * '/api/auth/permissions':
@@ -497,7 +660,11 @@ router.delete("/auth/role/:id", AuthController.AuthRoleController.delete);
  *      5XX':
  *        description: server error.
  */
-router.get("/auth/permissions", AuthController.AuthPermissionController.getAll);
+router.get(
+  "/auth/permissions",
+  checkTenant,
+  AuthController.AuthPermissionController.getAll
+);
 /**
  * @openapi
  * '/api/auth/permission/{id}':
@@ -528,10 +695,12 @@ router.get("/auth/permissions", AuthController.AuthPermissionController.getAll);
  */
 router.get(
   "/auth/permissions/:id",
+  checkTenant,
   AuthController.AuthPermissionController.getById
 );
 router.post(
   "/auth/permissions",
+  checkTenant,
   AuthController.AuthPermissionController.create
 );
 /**
@@ -564,6 +733,7 @@ router.post(
  */
 router.patch(
   "/auth/permissions/:id",
+  checkTenant,
   AuthController.AuthPermissionController.update
 );
 /**
@@ -596,6 +766,7 @@ router.patch(
  */
 router.delete(
   "/auth/permissions/:id",
+  checkTenant,
   AuthController.AuthRoleController.delete
 );
 
@@ -622,7 +793,7 @@ router.delete(
  *      5XX':
  *        description: server error.
  */
-router.get("/audit_log", AdminController.AuditLog.getAll);
+router.get("/audit_log", checkTenant, AuditLogController.getAll);
 /**
  * @openapi
  * '/api/audit_log/{id}':
@@ -651,7 +822,7 @@ router.get("/audit_log", AdminController.AuditLog.getAll);
  *      5XX':
  *        description: server error.
  */
-router.get("/audit_log/:id", AdminController.AuditLog.getById);
+router.get("/audit_log/:id", checkTenant, AuditLogController.getById);
 /**
  * @openapi
  * '/api/audit_log':
@@ -675,7 +846,7 @@ router.get("/audit_log/:id", AdminController.AuditLog.getById);
  *      5XX':
  *        description: server error.
  */
-router.post("/audit_log", AdminController.AuditLog.create);
+router.post("/audit_log", checkTenant, AuditLogController.create);
 /**
  * @openapi
  * '/api/audit_log/{id}':
@@ -704,7 +875,7 @@ router.post("/audit_log", AdminController.AuditLog.create);
  *      5XX':
  *        description: server error.
  */
-router.patch("/audit_log/:id", AdminController.AuditLog.update);
+router.patch("/audit_log/:id", checkTenant, AuditLogController.update);
 /**
  * @openapi
  * '/api/audit_log/{id}':
@@ -733,7 +904,7 @@ router.patch("/audit_log/:id", AdminController.AuditLog.update);
  *      5XX':
  *        description: server error.
  */
-router.delete("/audit_log/:id", AdminController.AuditLog.delete);
+router.delete("/audit_log/:id", checkTenant, AuditLogController.delete);
 
 /**
  * @openapi
@@ -756,7 +927,7 @@ router.delete("/audit_log/:id", AdminController.AuditLog.delete);
  *      5XX':
  *        description: server error.
  */
-router.get("/tenant", AdminController.Tenant.getAll);
+router.get("/tenant", checkTenant, TenantController.getAll);
 /**
  * @openapi
  * '/api/tenant/{id}':
@@ -785,8 +956,90 @@ router.get("/tenant", AdminController.Tenant.getAll);
  *      5XX':
  *        description: server error.
  */
-router.get("/tenant/:id", AdminController.Tenant.getById);
-router.post("/tenant", AdminController.Tenant.create);
+router.get("/tenant/:id", checkTenant, TenantController.getById);
+/**
+ * @openapi
+ * '/api/tenant':
+ *  post:
+ *     tags:
+ *     - Administration
+ *     description: Creates a new tenant
+ *     summary: Create Tenant
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *              organizationId:
+ *                description: ID of the organization the tenant belongs to
+ *                type: string
+ *                required: true
+ *                example: 1
+ *              name:
+ *                description: Name of the tenant
+ *                type: string
+ *                example: tenant 1
+ *              email:
+ *                description: Email of the tenant
+ *                type: string
+ *                example: contact@qwerty.co.ke
+ *              phoneNumber:
+ *                description: Phone number of the tenant
+ *                type: string
+ *                example: 254743411403
+ *              website:
+ *                description: Website of the tenant
+ *                type: string
+ *                example: localhost:3333
+ *              description:
+ *                description: description of the tenant
+ *                type: string
+ *                example: tenant One
+ *              logo:
+ *                description: Logo of the tenant
+ *                type: string
+ *                example: https://res.cloudinary.com/dihzljuvb/image/upload/v1662269776/qwerty/qwerty_hlfpqr.png
+ *              address:
+ *                description: Address of the tenant
+ *                type: object
+ *                properties:
+ *                  street:
+ *                    description: Street address of the tenant
+ *                    type: string
+ *                    example: Just
+ *                  city:
+ *                    description: City of the tenant
+ *                    type: string
+ *                    example: Around
+ *                  state:
+ *                    description: State of the tenant
+ *                    type: string
+ *                    example: Here
+ *                  zipCode:
+ *                    description: Zip code of the tenant
+ *                    type: string
+ *                    example: 1234
+ *                  country:
+ *                    description: Country of the tenant
+ *                    type: string
+ *                    example: Kenya
+ *            required:
+ *              - organizationId
+ *     responses:
+ *      '201':
+ *        description: Created
+ *      400:
+ *        description: Bad request
+ *      401':
+ *        description: Authorization information is missing or invalid.
+ *      404':
+ *        description: Not found.
+ *      409:
+ *        description: Conflict
+ *      5XX':
+ *        description: server error.
+ * */
+router.post("/tenant", checkTenant, TenantController.create);
 /**
  * @openapi
  * '/api/tenant/{id}':
@@ -815,7 +1068,7 @@ router.post("/tenant", AdminController.Tenant.create);
  *      5XX':
  *        description: server error.
  */
-router.patch("/tenant/:id", AdminController.Tenant.update);
+router.patch("/tenant/:id", checkTenant, TenantController.update);
 /**
  * @openapi
  * '/api/tenant/{id}':
@@ -844,7 +1097,7 @@ router.patch("/tenant/:id", AdminController.Tenant.update);
  *      5XX':
  *        description: server error.
  */
-router.delete("/tenant/:id", AdminController.Tenant.delete);
+router.delete("/tenant/:id", checkTenant, TenantController.delete);
 
 /**
  * @openapi
@@ -867,7 +1120,7 @@ router.delete("/tenant/:id", AdminController.Tenant.delete);
  *      5XX':
  *        description: server error.
  */
-router.get("/organization", AdminController.Organization.getAll);
+router.get("/organization", checkTenant, OrganizationController.getAll);
 /**
  * @openapi
  * '/api/organization/{id}':
@@ -896,8 +1149,86 @@ router.get("/organization", AdminController.Organization.getAll);
  *      5XX':
  *        description: server error.
  */
-router.get("/organization/:id", AdminController.Organization.getById);
-router.post("/organization", AdminController.Organization.create);
+router.get("/organization/:id", checkTenant, OrganizationController.getById);
+/**
+ * @openapi
+ * '/api/organization':
+ *  post:
+ *    tags:
+ *    - Administration
+ *    description: Creates a new organization
+ *    summary: Create Organization
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            properties:
+ *              name:
+ *                description: Name of the organization
+ *                type: string
+ *                example: Organization 1
+ *              email:
+ *                description: Email of the organization
+ *                type: string
+ *                example: contact@qwerty.co.ke
+ *              phoneNumber:
+ *                description: Phone number of the organization
+ *                type: string
+ *                example: 254743411403
+ *              website:
+ *                description: Website of the organization
+ *                type: string
+ *                example: localhost:3333
+ *              description:
+ *                description: description of the organization
+ *                type: string
+ *                example: Organization One
+ *              logo:
+ *                description: Logo of the organization
+ *                type: string
+ *                example: https://res.cloudinary.com/dihzljuvb/image/upload/v1662269776/qwerty/qwerty_hlfpqr.png
+ *              address:
+ *                description: Address of the organization
+ *                type: object
+ *                properties:
+ *                  street:
+ *                    description: Street address of the organization
+ *                    type: string
+ *                    example: Just
+ *                  city:
+ *                    description: City of the organization
+ *                    type: string
+ *                    example: Around
+ *                  state:
+ *                    description: State of the organization
+ *                    type: string
+ *                    example: Here
+ *                  zipCode:
+ *                    description: Zip code of the organization
+ *                    type: string
+ *                    example: 1234
+ *                  country:
+ *                    description: Country of the organization
+ *                    type: string
+ *                    example: Kenya
+ *            required:
+ *              - name
+ *              - email
+ *              - phone
+ *    responses:
+ *      '201':
+ *        description: Created
+ *      400:
+ *        description: Bad request
+ *      401:
+ *        description: Unauthorized
+ *      403:
+ *        description: Forbidden
+ *      5XX:
+ *        description: Unexpected server error
+ *
+ * */
+router.post("/organization", checkTenant, OrganizationController.create);
 /**
  * @openapi
  * '/api/organization/{id}':
@@ -926,7 +1257,7 @@ router.post("/organization", AdminController.Organization.create);
  *      5XX':
  *        description: server error.
  */
-router.patch("/organization/:id", AdminController.Organization.update);
+router.patch("/organization/:id", checkTenant, OrganizationController.update);
 /**
  * @openapi
  * '/api/organization/{id}':
@@ -955,7 +1286,7 @@ router.patch("/organization/:id", AdminController.Organization.update);
  *      5XX':
  *        description: server error.
  */
-router.delete("/organization/:id", AdminController.Organization.delete);
+router.delete("/organization/:id", checkTenant, OrganizationController.delete);
 
 /**
  * @openapi
@@ -978,7 +1309,7 @@ router.delete("/organization/:id", AdminController.Organization.delete);
  *      5XX':
  *        description: server error.
  */
-router.get("/user", UserController.UserController.getAll);
+router.get("/user", checkTenant, UserController.UserController.getAll);
 /**
  * @openapi
  * '/api/user':
@@ -1000,7 +1331,7 @@ router.get("/user", UserController.UserController.getAll);
  *      5XX':
  *        description: server error.
  */
-router.get("/user/:id", UserController.UserController.getById);
+router.get("/user/:id", checkTenant, UserController.UserController.getById);
 /**
  * @openapi
  * '/api/user/{id}':
@@ -1029,7 +1360,7 @@ router.get("/user/:id", UserController.UserController.getById);
  *      5XX':
  *        description: server error.
  */
-router.patch("/user/:id", UserController.UserController.update);
+router.patch("/user/:id", checkTenant, UserController.UserController.update);
 /**
  * @openapi
  * '/api/user/{id}':
@@ -1058,7 +1389,7 @@ router.patch("/user/:id", UserController.UserController.update);
  *      5XX':
  *        description: server error.
  */
-router.delete("/user/:id", UserController.UserController.delete);
+router.delete("/user/:id", checkTenant, UserController.UserController.delete);
 /**
  * @openapi
  * '/api/user/profile/{id}':
@@ -1087,7 +1418,11 @@ router.delete("/user/:id", UserController.UserController.delete);
  *      5XX':
  *        description: server error.
  */
-router.get("/user/profile/:id", UserController.UserController.getProfile);
+router.get(
+  "/user/profile/:id",
+  checkTenant,
+  UserController.UserController.getProfile
+);
 /**
  * @openapi
  * '/api/user/group':
@@ -1116,7 +1451,7 @@ router.get("/user/profile/:id", UserController.UserController.getProfile);
  *      5XX':
  *        description: server error.
  */
-router.get("/user/group", UserController.UserController.getGroups);
+router.get("/user/group", checkTenant, UserController.UserController.getGroups);
 /**
  * @openapi
  * '/api/user/group/{id}':
@@ -1145,7 +1480,11 @@ router.get("/user/group", UserController.UserController.getGroups);
  *      5XX':
  *        description: server error.
  */
-router.patch("/user/group/:id", UserController.UserController.updateGroups);
+router.patch(
+  "/user/group/:id",
+  checkTenant,
+  UserController.UserController.updateGroups
+);
 /**
  * @openapi
  * '/api/user/profile/{id}':
@@ -1174,6 +1513,10 @@ router.patch("/user/group/:id", UserController.UserController.updateGroups);
  *      5XX':
  *        description: server error.
  */
-router.patch("/user/profile/:id", UserController.UserController.updateProfile);
+router.patch(
+  "/user/profile/:id",
+  checkTenant,
+  UserController.UserController.updateProfile
+);
 
 export default router;
