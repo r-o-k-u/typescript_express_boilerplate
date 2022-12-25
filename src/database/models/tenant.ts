@@ -54,6 +54,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "tenantId",
         as: "users",
       });
+      Tenant.hasOne(models.TenantDetails, {
+        foreignKey: "tenantId",
+        as: "details",
+      });
       Tenant.belongsToMany(models.Modules, { through: "TenantModule" });
     }
   }
@@ -120,7 +124,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         }, */
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return Tenant;

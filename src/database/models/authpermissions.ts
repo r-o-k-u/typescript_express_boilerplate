@@ -34,8 +34,6 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     code: string;
     name: string;
     description?: string | undefined;
-    createdAt: Date;
-    updatedAt: Date;
     id: CreationOptional<number>;
     static associate(models: any) {
       AuthPermission.belongsTo(models.Tenant, {
@@ -80,7 +78,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         }, */
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return AuthPermission;

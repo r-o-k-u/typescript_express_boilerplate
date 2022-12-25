@@ -27,7 +27,7 @@ export class TenantController {
     try {
       // retrieve all tenants
       const tenants = await TenantService.getAll(req.params.database);
-      if (tenants) {
+      if (tenants.length > 0) {
         Handler.responseHandler(
           res,
           200,

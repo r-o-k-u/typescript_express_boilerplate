@@ -36,11 +36,9 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     tenantId: number;
     code: string;
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
     codename: string;
     name: string;
-    status: string;
+    status: number;
     id: CreationOptional<number>;
     static associate(models: any) {
       AuthRole.belongsTo(models.Tenant, {
@@ -89,7 +87,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         }, */
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return AuthRole;

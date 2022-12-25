@@ -102,7 +102,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         comment: "comment",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return AuditLog;

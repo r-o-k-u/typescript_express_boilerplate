@@ -22,21 +22,39 @@ const router = Router();
  *         application/json:
  *           schema:
  *            properties:
- *             name:
- *              description: Full name of the user
+ *             firstName:
+ *              description: First name of the user
  *              type: string
- *              required: true
- *             phone_email:
- *              description: Phone number or email address of the user
+ *              example: John
+ *             lastName:
+ *              description: Last name of the user
  *              type: string
- *              required: true
+ *              example: John
+ *             username:
+ *              description: Username of the user
+ *              type: string
+ *              example: John
+ *             email:
+ *              description: email address of the user
+ *              type: string
+ *              example: contact@qwerty.co.ke
+ *             phone:
+ *              description: Phone number  of the user
+ *              type: string
+ *              example: 25477777777
  *             password:
  *              description: Password for the user
  *              type: string
- *              required: true
+ *              example: change me
+ *             referral_code:
+ *              description: referral code if any
+ *              type: string
+ *              example:
  *            required:
- *              - name
- *              - phone_email
+ *              - firstName
+ *              - lastName
+ *              - phone
+ *              - email
  *              - password
  *     responses:
  *      '200':
@@ -383,9 +401,11 @@ router.get(
  *             name:
  *              description: Name of the auth group
  *              type: string
+ *              example: Super Admin
  *             description:
  *              description: Description of the auth group
  *              type: string
+ *              example: Main System administrators
  *            required:
  *              - name
  *     responses:
@@ -548,9 +568,11 @@ router.get(
  *             name:
  *              description: Name of the auth role
  *              type: string
- *             code:
- *              description: Code of the auth role
+ *              example: Admin
+ *             description:
+ *              description: description of role
  *              type: string
+ *              example: System Administration Role
  *            required:
  *              - name
  *              - code
@@ -698,6 +720,45 @@ router.get(
   checkTenant,
   AuthController.AuthPermissionController.getById
 );
+/**
+ * @openapi
+ * '/api/auth-permissions':
+ *  post:
+ *     tags:
+ *     - Auth Permissions
+ *     description: Creates a new auth permission
+ *     summary: Create Auth Permission
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             name:
+ *              description: Name of the auth role
+ *              type: string
+ *              example: View
+ *             description:
+ *              description: description of role
+ *              type: string
+ *              example: only view permissions
+ *            required:
+ *              - name
+ *              - code
+ *     responses:
+ *      '201':
+ *        description: Created
+ *      400:
+ *        description: Bad request
+ *      401':
+ *        description: Authorization information is missing or invalid.
+ *      404':
+ *        description: Not found.
+ *      409:
+ *        description: Conflict
+ *      5XX':
+ *        description: server error.
+ */
+
 router.post(
   "/auth/permissions",
   checkTenant,

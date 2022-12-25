@@ -34,8 +34,6 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     tenantId: number;
     code: string;
     description?: string | undefined;
-    createdAt: Date;
-    updatedAt: Date;
     name: string;
     status: string;
     id: CreationOptional<number>;
@@ -86,7 +84,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         comment: "optional description of the permission ",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return AuthGroup;

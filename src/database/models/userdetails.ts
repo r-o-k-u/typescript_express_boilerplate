@@ -96,48 +96,51 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       // Email address for the user
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: "true",
       },
       // Phone number for the user
       phone: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         comment: " ",
       },
       // Avatar image for the user
       avatar: {
         type: DataTypes.STRING,
+        allowNull: true,
         comment: " ",
       },
       address1: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         comment: " ",
       },
       address2: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         comment: " ",
       },
       // City for the user
       city: {
         type: DataTypes.STRING,
+        allowNull: true,
         comment: " ",
       },
       // Country for the user
       country: {
         type: DataTypes.STRING,
+        allowNull: true,
         comment: " ",
       },
       state: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         comment: " ",
       },
       zip: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         comment: " ",
       },
 
@@ -145,21 +148,22 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       dob: {
         type: DataTypes.DATEONLY,
         comment: " ",
+        allowNull: true,
       },
       // Gender for the user
       gender: {
         type: DataTypes.STRING,
         comment: " ",
+        allowNull: true,
       },
       //Status of the record
       status: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         defaultValue: 0,
         comment: "Status of the record (0.inactive,2.active, 3.suspended)",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
 

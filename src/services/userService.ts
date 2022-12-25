@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express";
 import Handler from "../utils/Handler";
+import Repo from "../database/models/index";
+import { hash } from "./authService";
 /**
  * User Service
  * @remarks
@@ -61,11 +62,83 @@ export class UserService {
    * @param res
    */
   static async create(DB_NAME: string, Payload: any) {
+    const t = await Repo.sequelize.transaction();
     try {
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        tenantId,
+        username,
+        referral_code,
+      } = Payload;
       // create a new user
-      const user = {}; // await User.create(req.body);
-      return null;
+      const refereed = referral_code ? true : false;
+      const username_ = username ? username : email;
+      const type = 0;
+      const language_id = 0;
+      const registrationStatus = 1;
+      const accountStatus = 0;
+      const email_notification_status = 0;
+      const phone_notification_status = 0;
+      const passwordHash = await hash(password);
+      const code = `USR_${Math.floor(
+        10000 + Math.random() * 90000
+      ).toString()}`;
+      const user = await Repo[DB_NAME].User.create(
+        {
+          user_code: code,
+          tenantId,
+          firstName,
+          lastName,
+          username: username_,
+          refereed,
+          language_id,
+          registrationStatus,
+          accountStatus,
+          referral_code,
+          type,
+          email_notification_status,
+          phone_notification_status,
+          status: 1, //active
+        },
+        {
+          transaction: t,
+        }
+      );
+      const user_details = await Repo[DB_NAME].UserDetail.create(
+        {
+          tenantId,
+          userId: user.id,
+          email,
+          phone,
+          status: 1,
+        },
+        {
+          transaction: t,
+        }
+      );
+
+      const user_auth = await Repo[DB_NAME].UserAuthentication.create(
+        {
+          tenantId,
+          userId: user.id,
+          passwordHash,
+        },
+        {
+          transaction: t,
+        }
+      );
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+      await t.commit();
+      return { user, user_details, user_auth };
     } catch (error: any) {
+      // If the execution reaches this line, an error was thrown.
+      // We rollback the transaction.
+      await t.rollback();
       throw Error(error);
     }
   }

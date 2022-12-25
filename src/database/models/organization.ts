@@ -166,7 +166,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         comment: "Description for the organization (optional) ",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
 

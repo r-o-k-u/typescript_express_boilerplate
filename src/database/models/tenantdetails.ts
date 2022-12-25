@@ -72,7 +72,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         }, */
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return TenantDetails;

@@ -144,7 +144,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       //Users code
       user_code: {
         type: DataTypes.STRING,
-        defaultValue: false,
+        allowNull: false,
         comment:
           "Unique hash identifying the user internally in the code oe the api",
       },
@@ -175,7 +175,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         comment: "Type of user  (0. Normal,2.API)",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return User;

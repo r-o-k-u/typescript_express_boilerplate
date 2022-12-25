@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Handler from "../utils/Handler";
 import Repo from "../database/models/index";
 import bcrypt from "bcrypt";
+import { hash } from "./authService";
 /**
  * TenantService
  * @remarks
@@ -19,7 +20,9 @@ export class TenantService {
   static async getAll(DB_NAME: string) {
     try {
       // retrieve all tenants
-      const tenants = await Repo[DB_NAME].Tenant.findAll();
+      const tenants = await Repo[DB_NAME].Tenant.findAll({
+        include: { model: Repo[DB_NAME].TenantDetails, as: "details" },
+      });
       if (tenants) {
         return tenants;
       } else {
@@ -38,7 +41,9 @@ export class TenantService {
   static async getById(DB_NAME: string, Id: number) {
     try {
       // retrieve a single tenant by id
-      const tenant = await Repo[DB_NAME].Tenant.findByPk(Id);
+      const tenant = await Repo[DB_NAME].Tenant.findByPk(Id, {
+        include: { model: Repo[DB_NAME].TenantDetails, as: "details" },
+      });
       if (tenant) {
         return tenant;
       } else {
@@ -56,6 +61,7 @@ export class TenantService {
    
    */
   static async create(DB_NAME: string, Payload: any) {
+    const t = await Repo.sequelize.transaction();
     try {
       const {
         name,
@@ -70,35 +76,34 @@ export class TenantService {
       } = Payload;
       const { street, city, state, zipCode, country } = address;
       // create a new tenant
-      console.log("DB_NAME", DB_NAME);
-      const t = Repo[DB_NAME];
-      console.log("t", t);
       const Organization = await Repo[DB_NAME].Organization.findByPk(
         parseInt(organizationId)
       );
-      console.log("Organization", Organization);
+      if (!Organization) return null;
       let code = `TENANT_${Math.floor(
         10000 + Math.random() * 90000
       ).toString()}`;
-      let databaseName_ = Organization.databaseName || code;
+      let databaseName_ = Organization.databaseName;
+      let website_ = website || Organization.website; // if website is not provided use organizations website
       const password = await hash("change me");
       const tenant = await Repo[DB_NAME].Tenant.create(
         {
           name,
           email,
           password,
+          domainName: website_,
           code,
           databaseName: databaseName_,
-          Organization: parseInt(Organization.id),
+          organizationId: parseInt(Organization.id),
+          status: 1, //active
         },
         {
           transaction: t,
         }
       );
-      console.log("tenant", tenant);
       const tenant_details = await Repo[DB_NAME].TenantDetails.create(
         {
-          tenantId: tenant,
+          tenantId: tenant.id,
           phone: phoneNumber,
           address: zipCode,
           city,
@@ -108,11 +113,14 @@ export class TenantService {
           transaction: t,
         }
       );
-      console.log("tenant_details", tenant_details);
-      delete tenant_details.id;
-      //delete tenant_details.id;
-      return { tenant, ...tenant_details };
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+      await t.commit();
+      return { tenant, tenant_details };
     } catch (error: any) {
+      // If the execution reaches this line, an error was thrown.
+      // We rollback the transaction.
+      await t.rollback();
       throw Error(error);
     }
   }
@@ -559,8 +567,4 @@ export class ModulesService {
       throw Error(error);
     }
   }
-}
-
-async function hash(password: any) {
-  return await bcrypt.hash(password, 10);
 }

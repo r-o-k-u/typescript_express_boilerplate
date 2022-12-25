@@ -496,17 +496,15 @@ export class AuthenticationController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
       // register a new user
-      const { firstName, lastName, email, password, phone } = req.body;
-      const user = AuthenticationService.register(
+      const user = await AuthenticationService.register(
         req.params.database,
         req.body
       );
-      //await user.save();
       Handler.responseHandler(
         res,
         200,
         "Success",
-        null,
+        user,
         "User registered successfully"
       );
     } catch (error: any) {

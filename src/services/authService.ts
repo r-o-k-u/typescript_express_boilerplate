@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import Locals from "../providers/Locals";
 import { UserService } from "./userService";
+import Repo from "../database/models/index";
+import bcrypt from "bcrypt";
 /**
  * Auth service
  * @remarks
@@ -23,7 +25,7 @@ export class AuthGroupService {
   static async getAll(DB_NAME: string) {
     try {
       // retrieve all auth groups
-      const authGroups = {}; // await AuthGroup.findAll();
+      const authGroups = await Repo[DB_NAME].AuthGroup.findAll();
       if (authGroups) {
         return null;
       } else {
@@ -42,7 +44,7 @@ export class AuthGroupService {
   static async getById(DB_NAME: string, Id: number) {
     try {
       // retrieve a single auth group by id
-      const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
+      const authGroup = await Repo[DB_NAME].AuthGroup.findByPk(Id);
       if (authGroup) {
         return null;
       } else {
@@ -61,8 +63,15 @@ export class AuthGroupService {
    */
   static async create(DB_NAME: string, Payload: any) {
     try {
+      const { tenantId, description, name } = Payload;
+      let code = `${Math.floor(10000 + Math.random() * 90000).toString()}`;
       // create a new auth group
-      const authGroup = {}; // await AuthGroup.create(Payload);
+      const authGroup = await Repo[DB_NAME].AuthGroup.create({
+        tenantId: parseInt(tenantId),
+        description,
+        name,
+        code,
+      });
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -80,8 +89,8 @@ export class AuthGroupService {
   static async update(DB_NAME: string, Id: number, Update: any) {
     try {
       // update an existing auth group
-      const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
-      //authGroup.update(Payload);
+      const authGroup = await Repo[DB_NAME].AuthGroup.findByPk(Id);
+      authGroup.update(Update);
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -93,11 +102,11 @@ export class AuthGroupService {
    *  then uses the destroy function to delete the AuthGroup record with the matching ID.
    * It then sends a response indicating that the authentication group was deleted successfully.
    */
-  static delete(DB_NAME: string, Id: number) {
+  static async delete(DB_NAME: string, Id: number) {
     try {
       // delete an existing auth group
-      const authGroup = {}; // await AuthGroup.findByPk(req.params.id);
-      //authGroup.destroy();
+      const authGroup = await Repo[DB_NAME].AuthGroup.findByPk(Id);
+      authGroup.destroy();
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -121,7 +130,7 @@ export class AuthPermissionService {
   static async getAll(DB_NAME: string) {
     try {
       // retrieve all auth permissions
-      const authPermissions = {}; // await AuthPermission.findAll();
+      const authPermissions = await Repo[DB_NAME].AuthPermission.findAll();
       if (authPermissions) {
         return null;
       } else {
@@ -140,7 +149,7 @@ export class AuthPermissionService {
   static async getById(DB_NAME: string, Id: number) {
     try {
       // retrieve a single auth permission by id
-      const authPermission = {}; // await AuthPermission.findByPk(req.params.id);
+      const authPermission = await Repo[DB_NAME].AuthPermission.findByPk(Id);
       if (authPermission) {
         return null;
       } else {
@@ -159,7 +168,15 @@ export class AuthPermissionService {
   static async create(DB_NAME: string, Payload: any) {
     try {
       // create a new auth permission
-      const authPermission = {}; // await AuthPermission.create(Payload);
+      const { tenantId, description, name } = Payload;
+      let code = `${Math.floor(10000 + Math.random() * 90000).toString()}`;
+      // create a new auth permission
+      const authPermission = await Repo[DB_NAME].AuthPermission.create({
+        tenantId: parseInt(tenantId),
+        description,
+        name,
+        code,
+      });
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -177,8 +194,8 @@ export class AuthPermissionService {
   static async update(DB_NAME: string, Id: number, Update: any) {
     try {
       // update an existing auth permission
-      const authPermission = {}; // await AuthPermission.findByPk(req.params.id);
-      //authPermission.update(Payload);
+      const authPermission = await Repo[DB_NAME].AuthPermission.findByPk(Id);
+      authPermission.update(Update);
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -202,7 +219,7 @@ export class AuthRoleService {
   static async getAll(DB_NAME: string) {
     try {
       // retrieve all auth roles
-      const authRoles = {}; // await AuthRole.findAll();
+      const authRoles = await Repo[DB_NAME].AuthRole.findAll();
       if (authRoles) {
         return null;
       } else {
@@ -221,7 +238,7 @@ export class AuthRoleService {
   static async getById(DB_NAME: string, Id: number) {
     try {
       // retrieve a single auth role by id
-      const authRole = {}; // await AuthRole.findByPk(req.params.id);
+      const authRole = await Repo[DB_NAME].AuthRole.findByPk(Id);
       if (authRole) {
         return null;
       } else {
@@ -241,7 +258,15 @@ export class AuthRoleService {
   static async create(DB_NAME: string, Payload: any) {
     try {
       // create a new auth role
-      const authRole = {}; // await AuthRole.create(Payload);
+      const { tenantId, description, name } = Payload;
+      let code = `${Math.floor(10000 + Math.random() * 90000).toString()}`;
+      // create a new auth role
+      const authRole = await Repo[DB_NAME].AuthRole.create({
+        tenantId: parseInt(tenantId),
+        description,
+        name,
+        code,
+      });
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -258,8 +283,8 @@ export class AuthRoleService {
   static async update(DB_NAME: string, Id: number, Update: any) {
     try {
       // update an existing auth role
-      const authRole = {}; // await AuthRole.findByPk(req.params.id);
-      //authRole.update(Payload);
+      const authRole = await Repo[DB_NAME].AuthRole.findByPk(Id);
+      authRole.update(Update);
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -271,11 +296,11 @@ export class AuthRoleService {
    * then uses the destroy function to delete the AuthRole record with the matching ID.
    * It then sends a response indicating that the authentication role was deleted successfully.
    */
-  static delete(DB_NAME: string, Id: number) {
+  static async delete(DB_NAME: string, Id: number) {
     try {
       // delete an existing auth role
-      const authRole = {}; // await AuthRole.findByPk(req.params.id);
-      //authRole.destroy();
+      const authRole = await Repo[DB_NAME].AuthRole.findByPk(Id);
+      authRole.destroy();
       return null;
     } catch (error: any) {
       throw Error(error);
@@ -298,10 +323,27 @@ export class AuthenticationService {
   static async register(DB_NAME: string, Payload: any) {
     try {
       // register a new user
-      const { firstName, lastName, email, password, phone } = Payload;
-      const user = {}; //new User({ firstName, lastName, email, password, phone });
-      //await user.save();
-      return null;
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        username,
+        referral_code,
+        tenantId,
+      } = Payload;
+      const user = await UserService.create(DB_NAME, {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        username,
+        referral_code,
+        tenantId,
+      });
+      return user;
     } catch (error: any) {
       throw Error(error);
     }
@@ -587,9 +629,6 @@ export class AuthenticationService {
   }
 }
 
-export default {
-  AuthenticationService,
-  AuthRoleService,
-  AuthPermissionService,
-  AuthGroupService,
-};
+export async function hash(password: any) {
+  return await bcrypt.hash(password, 10);
+}

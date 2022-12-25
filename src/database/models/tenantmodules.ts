@@ -125,7 +125,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
           "Status of the tenant's access to the module (e.g. 1.active, 0.inactive, 2.expired) ",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return TenantModule;

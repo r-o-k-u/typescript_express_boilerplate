@@ -100,13 +100,12 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       //lastLoginAt
       lastLoginAt: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
         comment: "Last time user logged in",
       },
       //status
       status: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         defaultValue: 0,
         comment:
           "Status of the User (e.g.  0.inactive,1.active, 2.dormant 3.blocked 4.other) ",
@@ -146,7 +145,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         comment: "accessKey ",
       },
     },
-    { sequelize }
+    { sequelize, paranoid: true }
   );
   //
   return UserAuthentication;

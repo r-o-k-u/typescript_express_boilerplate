@@ -5,6 +5,7 @@ import Handler from "../utils/Handler";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const Organization = Repo[Locals.config().DB_NAME].Organization;
+
   if (!req.get("host")) {
     return Handler.errorHandler(
       new Error("Host not found try again later"),
@@ -26,8 +27,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       "Organization not found"
     );
   } */
+  let tenantId = null;
+  if (organization_) {
+    const Tenant = Repo[organization_.databaseName].Tenant;
+    const tenant_: any = await Tenant.findOne({
+      where: { domainName: req.get("host") },
+    });
+    if (tenant_) tenantId = tenant_.id;
+  }
+
   req.params.database = organization_
     ? organization_.databaseName
     : Locals.config().DB_NAME;
+  req.body.tenantId = tenantId;
   next();
 };
