@@ -531,6 +531,7 @@ export class AuthenticationController {
         req.params.database,
         req.body
       );
+      console.log("user", user);
       if (!user) {
         Handler.responseHandler(
           res,
@@ -539,29 +540,17 @@ export class AuthenticationController {
           null,
           "Invalid email or password"
         );
-      } else if (/* !(await user.validatePassword(password)) */ false) {
-        Handler.responseHandler(
-          res,
-          401,
-          "Unauthorized",
-          null,
-          "Invalid email or password"
-        );
-      } else {
+      } else if (user) {
+        console.log("user", user);
         // create a session for the user
-        /* req.session!.userId = user.id;
-        req.session!.save((error) => {
+        /* req.session!.userId = user.user.id;
+        req.session!.save((error: any) => {
           if (error) {
-            res.status(500).send(error);
-          } else {
-            // create a JWT token for the user
-            const token = jwt.sign(
-              { userId: user.id },
-              process.env.JWT_SECRET!
-            );
-            res.send({ message: "Logged in successfully", token });
+            Handler.errorHandler(error, req, res, next);
           }
         }); */
+        Handler.responseHandler(res, 200, "Success", user, "Login Successful");
+      } else {
       }
     } catch (error: any) {
       Handler.errorHandler(error, req, res, next);
@@ -626,10 +615,9 @@ export class AuthenticationController {
         );
       } else {
         // create a new JWT token for the user
-        const newToken = await AuthenticationService.signJWTToken(
-          req.params.database,
-          { userId: token.userId }
-        );
+        const newToken = await AuthenticationService.generateRefreshToken({
+          userId: token.userId,
+        });
         Handler.responseHandler(
           res,
           200,

@@ -89,11 +89,7 @@ export class TenantService {
       const tenant = await Repo[DB_NAME].Tenant.create(
         {
           name,
-          email,
-          password,
-          domainName: website_,
           code,
-          databaseName: databaseName_,
           organizationId: parseInt(Organization.id),
           status: 1, //active
         },
@@ -106,6 +102,10 @@ export class TenantService {
           tenantId: tenant.id,
           phone: phoneNumber,
           address: zipCode,
+          email,
+          password,
+          databaseName: databaseName_,
+          domainName: website_,
           city,
           country,
         },

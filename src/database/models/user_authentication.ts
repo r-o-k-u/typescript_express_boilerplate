@@ -58,6 +58,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "userId",
         as: "user",
       });
+      UserAuthentication.hasMany(models.UserDetail, {
+        foreignKey: "userId",
+        as: "details",
+      });
     }
   }
   UserAuthentication.init(

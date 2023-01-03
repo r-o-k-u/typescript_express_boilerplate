@@ -91,16 +91,17 @@ router.post(
  *             email:
  *              description: Users email
  *              type: string
+ *              example: contact@qwerty.co.ke
  *             phone:
  *              description: Users phone
  *              type: number
+ *              example: 0202222222
  *             password:
  *              description: Users password
  *              type: string
+ *              example: change me
  *            required:
  *              - password
- *              - phone
- *              - email
  *     responses:
  *      '200':
  *        description: OK
@@ -1373,11 +1374,18 @@ router.delete("/organization/:id", checkTenant, OrganizationController.delete);
 router.get("/user", checkTenant, UserController.UserController.getAll);
 /**
  * @openapi
- * '/api/user':
+ * '/api/user/{id}':
  *  get:
  *     tags:
  *     - Users
  *     summary: Retrieve a list of all Users in the database
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The User  id
  *     responses:
  *      '200':
  *        description: OK

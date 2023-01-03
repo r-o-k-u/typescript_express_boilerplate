@@ -1,6 +1,6 @@
-import Handler from "../utils/Handler";
 import Repo from "../database/models/index";
 import { hash } from "./authService";
+
 /**
  * User Service
  * @remarks
@@ -22,9 +22,9 @@ export class UserService {
   static async getAll(DB_NAME: string) {
     try {
       // retrieve all users
-      const users = {}; // await User.findAll();
+      const users = await Repo[DB_NAME].User.findAll();
       if (users) {
-        return null;
+        return users;
       } else {
         return null;
       }
@@ -42,9 +42,61 @@ export class UserService {
   static async getById(DB_NAME: string, Id: number) {
     try {
       // retrieve a single user by id
-      const user = {}; // await User.findByPk(req.params.id);
+      const user = await Repo[DB_NAME].User.findByPk(Id);
+      if (user) {
+        return user;
+      } else {
+        return null;
+      }
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
+  /**
+   * This function retrieves a single user based on set conditions .,
+   * It then sends the user as the response.
+   * @param req
+   * @param res
+   */
+  static async find(DB_NAME: string, condition: any) {
+    try {
+      // retrieve a single user by id
+      const user = await Repo[DB_NAME].User.findAll({ where: condition });
       if (user) {
         return null;
+      } else {
+        return null;
+      }
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
+  /**
+   * This function retrieves a single user based on set conditions .,
+   * It then sends the user as the response.
+   * @param req
+   * @param res
+   */
+  static async findDetail(DB_NAME: string, condition: any) {
+    try {
+      // retrieve a single user by id
+      const user = await Repo[DB_NAME].UserDetail.findOne({
+        where: condition,
+        include: [
+          { model: Repo[DB_NAME].Tenant, as: "tenant" },
+          { model: Repo[DB_NAME].User, as: "user" },
+          {
+            model: Repo[DB_NAME].UserAuthentication,
+            as: "authentication",
+            // required: false,
+            // where: {
+            //   status: 1,
+            // },
+          },
+        ],
+      });
+      if (user) {
+        return user;
       } else {
         return null;
       }

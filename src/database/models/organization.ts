@@ -116,12 +116,14 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       code: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: "true",
         comment: "Registration number for the organization",
       },
       // Database name for the organization
       databaseName: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: "true",
         comment: "Database name for the organization",
       },
       // Logo for the organization
@@ -158,6 +160,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       phoneNumber: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: "true",
         comment: "Phone number for the organization (optional) ",
       },
       // Description for the organization (optional)

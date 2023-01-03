@@ -64,6 +64,10 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         foreignKey: "userId",
         as: "user",
       });
+      UserDetail.hasOne(models.UserAuthentication, {
+        foreignKey: "userId",
+        as: "authentication",
+      });
     }
   }
   UserDetail.init(
@@ -87,7 +91,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: " ",
+        comment: "ID for the user that the details belongs to (foreign key) ",
         /* references: {
           model: "users",
           key: "id",
@@ -97,63 +101,65 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       email: {
         type: DataTypes.STRING,
         allowNull: true,
+        comment: "Users email",
         unique: "true",
       },
       // Phone number for the user
       phone: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        unique: "true",
+        comment: "Users phone number",
       },
       // Avatar image for the user
       avatar: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "URL for the user's avatar image",
       },
       address1: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "First line of the user's address",
       },
       address2: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "Second line of the user's address (optional) ",
       },
       // City for the user
       city: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "City for the user",
       },
       // Country for the user
       country: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "Country for the user",
       },
       state: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "State or region of the user's address",
       },
       zip: {
         type: DataTypes.STRING,
         allowNull: true,
-        comment: " ",
+        comment: "Zip code of the user's address",
       },
 
       // Date of birth for the user
       dob: {
         type: DataTypes.DATEONLY,
-        comment: " ",
+        comment: "Date of birth for the user",
         allowNull: true,
       },
       // Gender for the user
       gender: {
         type: DataTypes.STRING,
-        comment: " ",
+        comment: "Gender for the user",
         allowNull: true,
       },
       //Status of the record

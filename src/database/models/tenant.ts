@@ -11,12 +11,8 @@ import { Sequelize, Model, CreationOptional } from "sequelize";
 export interface ITenant {
   id: number; // ID for the tenant (primary key)
   name: string; // Name for the tenant
-  email: string; // Email address for the tenant
-  password: string; // Password for the tenant
   status: string; // Status for the tenant (active, inactive, etc.)
   code: string; // Code for the tenant
-  databaseName: string; // Name of the database for the tenant
-  domainName: string; // Domain name for the tenant
   organizationId: number; // ID for the organization the tenant belongs to (foreign key)
 }
 
@@ -36,15 +32,11 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
    * It includes fields such as id, name, and description.
    */
   class Tenant extends Model<ITenant> implements ITenant {
-    name: string;
-    email: string;
-    password: string;
-    status: string;
-    code: string;
-    databaseName: string;
-    domainName: string;
-    organizationId: number;
-    id: CreationOptional<number>;
+    name: string; // Name for the tenant
+    status: string; // Status for the tenant (active, inactive, etc.)
+    code: string; // Code for the tenant
+    organizationId: number; // ID for the organization the tenant belongs to (foreign key)
+    id: CreationOptional<number>; // ID for the tenant (primary key)
     static associate(models: any) {
       Tenant.belongsTo(models.Organization, {
         foreignKey: "organizationId",
@@ -73,51 +65,27 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        comment: " ",
+        comment: "Name for the tenant",
       },
-      // Email address for the tenant
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: "true",
-        comment: " ",
-      },
-      // Password for the tenant
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        comment: " ",
-      },
+
       // Status for the tenant (active, inactive, etc.)
       status: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        comment: " ",
+        comment: "Status for the tenant (1.active,0.inactive, etc.)",
       },
       // Code for the tenant
       code: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: "true",
-        comment: " ",
-      },
-      // Name of the database for the tenant
-      databaseName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        comment: " ",
-      },
-      // Domain name for the tenant
-      domainName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        comment: " ",
+        comment: "Code for the tenant",
       },
       // ID for the organization the tenant belongs to (foreign key)
       organizationId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: " ",
+        comment: "ID for the organization the tenant belongs to (foreign key)",
         /* references: {
           model: "organization",
           key: "id",

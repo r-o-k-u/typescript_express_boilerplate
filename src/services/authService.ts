@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
 import Locals from "../providers/Locals";
 import { UserService } from "./userService";
 import Repo from "../database/models/index";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+const { Op } = require("sequelize");
 /**
  * Auth service
  * @remarks
@@ -360,28 +361,46 @@ export class AuthenticationService {
   static async login(DB_NAME: string, Payload: any) {
     try {
       // login an existing user
-      const email = Payload.email;
+      const { email, phone } = Payload;
       const password = Payload.password;
-      const user = null; //await User.findOne({ where: { email } });
+      const condition = {
+        [Op.or]: [{ email: email }, { phone: phone.toString() }],
+      };
+      const user_ = await UserService.findDetail(DB_NAME, condition);
+
+      const { tenant, UserDetail, user, authentication } = user_;
+      console.log(user.user);
+      const {
+        id,
+        username,
+        firstName,
+        lastName,
+        language_id,
+        phone_notification_status,
+        email_notification_status,
+        tenantId,
+        registrationStatus,
+        user_code,
+        accountStatus,
+        refereed,
+        referral_code,
+        type,
+      } = user;
       if (!user) {
         return null;
-      } else if (/* !(await user.validatePassword(password)) */ false) {
-        return null;
-      } else {
-        // create a session for the user
-        /* req.session!.userId = user.id;
-        req.session!.save((error) => {
-          if (error) {
-            res.status(500).send(error);
-          } else {
-            // create a JWT token for the user
-            const token = jwt.sign(
-              { userId: user.id },
-              process.env.JWT_SECRET!
-            );
-            res.send({ message: "Logged in successfully", token });
-          }
-        }); */
+      } else if (
+        await this.validatePassword(password, authentication.passwordHash)
+      ) {
+        //password is valid
+        const jwtToken = await this.generateJwtToken(user);
+        const refreshToken = await this.generateRefreshToken(user);
+
+        return {
+          user: { id, username, firstName, tenantId, user_code },
+          jwtToken,
+          //do not send the refresh token to the client
+          refreshToken,
+        };
       }
     } catch (error: any) {
       throw Error(error);
@@ -577,6 +596,12 @@ export class AuthenticationService {
       throw Error(error);
     }
   }
+
+  static async validatePassword(password: string, passwordHash: string) {
+    const isMatch = bcrypt.compareSync(password, passwordHash);
+    return isMatch;
+  }
+
   static async verifyToken(DB_NAME: string, Payload: any) {
     try {
       return; //jwt.verify(Payload.refreshToken, process.env.JWT_SECRET!);
@@ -584,12 +609,42 @@ export class AuthenticationService {
       throw Error(error);
     }
   }
-  static async signJWTToken(DB_NAME: string, Payload: any) {
+  static async generateJwtToken(Payload: any) {
     try {
-      return; /*  jwt.sign(
-          Payload,
-          process.env.JWT_SECRET!
-        ); */
+      return jwt.sign(
+        {
+          id: Payload.id,
+        },
+        Locals.config().JWT_SECRET_KEY,
+        {
+          // for better security, use a short expiration time is recommended, and refresh tokens should be used
+          expiresIn: "15m",
+        }
+      );
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
+  static async generateRefreshToken(Payload: any) {
+    try {
+      const twoHoursInMilliseconds = 2 * 60 * 60 * 1000;
+
+      // for a secure like a financial app, use a short expiration time is recommended, and refresh tokens should be used of about 15 minutes then the user will be required to login again
+      // create a refresh token that expires in 7 days
+      return {
+        token: jwt.sign(
+          {
+            id: Payload.id,
+          },
+          Locals.config().REFRESH_TOKEN_SECRET_KEY, // refreshTokenSecretKey
+          {
+            // expires in 2 hours
+            expiresIn: "2h",
+          }
+        ),
+        expires: new Date(Date.now() + twoHoursInMilliseconds),
+        createdByIp: "",
+      };
     } catch (error: any) {
       throw Error(error);
     }

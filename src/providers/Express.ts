@@ -14,6 +14,7 @@ import path from "path";
 import ExceptionHandler from "../utils/Handler";
 import Logger from "../utils/Log";
 import expressLayouts from "express-ejs-layouts";
+import session from "express-session";
 const Log = new Logger();
 const Routes = new Routes_();
 
@@ -58,6 +59,14 @@ class Express {
     this.express.set("view engine", "ejs");
 
     this.express.use(expressLayouts);
+    this.express.use(
+      session({
+        secret: "keyboard cat",
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: true },
+      })
+    );
   }
 
   /**

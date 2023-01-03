@@ -63,6 +63,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         // unique code used to identify the role in codebase or API calls
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        unique: "true",
         comment:
           "unique code used to identify the role in codebase or API calls",
       },
@@ -70,6 +71,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         // name of the role
         type: DataTypes.STRING, // string data type
         allowNull: false, // disallows null values
+        unique: "true",
         comment: "name of the role",
       },
       description: {

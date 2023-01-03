@@ -81,6 +81,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: "true",
         comment: "Name for the module ",
       },
       // Description for the module
