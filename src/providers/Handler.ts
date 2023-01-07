@@ -3,9 +3,9 @@
  *
  */
 
-import Logger from "../utils/Log";
+import Logger from "../providers/Log";
 const Log = new Logger();
-import Locals from "../providers/Locals";
+import Locals from "./Locals";
 import express, { NextFunction, Request, Response } from "express";
 /**
  * Error Handler class

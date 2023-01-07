@@ -3,13 +3,17 @@
  *
  */
 
-import Log from "./Log";
 import Locals from "../providers/Locals";
+import { response } from "express";
+import { Console } from "console";
+import Handler from "./Handler";
+import Logger from "./Log";
+let Log = new Logger();
 const { createTransport } = require("nodemailer");
 
-const SMTP_HOST = Locals.config().smtp_host as string;
-const SMTP_USERNAME = Locals.config().smtp_username as string;
-const SMTP_PASSWORD = Locals.config().smtp_password;
+const SMTP_HOST = Locals.config().SMTP_HOST as string;
+const SMTP_USERNAME = Locals.config().SMTP_USERNAME as string;
+const SMTP_PASSWORD = Locals.config().SMTP_PASSWORD;
 
 /**
  * Mailer Class
@@ -27,6 +31,7 @@ class Mailer {
         // console.log("email, subject, body, lang", email, subject, body, lang)
         return new Error("Please provide all values");
       }
+      console.log(SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD);
       const emailTransfer = createTransport({
         host: SMTP_HOST,
         port: 465,
@@ -47,8 +52,10 @@ class Mailer {
       try {
         await emailTransfer.sendMail(emailInfo);
         return resolve("Success");
-      } catch (err) {
+      } catch (err: any) {
         console.log("err", err);
+        Log.error(err.message);
+
         return reject(err);
       }
     });
@@ -58,8 +65,11 @@ class Mailer {
    * @param account
    * @param origin
    */
-  public static async sendVerificationEmail(account: any, origin: any) {
-    origin == null ? origin == "test.com" : "";
+  public static async sendVerificationEmail(
+    account: { verificationToken: string; email: string },
+    origin: any
+  ) {
+    origin == null ? origin == Locals.config().APP_URL : "";
     let message;
     if (origin) {
       const verifyUrl = `${origin}/account/verify-email?token=${account.verificationToken}`;
@@ -70,13 +80,14 @@ class Mailer {
                    <p><code>${account.verificationToken}</code></p>`;
     }
 
-    await this.sendEmail(
+    const response = await this.sendEmail(
       account.email,
       "Sign-up Verification API - Verify Email",
       `<h4>Verify Email</h4>
                <p>Thanks for registering!</p>
                ${message}`
     );
+    return response;
   }
 
   /**

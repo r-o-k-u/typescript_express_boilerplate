@@ -3,7 +3,7 @@ import path from "path";
 import { Sequelize, DataTypes } from "sequelize";
 import Locals from "../providers/Locals";
 const modelsDir = path.resolve(__dirname + "/models");
-import Logger from "../utils/Log";
+import Logger from "../providers/Log";
 const Log = new Logger();
 
 /**

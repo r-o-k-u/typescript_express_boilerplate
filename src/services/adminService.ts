@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Handler from "../utils/Handler";
+import Handler from "../providers/Handler";
 import Repo from "../database/models/index";
 import bcrypt from "bcrypt";
 import { hash } from "./authService";

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import config from "../utils/swagger";
+import config from "../providers/swagger";
 const router = Router();
 router.use(config.specs, config.serve);
 

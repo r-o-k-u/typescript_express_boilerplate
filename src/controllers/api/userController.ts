@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../../services/userService";
-import Handler from "../../utils/Handler";
+import Handler from "../../providers/Handler";
 /**
  * User controller
  * @remarks

@@ -1,7 +1,7 @@
 import Locals from "../providers/Locals";
 import { Request, Response, NextFunction } from "express";
 import Repo from "../database/models/index";
-import Handler from "../utils/Handler";
+import Handler from "../providers/Handler";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {

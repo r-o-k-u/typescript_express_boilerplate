@@ -45,12 +45,17 @@ class Locals {
       API_PREFIX,
       LOG_DAYS,
       JWT_EXPIRATION,
+      ENABLE_EMAIL_VERIFICATION,
+      ENABLE_PHONE_VERIFICATION,
     } = process.env;
     const year = new Date().getFullYear();
 
     return {
       PORT: PORT || 4040,
-      APP_URL: APP_URL || `http://localhost:${process.env.PORT}`,
+      APP_URL:
+        process.env.NODE_ENV == "production"
+          ? APP_URL
+          : `http://localhost:${process.env.PORT}`,
       APP_NAME: APP_NAME || "Express TS Boilerplate",
       APP_SECRET: APP_SECRET || "This is your responsibility!",
       COMPANY_NAME: COMPANY_NAME || "Qwerty Systems",
@@ -81,6 +86,8 @@ class Locals {
       SMS_ACCESS_KEY,
       REFRESH_TOKEN_SECRET_KEY,
       JWT_SECRET_KEY,
+      ENABLE_EMAIL_VERIFICATION: ENABLE_EMAIL_VERIFICATION,
+      ENABLE_PHONE_VERIFICATION: ENABLE_PHONE_VERIFICATION,
     };
   }
 

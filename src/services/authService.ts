@@ -3,6 +3,8 @@ import { UserService } from "./userService";
 import Repo from "../database/models/index";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Mailer from "../providers/Mailer";
+import { getUnixTime } from "date-fns";
 const { Op } = require("sequelize");
 /**
  * Auth service
@@ -333,6 +335,7 @@ export class AuthenticationService {
         username,
         referral_code,
         tenantId,
+        channel,
       } = Payload;
       const user = await UserService.create(DB_NAME, {
         firstName,
@@ -344,6 +347,21 @@ export class AuthenticationService {
         referral_code,
         tenantId,
       });
+      //TODO GENERATE VERIFICATION TOKEN
+      // if user registered over the web
+      if (user && channel == 1 && Locals.config().ENABLE_EMAIL_VERIFICATION) {
+        Mailer.sendVerificationEmail(
+          { verificationToken: "lskfnslkfsm;flsdlfslm;", email: email },
+          Locals.config().APP_URL
+        );
+      }
+      //if user registred via the mobile app
+      else if (
+        user &&
+        channel == 2 &&
+        Locals.config().ENABLE_PHONE_VERIFICATION
+      ) {
+      }
       return user;
     } catch (error: any) {
       throw Error(error);
@@ -367,9 +385,10 @@ export class AuthenticationService {
         [Op.or]: [{ email: email }, { phone: phone.toString() }],
       };
       const user_ = await UserService.findDetail(DB_NAME, condition);
-
+      if (!user_) {
+        return null;
+      }
       const { tenant, UserDetail, user, authentication } = user_;
-      console.log(user.user);
       const {
         id,
         username,
@@ -386,14 +405,14 @@ export class AuthenticationService {
         referral_code,
         type,
       } = user;
-      if (!user) {
-        return null;
-      } else if (
-        await this.validatePassword(password, authentication.passwordHash)
-      ) {
+      if (await this.validatePassword(password, authentication.passwordHash)) {
         //password is valid
         const jwtToken = await this.generateJwtToken(user);
         const refreshToken = await this.generateRefreshToken(user);
+
+        const user_ = await UserService.updateUserAuthentication(DB_NAME, id, {
+          lastLoginAt: getUnixTime(new Date()),
+        });
 
         return {
           user: { id, username, firstName, tenantId, user_code },
@@ -602,9 +621,9 @@ export class AuthenticationService {
     return isMatch;
   }
 
-  static async verifyToken(DB_NAME: string, Payload: any) {
+  static async verifyToken(Payload: any) {
     try {
-      return; //jwt.verify(Payload.refreshToken, process.env.JWT_SECRET!);
+      return jwt.verify(Payload.refreshToken, process.env.JWT_SECRET!);
     } catch (error: any) {
       throw Error(error);
     }

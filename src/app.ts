@@ -9,7 +9,7 @@ import express from "express";
 import ExpressApp from "./providers/Express";
 const Express = new ExpressApp();
 
-import Logger from "./utils/Log";
+import Logger from "./providers/Log";
 let Log = new Logger();
 /**
  * This is the main class.

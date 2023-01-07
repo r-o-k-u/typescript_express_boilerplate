@@ -50,12 +50,17 @@ const router = Router();
  *              description: referral code if any
  *              type: string
  *              example:
+ *             channel:
+ *              description: channel from which registration was done 1- web 2- app
+ *              type: number
+ *              example: 1
  *            required:
  *              - firstName
  *              - lastName
  *              - phone
  *              - email
  *              - password
+ *              - channel
  *     responses:
  *      '200':
  *        description: OK

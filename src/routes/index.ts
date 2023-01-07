@@ -5,7 +5,7 @@
 
 import { Application } from "express";
 import Locals from "../providers/Locals";
-import Logger from "../utils/Log";
+import Logger from "../providers/Log";
 const Log = new Logger();
 
 import apiRouter from "./api";

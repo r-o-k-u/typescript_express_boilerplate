@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Handler from "../../utils/Handler";
+import Handler from "../../providers/Handler";
 import {
   AuthGroupService,
   AuthPermissionService,
@@ -531,7 +531,6 @@ export class AuthenticationController {
         req.params.database,
         req.body
       );
-      console.log("user", user);
       if (!user) {
         Handler.responseHandler(
           res,
@@ -541,7 +540,6 @@ export class AuthenticationController {
           "Invalid email or password"
         );
       } else if (user) {
-        console.log("user", user);
         // create a session for the user
         /* req.session!.userId = user.user.id;
         req.session!.save((error: any) => {
@@ -601,10 +599,7 @@ export class AuthenticationController {
     try {
       // verify the refresh token provided by the user
       const refreshToken = req.body.refreshToken;
-      const token: any = await AuthenticationService.verifyToken(
-        req.params.database,
-        req.body
-      );
+      const token: any = await AuthenticationService.verifyToken(req.body);
       if (!token || !token.userId) {
         Handler.responseHandler(
           res,

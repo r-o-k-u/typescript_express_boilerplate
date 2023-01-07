@@ -316,6 +316,31 @@ export class UserService {
    * @param req
    * @param res
    */
+  static async updateUserAuthentication(
+    DB_NAME: string,
+    Id: number,
+    Update: any
+  ) {
+    try {
+      // update an existing user
+      const user = await Repo[DB_NAME].UserAuthentication.findByPk(Id);
+      user.update(Update);
+      return null;
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
+  /**
+   *  This function updates an existing user.
+   * It gets the user ID from the request parameters,
+   *  then gets the updated email, password, and name from the request body.
+   * It uses the findByPk function to retrieve the existing user with the matching ID,
+   * then updates its email, password, and name with the new values.
+   * It then saves the updated user to the database
+   * and sends a response indicating that the update was successful.
+   * @param req
+   * @param res
+   */
   static async updatePassword(DB_NAME: string, Id: number, Update: any) {
     try {
       // update an existing user
