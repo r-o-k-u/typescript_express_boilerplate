@@ -3,10 +3,9 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -20,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: typescript_express_boilerplate
-      
+
       # Create timestamp.txt
       - run: |
           cd typescript_express_boilerplate
@@ -48,6 +47,6 @@ jobs:
             whoami
             cd /var/www/html/temp/typescript_express_boilerplate
             ls -al
-            docker-compose down
-            docker-compose up --force-recreate -d 
-
+            docker-compose rm -f
+            docker-compose pull
+            docker-compose up --build -d
