@@ -23,7 +23,7 @@ class Database {
   Sequelize: Sequelize;
 
   /**
-   * Initializes the express server
+   * Initializes the express server.
    */
   constructor() {
     console.log(
