@@ -760,7 +760,7 @@ export class AuthenticationController {
           res,
           200,
           "Success",
-          null,
+          user,
           "Two-factor authentication code sent"
         );
       }

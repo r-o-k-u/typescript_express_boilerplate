@@ -256,7 +256,26 @@ router.post(
  *     - Authentication
  *     summary: two Factor Authentication
  *     requestBody:
- *      required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             phone:
+ *              description: phone number of the user
+ *              type: string
+ *              example: 254743411403
+ *             email:
+ *              description: email of the user
+ *              type: string
+ *              example: contact@qwerty.co.ke
+ *             device_id:
+ *              description: Phones Device ID
+ *              type: string
+ *              example: 893h9hH9EH8HRU
+ *             channel:
+ *              description: Channel
+ *              type: string
+ *              example: 1
  *     responses:
  *      '200':
  *        description: OK

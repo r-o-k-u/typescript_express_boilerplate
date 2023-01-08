@@ -26,16 +26,6 @@ class Database {
    * Initializes the express server.
    */
   constructor() {
-    console.log(
-      "DB_HOST",
-      Locals.config().DB_HOST,
-      "DB_NAME",
-      Locals.config().DB_NAME,
-      "DB_USER",
-      Locals.config().DB_USER,
-      "DB_PASSWORD",
-      Locals.config().DB_PASSWORD
-    );
     this.repo = {};
     this.sequelize = new Sequelize(
       Locals.config().DB_NAME,

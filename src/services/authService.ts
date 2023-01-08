@@ -382,7 +382,7 @@ export class AuthenticationService {
       const { email, phone } = Payload;
       const password = Payload.password;
       const condition = {
-        [Op.or]: [{ email: email }, { phone: phone.toString() }],
+        [Op.or]: [{ email: email || "" }, { phone: phone.toString() || "" }],
       };
       const user_ = await UserService.findDetail(DB_NAME, condition);
       if (!user_) {
@@ -537,25 +537,48 @@ export class AuthenticationService {
   static async twoFactorAuth(DB_NAME: string, Payload: any) {
     try {
       // send a two-factor authentication code to the user's phone or email
-      const userId = Payload.userId;
-      const type = Payload.type; // "phone" or "email"
+      const { phone, email, device_id, channel } = Payload; // "0. web " or "1. app"
       const user: any = null; //await User.findByPk(userId);
-      if (!user) {
+      const condition = {
+        [Op.or]: [{ email: email || "" }, { phone: phone.toString() || "" }],
+      };
+      const user_ = await UserService.findDetail(DB_NAME, condition);
+
+      if (!user_) {
         return null;
       } else {
-        // generate a two-factor authentication code
-        const code = ""; //generateAuthCode();
-        user.authCode = code;
-        user.authCodeExpiration = Date.now() + 300000; // 5 minutes
-        await user.save();
+        if (user_.twoFactorAuth) {
+          // generate a two-factor authentication code
+          const code = await this.generateOTPCode(9999);
+          const authCode = code.toString();
+          const authCodeExpiration = Date.now() + 300000; // 5 minutes
+          const user_auth = await UserService.updateUserAuthentication(
+            DB_NAME,
+            user_.id,
+            {
+              authCode,
+              authCodeExpiration,
+            }
+          );
 
-        // send the two-factor authentication code
-        if (type === "phone") {
-          //sendAuthCodeSms(user.phone, code);
-        } else if (type === "email") {
-          //sendAuthCodeEmail(user.email, code);
+          // send the two-factor authentication code
+          if (phone) {
+            //sendAuthCodeSms( { verificationToken: string; phone:user.phone }, code);
+          } else if (email) {
+            //sendAuthCodeEmail(user.email, code);
+          }
+          return {
+            user_id: user_.id,
+            VerificationCode: authCode,
+            ExpiresIn: authCodeExpiration,
+          };
+        } else {
+          return {
+            user_id: user_.id,
+            VerificationCode: null,
+            ExpiresIn: null,
+          };
         }
-        return null;
       }
     } catch (error: any) {
       throw Error(error);
@@ -620,7 +643,13 @@ export class AuthenticationService {
     const isMatch = bcrypt.compareSync(password, passwordHash);
     return isMatch;
   }
-
+  static async generateOTPCode(maxLength: number) {
+    try {
+      return Math.floor(Math.random() * maxLength);
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
   static async verifyToken(Payload: any) {
     try {
       return jwt.verify(Payload.refreshToken, process.env.JWT_SECRET!);
