@@ -2,6 +2,7 @@ version: "3.3"
 
 services:
   typescript_api:
+    network_mode: bridge
     restart: always
     build:
       context: .
@@ -24,7 +25,3 @@ services:
       - typescript_api
     expose:
       - 3333
-
-networks:
-  typescript_api:
-    driver: bridge
