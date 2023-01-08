@@ -12,6 +12,7 @@ export interface IUserAuthentication {
   userId: number; // ID for the user (foreign key)
   tenantId: number; // ID for the tenant that the user belongs to (foreign key)
   passwordHash: string; // user's hashed password
+  deviceId: string; // user's mobile unique identifier
   apiKey: string; // apiKey
   apiSecret: string; // apiSecret
   accessKey: string; // accessKey
@@ -20,6 +21,8 @@ export interface IUserAuthentication {
   twoFactorAuth: boolean; // Whether the user has enabled two-factor authentication
   emailVerified: boolean; // Whether the user's email address has been verified
   phoneVerified: boolean; // Whether the user's phone number has been verified
+  authCode: string; //otp , verification code e.t.c
+  authCodeExpiration: Date; // time code expires
 }
 
 //export class User extends Model<UserModel, UserCreationAttributes> {}
@@ -39,6 +42,7 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     userId: number; // ID for the user authentication (foreign key)
     tenantId: number; // ID for the tenant that the user belongs to (foreign key)
     passwordHash: string; // user's hashed password
+    deviceId: string; // user's mobile unique identifier
     apiKey: string; // apiKey
     apiSecret: string; // apiSecret
     accessKey: string; // accessKey
@@ -47,6 +51,8 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
     twoFactorAuth: boolean; // Whether the user has enabled two-factor authentication
     emailVerified: boolean; // Whether the user's email address has been verified
     phoneVerified: boolean; // Whether the user's phone number has been verified
+    authCode: string; //otp , verification code e.t.c
+    authCodeExpiration: Date; // time code expires
     static associate(models: any) {
       // User belongs to a Tenant
       UserAuthentication.belongsTo(models.Tenant, {
@@ -129,6 +135,24 @@ module.exports = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.STRING,
         unique: "true",
         comment: "user's hashed password ",
+      },
+      // user's mobile unique identifier
+      deviceId: {
+        type: DataTypes.STRING,
+        unique: "true",
+        comment: "user's mobile unique identifier ",
+      },
+      // user's mobile unique identifier
+      authCode: {
+        type: DataTypes.STRING,
+        unique: "true",
+        comment: "code for otp , verification code e.t.c",
+      },
+      //lastLoginAt
+      authCodeExpiration: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: "time authCode expires ",
       },
       //apiKey
       apiKey: {

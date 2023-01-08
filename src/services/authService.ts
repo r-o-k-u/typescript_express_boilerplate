@@ -4,7 +4,7 @@ import Repo from "../database/models/index";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Mailer from "../providers/Mailer";
-import { getUnixTime } from "date-fns";
+import { getUnixTime, isAfter } from "date-fns";
 const { Op } = require("sequelize");
 /**
  * Auth service
@@ -405,7 +405,7 @@ export class AuthenticationService {
         referral_code,
         type,
       } = user;
-      if (await this.validatePassword(password, authentication.passwordHash)) {
+      if (await validateHash(password, authentication.passwordHash)) {
         //password is valid
         const jwtToken = await this.generateJwtToken(user);
         const refreshToken = await this.generateRefreshToken(user);
@@ -547,10 +547,12 @@ export class AuthenticationService {
       if (!user_) {
         return null;
       } else {
-        if (user_.twoFactorAuth) {
+        const { authentication } = user_;
+        if (authentication.twoFactorAuth) {
           // generate a two-factor authentication code
           const code = await this.generateOTPCode(9999);
-          const authCode = code.toString();
+          const authCode_ = code.toString();
+          const authCode = await hash(authCode_);
           const authCodeExpiration = Date.now() + 300000; // 5 minutes
           const user_auth = await UserService.updateUserAuthentication(
             DB_NAME,
@@ -563,13 +565,13 @@ export class AuthenticationService {
 
           // send the two-factor authentication code
           if (phone) {
-            //sendAuthCodeSms( { verificationToken: string; phone:user.phone }, code);
+            //sendAuthCodeSms( { verificationToken: string; phone:user.phone }, authCode_);
           } else if (email) {
-            //sendAuthCodeEmail(user.email, code);
+            //sendAuthCodeEmail(user.email, authCode_);
           }
           return {
             user_id: user_.id,
-            VerificationCode: authCode,
+            VerificationCode: authCode_,
             ExpiresIn: authCodeExpiration,
           };
         } else {
@@ -579,6 +581,45 @@ export class AuthenticationService {
             ExpiresIn: null,
           };
         }
+      }
+    } catch (error: any) {
+      throw Error(error);
+    }
+  }
+  /**
+   * This function initiates a mobile app registration  process for a user.
+   */
+  static async activateApp(DB_NAME: string, Payload: any) {
+    try {
+      // send a two-factor authentication code to the user's phone
+      const { phone, otp, device_id, password } = Payload;
+      const user: any = null; //await User.findByPk(userId);
+      const condition = {
+        [Op.or]: [{ phone: phone.toString() || "" }],
+      };
+      const user_ = await UserService.findDetail(DB_NAME, condition);
+
+      if (!user_) {
+        return null;
+      } else {
+        const { UserDetails, user, authentication } = user_;
+        if (!(await validateHash(otp, authentication.authCode))) {
+          return null;
+        }
+        if (isAfter(new Date(), new Date(authentication.authCodeExpiration))) {
+          return null;
+        }
+        //TODO
+        const user_auth = await UserService.updateUserAuthentication(
+          DB_NAME,
+          user_.id,
+          {
+            phoneVerified: true,
+            deviceId: device_id.toString(),
+            authCodeExpiration: Date.now(),
+          }
+        );
+        return { user_id: user.id };
       }
     } catch (error: any) {
       throw Error(error);
@@ -639,10 +680,6 @@ export class AuthenticationService {
     }
   }
 
-  static async validatePassword(password: string, passwordHash: string) {
-    const isMatch = bcrypt.compareSync(password, passwordHash);
-    return isMatch;
-  }
   static async generateOTPCode(maxLength: number) {
     try {
       return Math.floor(Math.random() * maxLength);
@@ -732,6 +769,11 @@ export class AuthenticationService {
   }
 }
 
-export async function hash(password: any) {
-  return await bcrypt.hash(password, 10);
+export async function hash(text: any) {
+  return await bcrypt.hash(text, 10);
+}
+
+export async function validateHash(text: string, hashedText: string) {
+  const isMatch = bcrypt.compareSync(text, hashedText);
+  return isMatch;
 }

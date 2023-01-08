@@ -178,6 +178,7 @@ export class UserService {
           tenantId,
           userId: user.id,
           passwordHash,
+          twoFactorAuth: true,
         },
         {
           transaction: t,

@@ -769,6 +769,39 @@ export class AuthenticationController {
     }
   }
   /**
+   * This function registers a users mobile device and verifies their phone number.
+   * @param req
+   * @param res
+   */
+  static async activateApp(req: Request, res: Response, next: NextFunction) {
+    try {
+      // send a two-factor authentication code to the user's phone or email
+      const user: any = await AuthenticationService.activateApp(
+        req.params.database,
+        req.body
+      );
+      if (!user) {
+        Handler.responseHandler(
+          res,
+          400,
+          "Not Found",
+          null,
+          "App activation successful, Verify Otp"
+        );
+      } else {
+        Handler.responseHandler(
+          res,
+          200,
+          "Success",
+          user,
+          "App activation successful"
+        );
+      }
+    } catch (error: any) {
+      Handler.errorHandler(error, req, res, next);
+    }
+  }
+  /**
    * This function verifies an authentication code sent to a user via email or phone.
    * It gets the user ID, code type, and code from the request body,
    * then uses the findByPk function to retrieve the User record with the matching ID.

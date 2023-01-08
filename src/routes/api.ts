@@ -297,6 +297,53 @@ router.post(
 );
 /**
  * @openapi
+ * '/api/auth/activateApp':
+ *  post:
+ *     tags:
+ *     - Authentication
+ *     summary: App activation
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *            properties:
+ *             phone:
+ *              description: phone number of the user
+ *              type: string
+ *              example: 254743411403
+ *             otp:
+ *              description: otp of the user
+ *              type: string
+ *              example: 0025
+ *             device_id:
+ *              description: users Phone Device ID
+ *              type: string
+ *              example: 893h9hH9EH8HRU
+ *             password:
+ *              description:  users password
+ *              type: string
+ *              example: change me
+ *     responses:
+ *      '200':
+ *        description: OK
+ *      400:
+ *        description: Bad request
+ *      401':
+ *        description: Authorization information is missing or invalid.
+ *      404':
+ *        description: Not found.
+ *      409:
+ *        description: Conflict
+ *      5XX':
+ *        description: server error.
+ */
+router.post(
+  "/auth/activateApp",
+  checkTenant,
+  AuthController.AuthenticationController.activateApp
+);
+/**
+ * @openapi
  * '/api/auth/verifyAuthCode':
  *  post:
  *     tags:
