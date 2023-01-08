@@ -33,7 +33,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           #key: ${{ secrets.SSH_KEY  }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "."
+          source: "typescript_express_boilerplate"
           target: ${{ secrets.SCP_PATH }}
 
       - name: SSH and Redeploy
