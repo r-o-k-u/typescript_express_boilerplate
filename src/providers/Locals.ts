@@ -13,6 +13,7 @@ class Locals {
    * throughout the app's runtime
    */
   public static config(): any {
+    console.log("ENV", process.env.NODE_ENV);
     if (!process.env.NODE_ENV || process.env.NODE_ENV == "production") {
       dotenv.config({ path: `.env` });
     } else {
