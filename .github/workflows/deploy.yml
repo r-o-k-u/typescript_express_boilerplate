@@ -31,8 +31,8 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          #key: ${{ secrets.SSH_KEY  }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY  }}
+          #password: ${{ secrets.SSH_PASSWORD }}
           source: "typescript_express_boilerplate"
           target: ${{ secrets.SCP_PATH }}
 
@@ -41,8 +41,8 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          #key: ${{ secrets.SSH_KEY }}
+          #password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             whoami
             cd /var/www/html/temp/typescript_express_boilerplate
