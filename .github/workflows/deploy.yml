@@ -48,5 +48,6 @@ jobs:
             whoami
             cd /var/www/html/temp/typescript_express_boilerplate
             ls -al
+            docker-compose down
             docker-compose up --build -d
 
