@@ -33,8 +33,8 @@ jobs:
           key: ${{ secrets.SSH_KEY  }}
           #passphrase: ${{ secrets.SSH_PASSPHRASE  }}
           #password: ${{ secrets.SSH_PASSWORD }}
-          source: /var/www/html/temp/typescript_express_boilerplate2
-          target: ${{ secrets.SCP_PATH }}
+          source: typescript_express_boilerplate
+          target: /var/www/html/temp/typescript_express_boilerplate2 #${{ secrets.SCP_PATH }}
 
       - name: SSH and Redeploy
         uses: appleboy/ssh-action@master
