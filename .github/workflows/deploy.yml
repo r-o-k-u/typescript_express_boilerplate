@@ -45,7 +45,7 @@ jobs:
           #passphrase: ${{ secrets.SSH_PASSPHRASE  }}
           script: |
             whoami
-            cd /var/www/html/temp/typescript_express_boilerplate
+            cd /var/www/html/temp/typescript_express_boilerplate/typescript_express_boilerplate
             ls -al
             docker-compose rm -f
             docker-compose pull
