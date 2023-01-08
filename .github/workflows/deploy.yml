@@ -43,7 +43,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           #password: ${{ secrets.SSH_PASSWORD }}
           key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE  }}
+          #passphrase: ${{ secrets.SSH_PASSPHRASE  }}
           script: |
             whoami
             cd /var/www/html/temp/typescript_express_boilerplate
