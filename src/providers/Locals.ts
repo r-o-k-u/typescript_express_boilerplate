@@ -3,7 +3,7 @@
  *
  */
 
-import { Application } from "express";
+import e, { Application } from "express";
 import * as path from "path";
 import * as dotenv from "dotenv";
 
@@ -13,7 +13,12 @@ class Locals {
    * throughout the app's runtime
    */
   public static config(): any {
-    dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+    if (!process.env.NODE_ENV || process.env.NODE_ENV == "production") {
+      dotenv.config({ path: `.env` });
+    } else {
+      dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+    }
+
     const {
       COMPANY_NAME,
       PORT,
