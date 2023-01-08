@@ -34,7 +34,7 @@ export default {
     servers: [
       {
         url: "http://localhost:{port}",
-        description: "Development server 111",
+        description: "Development server",
         variables: {
           port: {
             enum: ["3333", "443"],
