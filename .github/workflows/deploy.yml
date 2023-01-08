@@ -19,29 +19,21 @@ jobs:
       - name: Checkout the latest code
         uses: actions/checkout@v3
         with:
-          path: "typescript_express_boilerplate"
+          path: typescript_express_boilerplate
       
       # Create timestamp.txt
       - run: |
           cd typescript_express_boilerplate
           date > timestamp.txt
-      - name: Upload repo to remote server
-        env:
-           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-         ssh-add - <<< "${{ secrets.SSH_KEY }}"
-         scp -o StrictHostKeyChecking=no -r -P 59666 typescript_express_boilerplate ${{ secrets.SSH_USERNAME }}@${{ secrets.HOST }}:${{ secrets.SCP_PATH }}
-
       - name: SCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY  }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE  }}
+          #passphrase: ${{ secrets.SSH_PASSPHRASE  }}
           #password: ${{ secrets.SSH_PASSWORD }}
-          source: "typescript_express_boilerplate"
+          source: typescript_express_boilerplate
           target: ${{ secrets.SCP_PATH }}
 
       - name: SSH and Redeploy
