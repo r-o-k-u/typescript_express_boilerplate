@@ -21,7 +21,5 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
-    networks:
-      - typescript_api
     expose:
       - 3333
