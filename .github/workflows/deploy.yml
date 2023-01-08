@@ -1,0 +1,50 @@
+# This is a basic workflow to help you get started with Actions
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  re-deploy:
+    #if: github.event.pull_request.merged == true
+    name: SCP and Deploy Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the latest code
+        uses: actions/checkout@v3
+        with:
+          path: "typescript_express_boilerplate"
+      
+      # Create timestamp.txt
+      - run: |
+          cd typescript_express_boilerplate
+          date > timestamp.txt
+
+      - name: SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY  }}
+          source: "."
+          target: ${{ secrets.SCP_PATH }}
+
+      - name: SSH and Redeploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          #password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            whoami
+            cd /var/www/html/temp/typescript_express_boilerplate
+            ls -al
+            docker-compose up --build -d
+
