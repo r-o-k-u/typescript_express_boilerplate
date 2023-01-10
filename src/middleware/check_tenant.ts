@@ -40,6 +40,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   } */
     let tenantId = null;
     if (organization_) {
+      console.log("organization_", organization_);
       const Tenant = Repo[organization_.databaseName].TenantDetails;
       const tenant_: any = await Tenant.findOne({
         where: { domainName: req.get("host") },
