@@ -24,6 +24,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         next
       );
     } else {
+      console.log("HOST", req.get("host"));
     }
     const organization_: any = await Organization.findOne({
       where: { website: req.get("host") },
