@@ -550,7 +550,7 @@ export class AuthenticationService {
         const { authentication } = user_;
         if (authentication.twoFactorAuth) {
           // generate a two-factor authentication code
-          const code = await this.generateOTPCode(9999);
+          const code = await this.generateOTPCode(999999);
           const authCode_ = code.toString();
           const authCode = await hash(authCode_);
           const authCodeExpiration = Date.now() + 300000; // 5 minutes
