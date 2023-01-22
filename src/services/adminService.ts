@@ -20,7 +20,7 @@ export class TenantService {
   static async getAll(DB_NAME: string) {
     try {
       // retrieve all tenants
-      const tenants = await Repo[DB_NAME].Tenant.findAll({
+      const tenants: unknown = await Repo[DB_NAME].Tenant.findAll({
         include: { model: Repo[DB_NAME].TenantDetails, as: "details" },
       });
       if (tenants) {
